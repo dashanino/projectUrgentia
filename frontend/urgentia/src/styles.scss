@@ -1,1 +1,65 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  /* ===== Brand ===== */
+  --color-primary: #2260FF;
+  --color-primary-dark: #00278C;
+  --color-primary-soft: #ECF1FF;
+
+  /* ===== Backgrounds ===== */
+  --color-background: #ECF1FF;
+  --color-surface: #FFFFFF;
+  --color-surface-soft: #F8FAFF;
+
+  /* ===== Text ===== */
+  --color-text: #1A1A1A;
+  --color-text-muted: #6B7280;
+  --color-text-disabled: #A7B0C2;
+
+  /* ===== Borders ===== */
+  --color-border: #D8E1F5;
+
+  /* ===== Status ===== */
+  --color-success: #14AE5C;
+  --color-success-soft: #EAFBF2;
+
+  --color-error: #C94747;
+  --color-error-soft: #FCEEEE;
+
+  --color-warning: #F4A300;
+  --color-warning-soft: #FFF8E6;
+
+  /* ===== Shadow ===== */
+  --shadow-card: 0 18px 50px rgba(34, 96, 255, 0.15);
+
+  /* ===== Radius ===== */
+  --radius-small: 8px;
+  --radius-medium: 14px;
+  --radius-large: 24px;
+
+  /* ===== Transition ===== */
+  --transition-default: 0.25s ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-background);
+}
