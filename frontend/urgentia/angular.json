@@ -45,16 +45,25 @@
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
+            },
+
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
+
             "styles": [
               "src/styles.scss"
             ]
           },
+
           "configurations": {
             "production": {
               "budgets": [
@@ -71,24 +80,30 @@
               ],
               "outputHashing": "all"
             },
+
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
             }
           },
+
           "defaultConfiguration": "production"
         },
+
         "serve": {
           "builder": "@angular/build:dev-server",
+
           "configurations": {
             "production": {
               "buildTarget": "urgentia:build:production"
             },
+
             "development": {
               "buildTarget": "urgentia:build:development"
             }
           },
+
           "defaultConfiguration": "development"
         }
       }
