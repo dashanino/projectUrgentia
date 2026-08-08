@@ -10,10 +10,11 @@
   --color-surface: #FFFFFF;
   --color-surface-soft: #F8FAFF;
 
-  /* ===== Text ===== */
-  --color-text: #1A1A1A;
-  --color-text-muted: #6B7280;
-  --color-text-disabled: #A7B0C2;
+/* ===== Text ===== */
+--color-text: #000000;          // Títulos
+--color-text-primary: #070707;  // Texto del logo / marca
+--color-text-muted: #6B7280;    // Texto secundario
+--color-text-disabled: #A7B0C2; // Deshabilitado
 
   /* ===== Borders ===== */
   --color-border: #D8E1F5;
