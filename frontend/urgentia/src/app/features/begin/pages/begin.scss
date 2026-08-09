@@ -1,0 +1,279 @@
+@use 'variables' as *;
+
+/* ==================================================
+   BEGIN PAGE - DESKTOP
+================================================== */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.begin-page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: grid;
+  grid-template-columns: 40% 60%;
+
+  background: var(--color-surface);
+}
+
+
+/* ==================================================
+   LEFT SIDE
+================================================== */
+
+.begin-visual {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 85px 0 0;
+
+  background: #D5E2FD;
+
+  overflow: hidden;
+}
+
+.brand {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  z-index: 2;
+}
+
+.logo {
+  width: 110px;
+  height: auto;
+
+  object-fit: contain;
+}
+
+.brand h1 {
+  margin: 18px 0 10px;
+
+  font-family: $font-title;
+  font-weight: $font-light;
+  font-size: 52px;
+
+  color: var(--color-primary);
+}
+
+.brand-description {
+  width: 260px;
+  margin: 0;
+
+  font-family: $font-title;
+  font-weight: $font-bold;
+  font-size: 18px;
+  line-height: 1.15;
+
+  color: var(--color-primary);
+}
+
+
+/* ==================================================
+   HOSPITAL ILLUSTRATION
+================================================== */
+.medical-illustration {
+  width: 100%;
+  display: block;
+
+  margin-top: -20px;
+
+  object-fit: contain;
+  object-position: bottom;
+}
+/* ==================================================
+   RIGHT SIDE
+================================================== */
+
+.begin-content {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 60px 7%;
+}
+
+.welcome {
+  width: 100%;
+  max-width: 760px;
+
+  text-align: center;
+}
+
+.welcome h2 {
+  margin: 0 0 32px;
+
+  font-family: $font-title;
+  font-weight: $font-regular;
+  font-size: 46px;
+
+  color: var(--color-text);
+}
+
+.welcome h2 span {
+  color: var(--color-primary);
+}
+
+.description {
+  max-width: 650px;
+
+  margin: 0 auto 30px;
+
+  font-family: $font-title;
+  font-weight: $font-regular;
+  font-size: 18px;
+  line-height: 1.35;
+
+  color: var(--color-text);
+}
+
+.instruction {
+  margin: 0 0 28px;
+
+  font-family: $font-title;
+  font-weight: $font-regular;
+  font-size: 17px;
+
+  color: var(--color-text);
+}
+
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 28px;
+}
+
+.actions button {
+  width: 100%;
+  height: 58px;
+
+  border: none;
+  border-radius: var(--radius-small);
+
+  font-family: $font-title;
+  font-weight: $font-semi-bold;
+  font-size: 16px;
+
+  color: white;
+
+  cursor: pointer;
+}
+
+.emergency-button {
+  background: #e53b3b;
+}
+
+.login-button {
+  background: var(--color-primary);
+}
+
+
+/* ==================================================
+   BUTTON HELP
+================================================== */
+
+.button-help {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 28px;
+
+  margin-top: 10px;
+
+  font-family: $font-title;
+  font-weight: $font-light;
+  font-size: 12px;
+
+  color: var(--color-text-muted);
+}
+
+.button-help p {
+  margin: 0;
+}
+
+
+/* ==================================================
+   REGISTER
+================================================== */
+
+.register-text {
+  margin: 36px 0 0;
+
+  font-family: $font-title;
+  font-weight: $font-regular;
+  font-size: 14px;
+
+  color: var(--color-text);
+}
+
+.register-text a {
+  color: var(--color-primary);
+
+  font-weight: $font-semi-bold;
+
+  text-decoration: none;
+}
+
+
+/* ==================================================
+   DIVIDER
+================================================== */
+
+.divider {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  margin: 42px 0 26px;
+}
+
+.divider span {
+  flex: 1;
+
+  height: 1px;
+
+  background: var(--color-border);
+}
+
+.shield {
+  font-size: 19px;
+}
+
+
+/* ==================================================
+   FOOTER
+================================================== */
+
+footer {
+  font-family: $font-title;
+  font-weight: $font-light;
+  font-size: 12px;
+
+  color: var(--color-text-muted);
+}
+
+footer p {
+  margin: 2px 0;
+}
