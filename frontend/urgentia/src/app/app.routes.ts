@@ -29,10 +29,10 @@ export const routes: Routes = [
   },
 
   {
-    path: 'recuperar-contrasena',
+    path: 'recuperar-contraseña',
     loadComponent: () =>
-      import('./features/auth/pages/forgot-password/forgot-password')
-        .then((m) => m.ForgotPassword),
+      import('./features/auth/pages/forgot-password/account-data/account-data')
+        .then((m) => m.AccountData),
   },
 
   {

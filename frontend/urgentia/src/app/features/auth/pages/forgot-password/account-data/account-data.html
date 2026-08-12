@@ -1,1 +1,42 @@
-<p>account-data works!</p>
+<div>
+<section class="begin-visual">
+  
+      <div class="brand">
+        <img
+          class="logo"
+          src="logo.png"
+          alt="Urgentia"
+        >
+  
+        <h1>Urgentia</h1>
+  
+        <p class="brand-description">
+          Sistema de Pre-Triage Para Urgencias
+        </p>
+      </div>
+  
+      <img
+        class="medical-illustration"
+        src="hospital.png"
+        alt="Ilustración de urgencias"
+      >
+  
+    </section>
+
+</div>
+<div>
+    <!-- info -->
+     <h1>Olvidé Mi Contraseña</h1>
+     <p>Ingresa tu cédula y el correo electrónico asociado a tu cuenta y te enviaremos un 
+        código para reestablecer tu contraseña.</p>
+     <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      <input type="text" formControlName="cedula" placeholder="Cedula" />
+    </label>
+    <label>
+      <input type="text" formControlName="email" placeholder="Correo electrónico" />
+    </label>
+    <button type="submit">Enviar Contraseña</button>
+  </form>
+
+</div>
