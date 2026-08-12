@@ -1,42 +1,37 @@
-<div>
-<section class="begin-visual">
-  
-      <div class="brand">
-        <img
-          class="logo"
-          src="logo.png"
-          alt="Urgentia"
-        >
-  
+<div class = ParentDiv>
+    <section class="begin-visual">
+        <img src="image 5.png" alt="Ilustración de urgencias" class="imagen-fondo" /> <!-- imágen de fondo-->
+        <div class="nombre-visual">
+        <img class="logo" src="logo.png" alt="Urgentia" />
         <h1>Urgentia</h1>
-  
-        <p class="brand-description">
-          Sistema de Pre-Triage Para Urgencias
-        </p>
-      </div>
-  
-      <img
-        class="medical-illustration"
-        src="hospital.png"
-        alt="Ilustración de urgencias"
-      >
-  
+        <p>Sistema De Pre-Triage Para <br>Urgencias</p>
+        </div>
     </section>
-
-</div>
-<div>
+    
+<!-- 
+<div class="contenedor">
+  <img src="imagen.jpg" alt="Ejemplo">
+  <div class="texto-encima">Hola, texto sobre la imagen</div>
+</div> -->
+    <section class="forgot-password">
     <!-- info -->
-     <h1>Olvidé Mi Contraseña</h1>
-     <p>Ingresa tu cédula y el correo electrónico asociado a tu cuenta y te enviaremos un 
-        código para reestablecer tu contraseña.</p>
-     <form [formGroup]="form" (ngSubmit)="submit()">
-    <label>
-      <input type="text" formControlName="cedula" placeholder="Cedula" />
-    </label>
-    <label>
-      <input type="text" formControlName="email" placeholder="Correo electrónico" />
-    </label>
-    <button type="submit">Enviar Contraseña</button>
-  </form>
-
-</div>
+        <div class="formulario">
+        <h1>Olvidé Mi Contraseña</h1>
+        <p>
+            Ingresa la cédula y el correo electrónico asociado a tu cuenta y te enviaremos un código para
+            reestablecer tu contraseña.
+        </p>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+            <h4>Cédula</h4>
+            <label>
+            <input type="text" formControlName="cedula" placeholder="Cedula" />
+            </label>
+            <h4>Correo electrónico</h4>
+            <label>
+            <input type="text" formControlName="email" placeholder="Correo electrónico" />
+            </label>
+            <button type="submit">Enviar Código</button>
+        </form>
+        </div>
+    </section>
+</div> 

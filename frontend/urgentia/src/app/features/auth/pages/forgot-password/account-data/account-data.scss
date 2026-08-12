@@ -1,1 +1,103 @@
 @use 'variables' as *;
+
+.ParentDiv {
+    display: flex;
+    min-height: 100vh;
+}
+.begin-visual {
+  position: relative;
+  flex: 0 0 40%;
+}
+
+.imagen-fondo {
+  width: 100%;
+  height: 100vh;
+  display: block;
+}
+
+.nombre-visual {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    color: var(--color-primary);
+    text-align: center;
+    width: 80%;
+/* Evita que el texto toque los bordes */
+}
+
+/* Estilos del Logo */
+.logo {
+    width: 150px; /* Controla el tamaño de tu logo */
+    height: auto;
+    margin-top: 10vh; 
+    margin-bottom: -40px;/* Separación con el título */
+}
+
+/* Estilos de los Textos */
+.nombre-visual h1 {
+    font-family: $font-title;
+    font-weight: $font-thin;
+    font-size: 65px;
+    margin-bottom: 25px;
+
+}
+
+.nombre-visual p {
+  font-size: 25px;
+  margin: 0;
+  font-weight: $font-bold;
+  font-family: $font-title;
+  text-align: center;
+  line-height: 1.1;
+
+}
+
+.forgot-password {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+.forgot-password h1 {
+    font-family: $font-title;
+    font-weight: $font-semi-bold;
+    font-size: 35px;
+    margin-bottom: 25px;
+    color: var(--color-primary);
+}
+.forgot-password p {
+    font-family: $font-title;
+    font-weight: $font-extra-light;
+    font-size: 18px;
+    line-height: 25px;
+    color: var(--color-text);
+}
+
+
+.formulario {
+  background-color: var(--color-surface);
+  width: 80%;
+  max-width: 770px;
+  min-height: 70vh;
+
+  border-radius: 50px;
+  padding: 50px 70px;
+  box-sizing: border-box;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+.form label{
+    width: stretch;
+}
