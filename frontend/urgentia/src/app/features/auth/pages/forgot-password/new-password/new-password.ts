@@ -14,6 +14,7 @@ export class NewPassword {
 
   passwordTest = '123456'
 
+
   form = this.fb.group({
     nueva_contraseña: ['', Validators.required],
     confirmar_contraseña:['', Validators.required],
@@ -23,7 +24,7 @@ export class NewPassword {
   submit() {
   if (this.form.valid) {
     console.log('Form submitted', this.form.value);
-    this.router.navigate(['/recuperar-contraseña/success']);
+    this.router.navigate(['/recuperar-contraseña/exito']);
   }
 }
 
