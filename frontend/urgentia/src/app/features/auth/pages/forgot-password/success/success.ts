@@ -12,7 +12,7 @@ export class Success {
 private router = inject(Router);
   submit() {
   console.log('Form submitted');
-  this.router.navigate(['/recuperar-contraseña/begin']);
+  this.router.navigate(['/login']);
 
   }
 }
