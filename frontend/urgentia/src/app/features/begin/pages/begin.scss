@@ -1,126 +1,105 @@
 @use 'variables' as *;
 
-/* ==================================================
-   BEGIN PAGE - DESKTOP
-================================================== */
-
-:host {
-  display: block;
-  width: 100%;
-  min-height: 100vh;
+.ParentDiv {
+    display: flex;
+    min-height: 100vh;
 }
-
-.begin-page {
-  width: 100%;
-  min-height: 100vh;
-
-  display: grid;
-  grid-template-columns: 40% 60%;
-
-  background: var(--color-surface);
-}
-
-
-/* ==================================================
-   LEFT SIDE
-================================================== */
-
 .begin-visual {
-  min-height: 100vh;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 85px 0 0;
-
-  background: #D5E2FD;
-
-  overflow: hidden;
+  position: relative;
+  flex: 0 0 40%;
 }
 
-.brand {
+.imagen-fondo {
   width: 100%;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  text-align: center;
-
-  z-index: 2;
-}
-
-.logo {
-  width: 110px;
-  height: auto;
-
-  object-fit: contain;
-}
-
-.brand h1 {
-  margin: 18px 0 10px;
-
-  font-family: $font-title;
-  font-weight: $font-light;
-  font-size: 52px;
-
-  color: var(--color-primary);
-}
-
-.brand-description {
-  width: 260px;
-  margin: 0;
-
-  font-family: $font-title;
-  font-weight: $font-bold;
-  font-size: 18px;
-  line-height: 1.15;
-
-  color: var(--color-primary);
-}
-
-
-/* ==================================================
-   HOSPITAL ILLUSTRATION
-================================================== */
-.medical-illustration {
-  width: 100%;
+  height: 100vh;
   display: block;
-
-  margin-top: -20px;
-
-  object-fit: contain;
-  object-position: bottom;
 }
+
+.nombre-visual {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    color: var(--color-primary);
+    text-align: center;
+    width: 80%;
+/* Evita que el texto toque los bordes */
+}
+
+/* Estilos del Logo */
+.logo {
+    width: 150px; /* Controla el tamaño de tu logo */
+    height: auto;
+    margin-top: 10vh; 
+    margin-bottom: -40px;/* Separación con el título */
+}
+
+/* Estilos de los Textos */
+.nombre-visual h1 {
+    font-family: $font-title;
+    font-weight: $font-thin;
+    font-size: 65px;
+    margin-bottom: 25px;
+
+}
+
+.nombre-visual p {
+  font-size: 25px;
+  margin: 0;
+  font-weight: $font-bold;
+  font-family: $font-title;
+  text-align: center;
+  line-height: 1.1;
+
+}
+
 /* ==================================================
-   RIGHT SIDE
+   LADO DERECHO
 ================================================== */
 
 .begin-content {
-  min-height: 100vh;
+  flex: 1;
+  height: 100vh;
 
   display: flex;
-  align-items: center;
   justify-content: center;
 
-  padding: 60px 7%;
+  padding: 70px 6%;
+
+  box-sizing: border-box;
+
+  /* IMPORTANTE */
+  position: relative;
 }
+
+
+/* CONTENIDO CENTRAL */
 
 .welcome {
   width: 100%;
-  max-width: 760px;
-
+  max-width: 700px;
+  
+  margin-top: 100px;
   text-align: center;
 }
 
+
+/* ==================================================
+   TÍTULO
+================================================== */
+
 .welcome h2 {
-  margin: 0 0 32px;
+  margin: 0 0 55px;
 
   font-family: $font-title;
-  font-weight: $font-regular;
-  font-size: 46px;
+  font-weight: $font-light;
+  font-size: 48px;
+  line-height: 1;
 
   color: var(--color-text);
 }
@@ -129,47 +108,65 @@
   color: var(--color-primary);
 }
 
+
+/* ==================================================
+   DESCRIPCIÓN
+================================================== */
+
 .description {
-  max-width: 650px;
-
-  margin: 0 auto 30px;
-
-  font-family: $font-title;
-  font-weight: $font-regular;
-  font-size: 18px;
-  line-height: 1.35;
-
-  color: var(--color-text);
-}
-
-.instruction {
-  margin: 0 0 28px;
+  max-width: 620px;
+  margin: 0 auto 42px;
 
   font-family: $font-title;
   font-weight: $font-regular;
-  font-size: 17px;
+  font-size: 19px;
+  line-height: 1.15;
 
   color: var(--color-text);
 }
 
 
 /* ==================================================
-   BUTTONS
+   INSTRUCCIÓN
+================================================== */
+
+.instruction {
+  margin: 0 0 70px;
+
+  font-family: $font-title;
+  font-weight: $font-regular;
+  font-size: 18px;
+
+  color: var(--color-text);
+}
+
+
+/* ==================================================
+   BOTONES
 ================================================== */
 
 .actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
 
-  gap: 28px;
+  gap: 45px;
+
+  width: 100%;
 }
 
-.actions button {
+
+/* Cada botón + su texto */
+
+.action-group {
+  width: 100%;
+}
+
+.action-group button {
   width: 100%;
   height: 58px;
 
   border: none;
-  border-radius: var(--radius-small);
+  border-radius: 8px;
 
   font-family: $font-title;
   font-weight: $font-semi-bold;
@@ -180,26 +177,25 @@
   cursor: pointer;
 }
 
+
+/* BOTÓN ROJO */
+
 .emergency-button {
-  background: #e53b3b;
+  background: #ff2449;
 }
+
+
+/* BOTÓN AZUL */
 
 .login-button {
   background: var(--color-primary);
 }
 
 
-/* ==================================================
-   BUTTON HELP
-================================================== */
+/* TEXTO DEBAJO DEL BOTÓN */
 
-.button-help {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  gap: 28px;
-
-  margin-top: 10px;
+.action-group p {
+  margin: 10px 0 0;
 
   font-family: $font-title;
   font-weight: $font-light;
@@ -208,17 +204,13 @@
   color: var(--color-text-muted);
 }
 
-.button-help p {
-  margin: 0;
-}
-
 
 /* ==================================================
-   REGISTER
+   REGISTRO
 ================================================== */
 
 .register-text {
-  margin: 36px 0 0;
+  margin: 50px 0 0;
 
   font-family: $font-title;
   font-weight: $font-regular;
@@ -237,17 +229,31 @@
 
 
 /* ==================================================
-   DIVIDER
+   DIVISOR
 ================================================== */
 
 .divider {
+  position: absolute;
+
+  /* DISTANCIA DESDE ABAJO */
+  bottom: 85px;
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 700px;
+  max-width: 75%;
+
   display: flex;
   align-items: center;
 
-  gap: 16px;
+  gap: 0;
 
-  margin: 42px 0 26px;
+  margin: 0;
 }
+
+
+/* LÍNEAS */
 
 .divider span {
   flex: 1;
@@ -257,8 +263,27 @@
   background: var(--color-border);
 }
 
+
+/* ESCUDO / ICONO CENTRAL */
+
 .shield {
-  font-size: 19px;
+  width: 28px;
+  height: 28px;
+
+  margin: 0 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 0 0 14px 14px;
+
+  background: var(--color-primary);
+
+  color: white;
+
+  font-family: $font-title;
+  font-size: 16px;
 }
 
 
@@ -267,6 +292,19 @@
 ================================================== */
 
 footer {
+  position: absolute;
+
+  /* TEXTO CERCA DEL BORDE INFERIOR */
+  bottom: 35px;
+
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 700px;
+  max-width: 75%;
+
+  text-align: center;
+
   font-family: $font-title;
   font-weight: $font-light;
   font-size: 12px;
@@ -277,3 +315,8 @@ footer {
 footer p {
   margin: 2px 0;
 }
+
+footer p {
+  margin: 2px 0;
+}
+

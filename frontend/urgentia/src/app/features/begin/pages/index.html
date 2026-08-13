@@ -1,27 +1,30 @@
-<div class="begin-page">
+<div class="ParentDiv">
 
     <!-- LADO IZQUIERDO -->
     <section class="begin-visual">
   
-      <div class="brand">
+      <img
+        src="hospital.png"
+        alt="Ilustración de urgencias"
+        class="imagen-fondo"
+      />
+  
+      <div class="nombre-visual">
+  
         <img
           class="logo"
           src="logo.png"
           alt="Urgentia"
-        >
+        />
   
         <h1>Urgentia</h1>
   
-        <p class="brand-description">
-          Sistema de Pre-Triage Para Urgencias
+        <p>
+          Sistema De Pre-Triage Para <br>
+          Urgencias
         </p>
-      </div>
   
-      <img
-        class="medical-illustration"
-        src="hospital.png"
-        alt="Ilustración de urgencias"
-      >
+      </div>
   
     </section>
   
@@ -44,39 +47,70 @@
           Inicia sesión o utiliza el acceso de emergencias para continuar.
         </p>
   
+  
         <div class="actions">
   
-          <button class="emergency-button">
-            Emergencia inmediata
-          </button>
+          <div class="action-group">
   
-          <button class="login-button">
-            Iniciar sesión
-          </button>
+            <button
+            class="emergency-button"
+            (click)="irEmergencia()">
+            Emergencia Inmediata 
+            </button>
+  
+            <p>
+              Acceso rápido para atención prioritaria
+            </p>
+  
+          </div>
+  
+  
+          <div class="action-group">
+  
+            <button
+            class="login-button"
+            (click)="irLogin()">
+            Iniciar Sesión 
+            </button>
+  
+            <p>
+              Accede con tu cuenta para continuar
+            </p>
+  
+          </div>
   
         </div>
   
-        <div class="button-help">
-          <p>Acceso rápido para atención prioritaria</p>
-          <p>Accede con tu cuenta para continuar</p>
-        </div>
   
         <p class="register-text">
-          ¿No tienes cuenta?
-          <a href="/registro">Regístrate</a>
-        </p>
+            ¿No tienes cuenta?
+            <a (click)="irRegistro()">Regístrate</a>
+          </p>
+  
   
         <div class="divider">
+  
           <span></span>
-          <div class="shield">🛡️</div>
+  
+          <div class="shield">
+            ✚
+          </div>
+  
           <span></span>
+  
         </div>
   
+  
         <footer>
-          <p>Tus datos están protegidos.</p>
+  
+          <p>
+            Tus datos están protegidos
+          </p>
+  
           <p>
             Clasificación preliminar · No sustituye valoración médica profesional
           </p>
+  
         </footer>
   
       </div>
