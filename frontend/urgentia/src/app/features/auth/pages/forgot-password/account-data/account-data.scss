@@ -93,11 +93,51 @@
 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
-.form{
-    display: flex;
-    flex-direction: column;
-    padding: 0;
+
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
 }
-.form label{
-    width: stretch;
+
+.form h4{
+    font-family: $font-title;
+    font-weight: $font-medium;
+    font-size: 22px;
+    margin-bottom: 0px;
+}
+
+.form label {
+  font-family: $font-title;
+  font-weight: $font-semi-bold;
+  font-size: 18px;
+}
+
+.form input {
+  width: 100%;
+  height: 45px;
+  box-sizing: border-box;
+
+  border: none;
+  border-radius: 10px;
+  padding: 0 15px;
+
+  background-color: var(--color-primary-soft);
+
+  font-family: $font-title;
+  font-size: 20px;
+}
+
+button{
+    margin-top: 10%;
+    padding: 20px 30px;
+    font-family: $font-title;
+    font-weight: $font-medium;
+    font-size: 20px;
+    border-radius: 18px;
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+
 }

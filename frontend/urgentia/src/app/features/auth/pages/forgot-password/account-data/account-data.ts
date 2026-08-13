@@ -20,10 +20,11 @@ export class AccountData {
     email: ['', [Validators.required, Validators.email]],
   });
 
+
   submit() {
-    if (this.form.valid) {
-      console.log('Form submitted', this.form.value);
-      this.router.navigate(['/register']);
-    }
+  if (this.form.valid) {
+    console.log('Form submitted', this.form.value);
+    this.router.navigate(['/begin']);
   }
+}
 }
