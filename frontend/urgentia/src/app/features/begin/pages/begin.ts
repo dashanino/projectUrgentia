@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-begin',
   imports: [],
-  templateUrl: './index.html',
+  templateUrl:'./begin.html',
   styleUrl: './begin.scss',
 })
 export class Begin {
