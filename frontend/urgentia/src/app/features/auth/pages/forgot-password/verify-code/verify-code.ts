@@ -25,7 +25,7 @@ export class VerifyCode {
   submit() {
   if (this.form.valid) {
     console.log('Form submitted', this.form.value);
-    this.router.navigate(['/recuperar-contraseña/success']);
+    this.router.navigate(['/recuperar-contraseña/exito']);
   }
 }
 }
