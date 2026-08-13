@@ -14,6 +14,7 @@ export class NewPassword {
 
   passwordTest = '123456'
 
+
   form = this.fb.group({
     nueva_contraseña: ['', Validators.required],
     confirmar_contraseña:['', Validators.required],

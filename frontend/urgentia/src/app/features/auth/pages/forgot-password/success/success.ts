@@ -8,11 +8,4 @@ import { Router } from '@angular/router';
   templateUrl: './success.html',
   styleUrl: './success.scss',
 })
-export class Success {
-private router = inject(Router);
-  submit() {
-  console.log('Form submitted');
-  this.router.navigate(['/recuperar-contraseña/begin']);
-
-  }
-}
+export class Success {}
