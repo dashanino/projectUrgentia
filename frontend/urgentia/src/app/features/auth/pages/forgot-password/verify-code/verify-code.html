@@ -9,25 +9,33 @@
     </section>
     
 
-    <section class="forgot-password">
+    <section class="info">
     <!-- info -->
         <div class="formulario">
         <h1>Olvidé Mi Contraseña</h1>
+        <img src="email.png" alt="Ilustración de correo"/>
         <p>
-            Ingresa la cédula y el correo electrónico asociado a tu cuenta y te enviaremos un código para
-            reestablecer tu contraseña.
+            Hemos enviado un código para reestablecer su contraseña a :
         </p>
+        <span>urgentia@gmail.com</span>
+        <p>
+            El enlace expirará en 5 minutos.
+        </p>
+
         <form [formGroup]="form" (ngSubmit)="submit()" class="form">
-            <h4>Cédula</h4>
-            <label>
-            <input type="text" formControlName="cedula" placeholder="Ingrese su número de cédula" />
-            </label>
-            <h4>Correo electrónico</h4>
-            <label>
-            <input type="text" formControlName="email" placeholder="Ingrese su correo electrónico" />
-            </label>
-            <button type="submit">Enviar Código</button>
+            <h4>Código</h4>
+            <div class="code">
+                <label>
+                <input type="text" formControlName="codigo" placeholder="Ingrese el código" />
+                </label>
+                <button type="submit">Ingresar</button>
+            </div>
         </form>
+        <footer>
+            <p>¿No recibiste el código?</p>
+            <span>Reenviar código</span>
+        </footer>
         </div>
+        
     </section>
 </div> 

@@ -1,10 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
+
+
 @Component({
   selector: 'app-verify-code',
   imports: [ReactiveFormsModule],
-  templateUrl: './verify-code.html',
+  templateUrl:'./verify-code.html',
   styleUrl: './verify-code.scss',
 })
 export class VerifyCode {
