@@ -1,1 +1,35 @@
 
+<div class = ParentDiv>
+    <section class="begin-visual">
+        <img src="image 5.png" alt="Ilustración de urgencias" class="imagen-fondo" /> <!-- imágen de fondo-->
+        <div class="nombre-visual">
+        <img class="logo" src="logo.png" alt="Urgentia" />
+        <h1>Urgentia</h1>
+        <p>Sistema De Pre-Triage Para <br>Urgencias</p>
+        </div>
+    </section>
+    
+
+    <section class="info">
+    <!-- info -->
+        <div class="formulario">
+        <h1>Iniciar Sesión</h1>
+        <h3>Bienvenid@</h3>
+        <p>
+            Por favor ingrese sus datos para iniciar sesión.
+        </p>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+            <h4>Correo</h4>
+            <label>
+            <input type="text" formControlName="email" placeholder="Ingrese su correo" />
+            </label>
+            <h4>Contraseña</h4>
+            <label>
+            <input type="password" formControlName="password" placeholder="Ingrese su contraseña" />
+            </label>
+            <span><a>Olvidé mi contraseña</a></span>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+        </div>
+    </section>
+</div> 
