@@ -34,7 +34,25 @@ export const routes: Routes = [
       import('./features/auth/pages/forgot-password/account-data/account-data')
         .then((m) => m.AccountData),
   },
-
+  
+  {
+    path: 'recuperar-contraseña/codigo',
+    loadComponent: () =>
+      import('./features/auth/pages/forgot-password/verify-code/verify-code')
+        .then((m) => m.VerifyCode),
+  },
+  {
+    path: 'recuperar-contraseña/nueva-contraseña',
+    loadComponent: () =>
+      import('./features/auth/pages/forgot-password/new-password/new-password')
+        .then((m) => m.NewPassword),
+  },
+  {
+    path: 'recuperar-contraseña/exito',
+    loadComponent: () =>
+      import('./features/auth/pages/forgot-password/success/success')
+        .then((m) => m.Success),
+  },
   {
     path: 'home',
     loadComponent: () =>

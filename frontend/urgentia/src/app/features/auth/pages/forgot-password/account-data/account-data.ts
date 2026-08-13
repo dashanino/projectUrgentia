@@ -24,7 +24,7 @@ export class AccountData {
   submit() {
   if (this.form.valid) {
     console.log('Form submitted', this.form.value);
-    this.router.navigate(['/begin']);
+    this.router.navigate(['/recuperar-contraseña/codigo']);
   }
 }
 }
