@@ -16,47 +16,61 @@
         <h1>Nueva Cuenta</h1>
         
         <form [formGroup]="form" (ngSubmit)="submit()" class="form">
-            <h4>Nombres</h4>
-            <label>
-            <input type="text" formControlName="names" placeholder="Ingrese sus nombres" />
-            </label>
-            <h4>Apellidos</h4>
-            <label>
-            <input type="text" formControlName="lastname" placeholder="Ingrese sus apellidos" />
-            </label>
-            <h4>Correo electrónicos</h4>
-            <label>
-            <input type="text" formControlName="email" placeholder="Ingrese su correo electrónico" />
-            </label>
-            <h4>Número celular</h4>
-            <label>
-            <input type="number" formControlName="phoneNumber" placeholder="Ingrese su número celular" />
-            </label>
-            <h4>Fecha de nacimiento</h4>
-            <label>
-            <input type="number" formControlName="DOB" placeholder="(DD/MM/AAAA)" />
-            </label>
-            <label>
-              <select formControlName="EPS">
-                <option value="" disabled selected>Seleccione su EPS</option>
-                <option value="SURA">SURA</option>
-                <option value="Sanitas">Sanitas</option>
-                <option value="Nueva EPS">Nueva EPS</option>
-                <option value="Salud Total">Salud Total</option>
-                <option value="Coosalud">Coosalud</option>
-                <option value="Emssanar">Emssanar</option>
-                <option value="Compensar">Compensar</option>
-                <option value="Famisanar">Famisanar</option>
-                </select>
+          <div class="columna-izq">
+              <h4>Nombres</h4>
+              <label>
+              <input type="text" formControlName="names" placeholder="Ingrese sus nombres" />
               </label>
-            <h4>Nueva contraseña</h4>
-            <label>
-            <input type="password" formControlName="nueva_contraseña" placeholder="Ingrese una nueva contraseña" />
-            </label>
-            <h4>Confirmar nueva contraseña:</h4>
-            <label>
-            <input type="password" formControlName="confirmar_contraseña" placeholder="Ingrese nuevamente su contraseña" />
-            </label>
+
+              <h4>Correo electrónicos</h4>
+              <label>
+              <input type="text" formControlName="email" placeholder="Ingrese su correo electrónico" />
+              </label>
+
+              <h4>Fecha de nacimiento</h4>
+              <label>
+              <input type="number" formControlName="DOB" placeholder="(DD/MM/AAAA)" />
+              </label>
+
+              <h4>Nueva contraseña</h4>
+              <label>
+              <input type="password" formControlName="nueva_contraseña" placeholder="Ingrese una nueva contraseña" />
+              </label>
+              <p>Mínimo 8 caracteres, incluyendo mayúscula, número y carácter especial.</p>
+            </div>
+
+            <div class="columna-der">
+              <h4>Apellidos</h4>
+              <label>
+              <input type="text" formControlName="lastname" placeholder="Ingrese sus apellidos" />
+              </label>           
+
+              <h4>Número celular</h4>
+              <label>
+              <input type="number" formControlName="phoneNumber" placeholder="Ingrese su número celular" />
+              </label>
+
+              <h4>EPS</h4>
+              <label>
+                <select formControlName="EPS">
+                  <option value="" disabled selected>Seleccione su EPS</option>
+                  <option value="SURA">SURA</option>
+                  <option value="Sanitas">Sanitas</option>
+                  <option value="Nueva EPS">Nueva EPS</option>
+                  <option value="Salud Total">Salud Total</option>
+                  <option value="Coosalud">Coosalud</option>
+                  <option value="Emssanar">Emssanar</option>
+                  <option value="Compensar">Compensar</option>
+                  <option value="Famisanar">Famisanar</option>
+                  </select>
+                </label>
+              
+                <h4>Confirmar nueva contraseña:</h4>
+                <label>
+                <input type="password" formControlName="confirmar_contraseña" placeholder="Ingrese nuevamente su contraseña" />
+                </label>
+              </div>
+
             <button type="submit">Crear Cuenta</button>
         </form>
         </div>
