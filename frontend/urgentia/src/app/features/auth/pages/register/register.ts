@@ -22,6 +22,7 @@ export class Register {
     EPS: ['', Validators.required],
     nueva_contraseña: ['', Validators.required],
     confirmar_contraseña: ['', Validators.required],
+    terminos: [false, Validators.requiredTrue]
   });
 
   submit() {

@@ -159,6 +159,7 @@ button{
     border-radius: 18px;
     background-color: var(--color-primary);
     color: var(--color-surface);
+    margin-bottom: 1%vh ;
 
 }
 
@@ -176,6 +177,7 @@ button{
   grid-column: 1 / -1;
   margin-top: 10px;
   width: 100%;
+  margin-bottom: 5px;
 }
 
 .checkbox-container label {
