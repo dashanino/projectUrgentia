@@ -69,14 +69,15 @@
     font-family: $font-title;
     font-weight: $font-semi-bold;
     font-size: 35px;
-    margin-bottom: 25px;
+    margin-bottom: 2px;
     color: var(--color-primary);
 }
 .register p {
     font-family: $font-title;
-    font-weight: $font-extra-light;
+    font-weight: $font-light;
     font-size: 16px;
     color: var(--color-primary);
+    grid-column: 1 / -1;
 }
 
 
@@ -169,4 +170,40 @@ button{
 .columna-der{
   display: flex;
   flex-direction: column;
+}
+
+.checkbox-container {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.checkbox-container label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  width: 100%;
+
+  color: var(--color-text-primary);
+  cursor: pointer;
+  font-family: $font-title;
+  font-size: 16px;
+  font-weight: $font-regular;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+
+  margin: 0;
+  flex: 0 0 20px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.checkbox-container a {
+  color: var(--color-primary);
+  text-decoration: none;
 }

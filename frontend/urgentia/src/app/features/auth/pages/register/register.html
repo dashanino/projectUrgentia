@@ -29,14 +29,14 @@
 
               <h4>Fecha de nacimiento</h4>
               <label>
-              <input type="number" formControlName="DOB" placeholder="(DD/MM/AAAA)" />
+              <input type="date" formControlName="DOB" />
               </label>
 
               <h4>Nueva contraseña</h4>
               <label>
               <input type="password" formControlName="nueva_contraseña" placeholder="Ingrese una nueva contraseña" />
               </label>
-              <p>Mínimo 8 caracteres, incluyendo mayúscula, número y carácter especial.</p>
+              
             </div>
 
             <div class="columna-der">
@@ -67,9 +67,25 @@
               
                 <h4>Confirmar nueva contraseña:</h4>
                 <label>
-                <input type="password" formControlName="confirmar_contraseña" placeholder="Ingrese nuevamente su contraseña" />
+                <input type="password" formControlName="confirmar_contraseña" placeholder="Confirme nueva contraseña" />
                 </label>
+                
               </div>
+              
+
+            <p>Contraseña debe tener mínimo 8 caracteres, incluyendo mayúscula, número y carácter especial.</p>
+            <div class="checkbox-container">
+              <label>
+                  <input type="checkbox" formControlName="terminos">
+                  <span>
+                    Acepto los
+                    <a href="#">Términos y Condiciones</a>
+                    y autorizo el tratamiento de mis datos personales de acuerdo con la
+                    <a href="#">Política de Privacidad</a>.
+                  </span>
+              </label>
+
+            </div>
 
             <button type="submit">Crear Cuenta</button>
         </form>
