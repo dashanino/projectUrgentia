@@ -1,23 +1,33 @@
 import { Component, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators  } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
-export class Register {
 
+export class Register {
+  private fb = inject(FormBuilder);
   private router = inject(Router);
 
-  // Flecha → volver a begin
-  goBack() {
-    this.router.navigate(['/begin']);
-  }
+  form = this.fb.group({
+    names: ['', Validators.required],
+    lastname: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    phoneNumber: ['', Validators.required],
+    DOB: ['', Validators.required],
+    EPS: ['', Validators.required],
+    nueva_contraseña: ['', Validators.required],
+    confirmar_contraseña: ['', Validators.required],
+  });
 
-  // Continuar → ir al login
-  continue() {
-    this.router.navigate(['/login']);
+  submit() {
+    if (this.form.valid) {
+      console.log('Form submitted', this.form.value);
+      this.router.navigate(['/login']);
+    }
   }
 }

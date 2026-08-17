@@ -1,151 +1,68 @@
-<div class="register-page">
 
-    <!-- HEADER / LOGO -->
-    <header class="register-header">
-      <img
-        src="logo.png"
-        alt="Urgentia"
-        class="logo"
-      >
-  
-      <h1>Urgentia</h1>
-  
-      <div class="divider"></div>
-  
-      <p>
-        Pre-triage inteligente <br>
-        para urgencias
-      </p>
-    </header>
-  
-  
-    <!-- TARJETA -->
-    <section class="register-card">
-  
-        <div class="card-title">
-            <button
-            type="button"
-            class="back-button"
-            (click)="goBack()"
-          >
-            ‹
-          </button>
-  
-        <h2>Nueva Cuenta</h2>
-      </div>
-  
-  
-      <form class="register-form">
-  
-        <!-- NOMBRES -->
-        <div class="form-group">
-          <label for="nombre">Nombres</label>
-  
-          <input
-            id="nombre"
-            type="text"
-            placeholder="Maria José"
-          >
+<div class = ParentDiv>
+    <section class="begin-visual">
+        <img src="image 5.png" alt="Ilustración de urgencias" class="imagen-fondo" /> <!-- imágen de fondo-->
+        <div class="nombre-visual">
+        <img class="logo" src="logo.png" alt="Urgentia" />
+        <h1>Urgentia</h1>
+        <p>Sistema De Pre-Triage Para <br>Urgencias</p>
         </div>
-  
-  
-        <!-- APELLIDOS -->
-        <div class="form-group">
-          <label for="apellido">Apellidos</label>
-  
-          <input
-            id="apellido"
-            type="text"
-            placeholder="Gómez Perez"
-          >
-        </div>
-  
-  
-        <!-- CORREO -->
-        <div class="form-group">
-          <label for="correo">Correo electrónico</label>
-  
-          <input
-            id="correo"
-            type="email"
-            placeholder="urgentina@mail.com"
-          >
-        </div>
-  
-  
-        <!-- CELULAR -->
-        <div class="form-group">
-          <label for="celular">Número celular</label>
-  
-          <input
-            id="celular"
-            type="tel"
-            placeholder="(123) 456-789"
-          >
-        </div>
-  
-  
-        <!-- FECHA -->
-        <div class="form-group">
-          <label for="fecha">
-            Fecha de nacimiento (DD/MM/YY)
-          </label>
-  
-          <input
-            id="fecha"
-            type="date"
-          >
-        </div>
-  
-  
-        <!-- EPS -->
-        <div class="form-group">
-          <label for="eps">EPS</label>
-  
-          <select id="eps">
-            <option value="">Selecciona tu EPS</option>
-            <option>Sura</option>
-            <option>Sanitas</option>
-            <option>Nueva EPS</option>
-            <option>Salud Total</option>
-          </select>
-        </div>
-  
-  
-        <!-- CONTRASEÑA -->
-        <div class="form-group">
-          <label for="password">Contraseña</label>
-  
-          <input
-            id="password"
-            type="password"
-            placeholder="***************"
-          >
-        </div>
-  
-  
-        <!-- REQUISITOS -->
-        <div class="password-rules">
-          <p>Mínimo 8 caracteres</p>
-          <p>1 Mayúscula</p>
-          <p>1 Número</p>
-          <p>1 Carácter especial</p>
-        </div>
-  
-  
-        <!-- BOTÓN -->
-        <div class="button-container">
-            <button
-              type="button"
-              class="continue-button"
-              (click)="continue()"
-            >
-              Continuar
-            </button>
-          </div>
-  
-      </form>
-  
     </section>
+    
+
+    <section class="register">
+    <!-- info -->
+        <div class="formulario">
+        <h1>Nueva Cuenta</h1>
+        
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+            <h4>Nombres</h4>
+            <label>
+            <input type="text" formControlName="names" placeholder="Ingrese sus nombres" />
+            </label>
+            <h4>Apellidos</h4>
+            <label>
+            <input type="text" formControlName="lastname" placeholder="Ingrese sus apellidos" />
+            </label>
+            <h4>Correo electrónicos</h4>
+            <label>
+            <input type="text" formControlName="email" placeholder="Ingrese su correo electrónico" />
+            </label>
+            <h4>Número celular</h4>
+            <label>
+            <input type="number" formControlName="phoneNumber" placeholder="Ingrese su número celular" />
+            </label>
+            <h4>Fecha de nacimiento</h4>
+            <label>
+            <input type="number" formControlName="DOB" placeholder="(DD/MM/AAAA)" />
+            </label>
+            <label>
+              <select formControlName="EPS">
+                <option value="" disabled selected>Seleccione su EPS</option>
+                <option value="SURA">SURA</option>
+                <option value="Sanitas">Sanitas</option>
+                <option value="Nueva EPS">Nueva EPS</option>
+                <option value="Salud Total">Salud Total</option>
+                <option value="Coosalud">Coosalud</option>
+                <option value="Emssanar">Emssanar</option>
+                <option value="Compensar">Compensar</option>
+                <option value="Famisanar">Famisanar</option>
+                </select>
+              </label>
+            <h4>Nueva contraseña</h4>
+            <label>
+            <input type="password" formControlName="nueva_contraseña" placeholder="Ingrese una nueva contraseña" />
+            </label>
+            <h4>Confirmar nueva contraseña:</h4>
+            <label>
+            <input type="password" formControlName="confirmar_contraseña" placeholder="Ingrese nuevamente su contraseña" />
+            </label>
+            <button type="submit">Crear Cuenta</button>
+        </form>
+        </div>
+    </section>
+</div> 
+
   
-  </div>
+
+  

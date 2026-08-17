@@ -12,7 +12,7 @@ export class Begin {
   private router = inject(Router);
 
   irEmergencia() {
-    this.router.navigate(['/emergency']);
+    this.router.navigate(['emergency/antecedentes']);
   }
 
   irLogin() {
