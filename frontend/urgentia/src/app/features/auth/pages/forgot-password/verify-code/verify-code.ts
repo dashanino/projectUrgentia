@@ -31,12 +31,14 @@ constructor() {
   if (this.form.valid) {
     if (Number(this.form.value.codigo) === this.code) {
         console.log('Código correcto');
-
+        alert('Código ingresado correcto')
         this.router.navigate(['/recuperar-contraseña/nueva-contraseña']);
 
-      } else {
-        console.log('Código incorrecto');
-      }
+      } 
+    else {
+      console.log('Código incorrecto');
+      alert('Código ingresado incorrecto, intente nuevamente')
+    }
 
   }
 }
