@@ -15,15 +15,26 @@ export class Login {private fb = inject(FormBuilder);
   passwordTest = '123456'
 
   form = this.fb.group({
-    cedula: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
+    
   });
 
-
   submit() {
-  if (this.form.valid) {
-    console.log('Form submitted', this.form.value);
-    this.router.navigate(['/recuperar-contraseña/home']);
+  if (this.form.invalid) {
+    alert('Por favor, complete todos los campos correctamente.');
+    return;
   }
+
+  const password = this.form.value.password;
+  const email = this.form.value.email;
+
+  if (password !== this.passwordTest || email !== this.emailTest) {
+    alert('El correo electrónico y/o la contraseña no corresponden a una cuenta registrada..');
+    return;
+  }
+
+  console.log('Datos correctos');
+  this.router.navigate(['home']);
 }
 }
