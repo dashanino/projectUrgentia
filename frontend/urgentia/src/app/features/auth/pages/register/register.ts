@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators  } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
@@ -26,9 +26,22 @@ export class Register {
   });
 
   submit() {
-    if (this.form.valid) {
-      console.log('Form submitted', this.form.value);
-      this.router.navigate(['/login']);
+
+    if (this.form.invalid) {
+      alert('Por favor, complete todos los campos correctamente.');
+      return;
     }
+
+    const password = this.form.value.nueva_contraseña;
+    const confirmPassword = this.form.value.confirmar_contraseña;
+
+    if (password !== confirmPassword) {
+      alert('Las contraseñas no coinciden.');
+      return;
+    }
+
+    console.log('Form submitted', this.form.value);
+
+    this.router.navigate(['/login']);
   }
 }
