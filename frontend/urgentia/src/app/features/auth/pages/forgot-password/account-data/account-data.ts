@@ -13,20 +13,28 @@ export class AccountData {
   private router = inject(Router);
 
   cedulaTest = '123456';
-  emailTest = 'urgentia@gmail.com';
+emailTest = 'urgentia@gmail.com';
 
-  form = this.fb.group({
-    cedula: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-  });
-  goBack() {
-    this.router.navigate(['/begin']);
+form = this.fb.group({
+  cedula: ['', Validators.required],
+  email: ['', [Validators.required, Validators.email]],
+});
+
+submit() {
+  if (this.form.invalid) {
+    alert('Por favor, complete todos los campos correctamente.');
+    return;
   }
 
-  submit() {
-  if (this.form.valid) {
-    console.log('Form submitted', this.form.value);
-    this.router.navigate(['/recuperar-contraseña/codigo']);
+  const cedula = this.form.value.cedula;
+  const email = this.form.value.email;
+
+  if (cedula !== this.cedulaTest || email !== this.emailTest) {
+    alert('La cédula y el correo electrónico no corresponden a una cuenta registrada..');
+    return;
   }
+
+  console.log('Datos correctos');
+  this.router.navigate(['/recuperar-contraseña/codigo']);
 }
 }

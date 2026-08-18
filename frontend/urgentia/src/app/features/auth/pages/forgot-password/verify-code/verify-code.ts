@@ -15,17 +15,31 @@ export class VerifyCode {
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
-  codigoTest = 'ASD123'
+  code = Math.floor(100000 + Math.random() * 900000);
 
   form = this.fb.group({
     codigo: ['', Validators.required],
   });
+  
 
+
+constructor() {
+    console.log('Código de verificación:', this.code);
+  }
 
   submit() {
   if (this.form.valid) {
-    console.log('Form submitted', this.form.value);
-    this.router.navigate(['/recuperar-contraseña/nueva-contraseña']);
+    if (Number(this.form.value.codigo) === this.code) {
+        console.log('Código correcto');
+        alert('Código ingresado correcto')
+        this.router.navigate(['/recuperar-contraseña/nueva-contraseña']);
+
+      } 
+    else {
+      console.log('Código incorrecto');
+      alert('Código ingresado incorrecto, intente nuevamente')
+    }
+
   }
 }
 }
