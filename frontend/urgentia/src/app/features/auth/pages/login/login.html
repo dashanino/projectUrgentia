@@ -11,27 +11,50 @@
     
 
     <section class="info">
-    <!-- info -->
+        <!-- info -->
         <div class="formulario">
-        <h1>Iniciar Sesión</h1>
-        <h3>Bienvenid@</h3>
-        <p>
-            Por favor ingrese sus datos para iniciar sesión.
-        </p>
-        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
-            <h4>Correo</h4>
-            <label>
-            <input type="text" formControlName="email" placeholder="Ingrese su correo" />
-            </label>
-            <h4>Contraseña</h4>
-            <label>
-            <input type="password" formControlName="password" placeholder="Ingrese su contraseña" />
-            </label>
-            <span><a href="/recuperar-contraseña">Olvidé mi contraseña</a></span>
-            
-            <button type="submit" ><a href="/home" class="blanco">Iniciar Sesión </a></button>
-            
-        </form>
+            <div class="header-form">
+                <button
+                    type="button"
+                    class="back-button"
+                    (click)="goBack()"
+                    aria-label="Volver"
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <path
+                            d="M15 18l-6-6 6-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                </button>
+        
+                <h1>Iniciar Sesión</h1>
+            </div>
+            <h3>Bienvenid@</h3>
+            <p>
+                Por favor ingrese sus datos para iniciar sesión.
+            </p>
+            <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+                <h4>Correo</h4>
+                <label>
+                <input type="text" formControlName="email" placeholder="Ingrese su correo" />
+                </label>
+                <h4>Contraseña</h4>
+                <label>
+                <input type="password" formControlName="password" placeholder="Ingrese su contraseña" />
+                </label>
+                <span><a href="/recuperar-contraseña">Olvidé mi contraseña</a></span>
+                
+                <button type="submit" ><a href="/home" class="blanco">Iniciar Sesión </a></button>
+                
+            </form>
         </div>
     </section>
 </div> 

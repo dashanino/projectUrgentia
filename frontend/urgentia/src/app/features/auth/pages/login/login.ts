@@ -19,6 +19,9 @@ export class Login {private fb = inject(FormBuilder);
     password: ['', Validators.required],
     
   });
+  goBack() {
+    this.router.navigate(['/begin']);
+  }
 
   submit() {
   if (this.form.invalid) {
