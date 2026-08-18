@@ -13,7 +13,30 @@
     <section class="register">
     <!-- info -->
         <div class="formulario">
-        <h1>Nueva Cuenta</h1>
+            <div class="header-form">
+                <button
+                    type="button"
+                    class="back-button"
+                    (click)="goBack()"
+                    aria-label="Volver"
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <path
+                            d="M15 18l-6-6 6-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                </button>
+        
+                <h1>Nueva Cuenta</h1>
+            </div>
         
         <form [formGroup]="form" (ngSubmit)="submit()" class="form">
           <div class="columna-izq">

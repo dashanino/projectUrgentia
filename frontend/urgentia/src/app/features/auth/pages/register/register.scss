@@ -1,9 +1,20 @@
 @use 'variables' as *;
 
+
+/* =========================
+   CONTENEDOR PRINCIPAL
+========================= */
+
 .ParentDiv {
-    display: flex;
-    min-height: 100vh;
+  display: flex;
+  min-height: 100vh;
 }
+
+
+/* =========================
+   PANEL IZQUIERDO
+========================= */
+
 .begin-visual {
   position: relative;
   flex: 0 0 40%;
@@ -16,99 +27,182 @@
 }
 
 .nombre-visual {
-    position: absolute;
-    top: 5%;
-    left: 0;
-    width: 100%;
+  position: absolute;
+  top: 5%;
+  left: 0;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width: 80%;
 
-    color: var(--color-primary);
-    text-align: center;
-    width: 80%;
-/* Evita que el texto toque los bordes */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: var(--color-primary);
+  text-align: center;
 }
 
-/* Estilos del Logo */
 .logo {
-    width: 150px; /* Controla el tamaño de tu logo */
-    height: auto;
-    margin-top: 10vh; 
-    margin-bottom: -40px;/* Separación con el título */
+  width: 150px;
+  height: auto;
+
+  margin-top: 10vh;
+  margin-bottom: -40px;
 }
 
-/* Estilos de los Textos */
 .nombre-visual h1 {
-    font-family: $font-title;
-    font-weight: $font-thin;
-    font-size: 65px;
-    margin-bottom: 25px;
+  margin-bottom: 25px;
 
+  font-family: $font-title;
+  font-weight: $font-thin;
+  font-size: 65px;
 }
 
 .nombre-visual p {
-  font-size: 25px;
   margin: 0;
-  font-weight: $font-bold;
+
   font-family: $font-title;
+  font-weight: $font-bold;
+  font-size: 25px;
+
   text-align: center;
   line-height: 1.1;
-
 }
+
+
+/* =========================
+   PANEL REGISTER
+========================= */
 
 .register {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-}
-.register h1 {
-    font-family: $font-title;
-    font-weight: $font-semi-bold;
-    font-size: 35px;
-    margin-bottom: 2px;
-    color: var(--color-primary);
-}
-.register p {
-    font-family: $font-title;
-    font-weight: $font-light;
-    font-size: 16px;
-    color: var(--color-primary);
-    grid-column: 1 / -1;
-    font-style: italic;
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px;
 }
 
+.register p {
+  grid-column: 1 / -1;
+
+  font-family: $font-title;
+  font-weight: $font-light;
+  font-size: 16px;
+  font-style: italic;
+
+  color: var(--color-primary);
+}
+
+
+/* =========================
+   TARJETA
+========================= */
 
 .formulario {
-  background-color: var(--color-surface);
   width: 90%;
   max-width: 770px;
   height: 90vh;
 
-  border-radius: 50px;
   padding: 50px 70px;
-  
+
   box-sizing: border-box;
+
+  background-color: var(--color-surface);
+  border-radius: 50px;
 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 
+/* =========================
+   ENCABEZADO
+========================= */
+
+.header-form {
+  position: relative;
+
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.header-form h1 {
+  margin: 0;
+  padding: 0;
+
+  font-family: $font-title;
+  font-weight: $font-semi-bold;
+  font-size: 35px;
+
+  color: var(--color-primary);
+}
+
+
+/* =========================
+   FLECHA REGRESAR
+========================= */
+
+.back-button {
+  position: absolute;
+
+  left: -55px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 42px;
+  height: 42px;
+
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  background: transparent;
+
+  color: var(--color-primary);
+
+  cursor: pointer;
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  &:hover {
+    background-color: var(--color-primary-soft);
+    border-radius: 50%;
+  }
+}
+
+
+/* =========================
+   FORMULARIO
+========================= */
+
 .form {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 35px;
+
   width: 100%;
 }
 
-.form h4{
-    font-family: $font-title;
-    font-weight: $font-medium;
-    font-size: 22px;
-    margin-bottom: 0px;
+.columna-izq,
+.columna-der {
+  display: flex;
+  flex-direction: column;
+}
+
+.form h4 {
+  margin-bottom: 0;
+
+  font-family: $font-title;
+  font-weight: $font-medium;
+  font-size: 22px;
 }
 
 .form label {
@@ -117,86 +211,61 @@
   font-size: 18px;
 }
 
-.form input {
-  width: 100%;
-  height: 45px;
-  box-sizing: border-box;
 
-  border: none;
-  border-radius: 10px;
-  padding: 0 15px;
-
-  background-color: var(--color-primary-soft);
-
-  font-family: $font-title;
-  font-size: 20px;
-}
-.form button {
-  grid-column: 1 / -1;
-
-}
+/* =========================
+   INPUTS Y SELECT
+========================= */
 
 .form input,
 .form select {
   width: 100%;
   height: 45px;
+
   box-sizing: border-box;
+
+  padding: 0 15px;
 
   border: none;
   border-radius: 10px;
-  padding: 0 15px;
 
   background-color: var(--color-primary-soft);
 
   font-family: $font-title;
   font-size: 20px;
+
   color: #666;
 }
 
-button{
-    margin-top: 1%;
-    padding: 20px 30px;
-    font-family: $font-title;
-    font-weight: $font-medium;
-    font-size: 20px;
-    border-radius: 18px;
-    background-color: var(--color-primary);
-    color: var(--color-surface);
-    
-}
 
-
-
-.columna-izq{
-  display: flex;
-  flex-direction: column;
-}
-
-.columna-der{
-  display: flex;
-  flex-direction: column;
-}
+/* =========================
+   CHECKBOX
+========================= */
 
 .checkbox-container {
   grid-column: 1 / -1;
-  margin-top: 10px;
+
   width: 100%;
+
+  margin-top: 10px;
   margin-bottom: 5px;
 }
 
 .checkbox-container label {
+  width: 100%;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 10px;
 
-  width: 100%;
-
-  color: var(--color-text-primary);
-  cursor: pointer;
   font-family: $font-title;
   font-size: 16px;
   font-weight: $font-regular;
+
+  color: var(--color-text-primary);
+
+  cursor: pointer;
 }
 
 .checkbox-container input[type="checkbox"] {
@@ -204,12 +273,37 @@ button{
   height: 20px;
 
   margin: 0;
+
   flex: 0 0 20px;
+
   accent-color: var(--color-primary);
+
   cursor: pointer;
 }
 
 .checkbox-container a {
   color: var(--color-primary);
   text-decoration: none;
+}
+
+
+/* =========================
+   BOTÓN PRINCIPAL
+========================= */
+
+.form button {
+  grid-column: 1 / -1;
+
+  margin-top: 1%;
+
+  padding: 20px 30px;
+
+  border-radius: 18px;
+
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+
+  font-family: $font-title;
+  font-weight: $font-medium;
+  font-size: 20px;
 }

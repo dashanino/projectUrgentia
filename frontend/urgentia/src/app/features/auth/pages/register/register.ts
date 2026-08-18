@@ -24,6 +24,9 @@ export class Register {
     confirmar_contraseña: ['', Validators.required],
     terminos: [false, Validators.requiredTrue]
   });
+  goBack() {
+    this.router.navigate(['/begin']);
+  }
 
   submit() {
 
