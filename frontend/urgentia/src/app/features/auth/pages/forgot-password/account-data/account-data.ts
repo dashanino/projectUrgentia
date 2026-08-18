@@ -19,7 +19,9 @@ export class AccountData {
     cedula: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
   });
-
+  goBack() {
+    this.router.navigate(['/begin']);
+  }
 
   submit() {
   if (this.form.valid) {

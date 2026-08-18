@@ -12,22 +12,45 @@
     <section class="forgot-password">
     <!-- info -->
         <div class="formulario">
-        <h1>Olvidé Mi Contraseña</h1>
-        <p>
-            Ingrese la cédula y el correo electrónico asociado a su cuenta y le enviaremos un código para
-            reestablecer tu contraseña.
-        </p>
-        <form [formGroup]="form" (ngSubmit)="submit()" class="form">
-            <h4>Cédula</h4>
-            <label>
-            <input type="text" formControlName="cedula" placeholder="Ingrese su número de cédula" />
-            </label>
-            <h4>Correo electrónico</h4>
-            <label>
-            <input type="text" formControlName="email" placeholder="Ingrese su correo electrónico" />
-            </label>
-            <button type="submit">Enviar Código</button>
-        </form>
+            <div class="header-form">
+                <button
+                    type="button"
+                    class="back-button"
+                    (click)="goBack()"
+                    aria-label="Volver"
+                    >
+                    <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    >
+                    <path
+                        d="M15 18l-6-6 6-6"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                    </svg>
+              </button>
+            
+                <h1>Olvidé Mi Contraseña</h1>
+            </div>
+            <p>
+                Ingrese la cédula y el correo electrónico asociado a su cuenta y le enviaremos un código para
+                reestablecer tu contraseña.
+            </p>
+            <form [formGroup]="form" (ngSubmit)="submit()" class="form">
+                <h4>Cédula</h4>
+                <label>
+                <input type="text" formControlName="cedula" placeholder="Ingrese su número de cédula" />
+                </label>
+                <h4>Correo electrónico</h4>
+                <label>
+                <input type="text" formControlName="email" placeholder="Ingrese su correo electrónico" />
+                </label>
+                <button type="submit">Enviar Código</button>
+            </form>
         </div>
     </section>
 </div> 
