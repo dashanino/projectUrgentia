@@ -19,7 +19,9 @@ form = this.fb.group({
   cedula: ['', Validators.required],
   email: ['', [Validators.required, Validators.email]],
 });
-
+goBack() {
+  this.router.navigate(['/begin']);
+}
 submit() {
   if (this.form.invalid) {
     alert('Por favor, complete todos los campos correctamente.');
