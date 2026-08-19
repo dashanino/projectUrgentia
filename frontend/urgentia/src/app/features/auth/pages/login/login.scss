@@ -5,7 +5,6 @@
   min-height: 100vh;
 }
 
-
 /* =========================
    PANEL IZQUIERDO
 ========================= */
@@ -63,7 +62,6 @@
   line-height: 1.1;
 }
 
-
 /* =========================
    PANEL DERECHO
 ========================= */
@@ -92,7 +90,6 @@
 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
-
 
 /* =========================
    ENCABEZADO
@@ -137,7 +134,6 @@
   color: var(--color-text);
 }
 
-
 /* =========================
    BOTÓN REGRESAR
 ========================= */
@@ -177,7 +173,6 @@
     border-radius: 50%;
   }
 }
-
 
 /* =========================
    FORMULARIO
@@ -224,7 +219,6 @@
   font-size: 20px;
 }
 
-
 /* =========================
    ENLACES
 ========================= */
@@ -249,12 +243,11 @@ a {
   color: var(--color-surface);
 }
 
-
 /* =========================
    BOTÓN INICIAR SESIÓN
 ========================= */
 
-.form button {
+.form > button {
   margin-top: 10%;
 
   padding: 20px 30px;
@@ -267,4 +260,44 @@ a {
   font-family: $font-title;
   font-weight: $font-medium;
   font-size: 20px;
+}
+
+.password-field {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.password-field input {
+  padding-right: 50px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 35%;
+  transform: translateY(-50%);
+
+  width: 30px;
+  height: 30px;
+
+  padding: 0;
+  margin: 0;
+
+  border: none;
+  background: transparent;
+
+  color: var(--color-text);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.password-toggle mat-icon {
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
 }

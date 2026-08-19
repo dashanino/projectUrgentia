@@ -1,10 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+
+
 
 @Component({
   selector: 'app-new-password',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatIconModule],
   templateUrl: './new-password.html',
   styleUrl: './new-password.scss',
 })
@@ -13,11 +16,23 @@ export class NewPassword {
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
+  showNewPassword = false;
+  showConfirmPassword = false;
+
+
   form = this.fb.group({
-    nueva_contraseña: ['', Validators.required],
-    confirmar_contraseña: ['', Validators.required],
+    NewPassword: ['', Validators.required],
+    ConfirmPassword: ['', Validators.required],
   });
 
+
+  showNewPasswordValue() {
+      this.showNewPassword = !this.showNewPassword;
+    }
+
+  showConfirmPasswordValue() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
   submit() {
 
     if (this.form.invalid) {
@@ -25,8 +40,8 @@ export class NewPassword {
       return;
     }
 
-    const password = this.form.value.nueva_contraseña;
-    const confirmPassword = this.form.value.confirmar_contraseña;
+    const password = this.form.value.NewPassword;
+    const confirmPassword = this.form.value.ConfirmPassword;
 
     if (password !== confirmPassword) {
       alert('Las contraseñas no coinciden.');

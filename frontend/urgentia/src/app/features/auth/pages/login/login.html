@@ -46,9 +46,24 @@
                 <label>
                 <input type="text" formControlName="email" placeholder="Ingrese su correo" />
                 </label>
+
                 <h4>Contraseña</h4>
-                <label>
-                <input type="password" formControlName="password" placeholder="Ingrese su contraseña" />
+                <label class="password-field">
+                    <input
+                        [type]="showPasswordValue ? 'text' : 'password'"
+                        formControlName="password"
+                        placeholder="Ingrese su contraseña"
+                    />
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        (click)="showPassword()"
+                    >
+                        <mat-icon>
+                            {{ showPasswordValue ? 'visibility' : 'visibility_off' }}
+                        </mat-icon>
+                    </button>
                 </label>
                 <span><a href="/recuperar-contraseña">Olvidé mi contraseña</a></span>
                 
@@ -58,3 +73,4 @@
         </div>
     </section>
 </div> 
+
