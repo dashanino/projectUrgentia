@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import {LOGIN_USERS_MOCK} from '../../../../mocks/login/login.mock';
 
 @Component({
   selector: 'app-login',
@@ -9,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
+
 export class Login {
   private fb = inject(FormBuilder);
   private router = inject(Router);
@@ -22,6 +24,7 @@ export class Login {
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   })
+
 
   goBack() {
     this.router.navigate(['/begin']);
@@ -40,10 +43,17 @@ export class Login {
     const password = this.form.value.password;
     const email = this.form.value.email;
 
-    if (password !== this.passwordTest || email !== this.emailTest) {
-      alert('El correo electrónico y/o la contraseña no corresponden a una cuenta registrada.');
-      return;
+    const userFound = LOGIN_USERS_MOCK.find(
+      (user)=> user.email === email && user.password ===password,
+    );
+
+    if (!userFound){
+      alert ('Correo o contraseña incorrectos')
+      return
     }
+
+    //crear sesion storage
+    sessionStorage.setItem('isLoggedIn', 'true');
 
     console.log('Datos correctos');
     this.router.navigate(['/home']);
