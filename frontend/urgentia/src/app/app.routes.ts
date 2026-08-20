@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import {authGuard} from './guards/auth.guards'
+import {authGuard} from './guards/auth.guards';
 
 export const routes: Routes = [
   {
@@ -16,7 +16,7 @@ export const routes: Routes = [
   },
 
   {
-    path: 'login', //PONER AUTHGUARD
+    path: 'login', 
     loadComponent: () =>
       import('./features/auth/pages/login/login')
         .then((m) => m.Login),
@@ -55,7 +55,9 @@ export const routes: Routes = [
         .then((m) => m.Success),
   },
   {
+    //se puede especificar el rol para ingrsar [authGuard, estudiante]
     path: 'home',
+    canActivate : [authGuard], 
     loadComponent: () =>
       import('./features/home/pages/home/home')
         .then((m) => m.Home),
