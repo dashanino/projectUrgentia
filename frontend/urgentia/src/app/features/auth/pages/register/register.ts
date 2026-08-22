@@ -29,6 +29,14 @@ export class Register {
     this.router.navigate(['/begin']);
   }
 
+  checkTerms(){
+    window.open('docs/Urgentia_Terminos_Condiciones.pdf')
+  }
+
+  checkPrivacy(){
+    window.open('/docs/Urgentia_Politica_Privacidad.pdf')
+  }
+
   submit() {
 
     if (this.form.invalid) {
