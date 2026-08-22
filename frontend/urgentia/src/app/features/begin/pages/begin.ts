@@ -19,7 +19,4 @@ export class Begin {
     this.router.navigate(['/login']);
   }
 
-  irRegistro() {
-    this.router.navigate(['/registro']);
-  }
 }
