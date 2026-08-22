@@ -52,8 +52,8 @@ export class Login {
       return
     }
 
-    //crear sesion storage
-    sessionStorage.setItem('isLoggedIn', 'true');
+   sessionStorage.setItem('isLoggedIn', 'true');
+
 
     console.log('Datos correctos');
     this.router.navigate(['/home']);

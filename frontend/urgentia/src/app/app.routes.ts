@@ -84,6 +84,14 @@ export const routes: Routes = [
       import('./features/emergency/pages/red-flags/red-flags')
         .then((m) => m.RedFlags),
   },
+  {
+    path: 'perfil',
+    canActivate : [authGuard], 
+    loadComponent: () =>
+      import('./features/perfil/pages/perfil/perfil')
+        .then((m) => m.Perfil),
+  },
+  
 
   {
     path: '**',
