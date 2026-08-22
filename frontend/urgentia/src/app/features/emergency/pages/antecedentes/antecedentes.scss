@@ -198,6 +198,11 @@
   
     cursor: pointer;
   }
+  .emergency-btn img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+  }
   
   .step {
     width: 100%;
