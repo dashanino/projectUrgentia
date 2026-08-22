@@ -13,22 +13,27 @@
   width: 100%;
   height: 100vh;
   display: block;
+
+  object-fit: contain;
+  object-position: bottom center;
+
+  background: #d4e1fc;
 }
 
 .nombre-visual {
-    position: absolute;
-    top: 5%;
-    left: 0;
-    width: 100%;
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-55%);
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width: 100%;
 
-    color: var(--color-primary);
-    text-align: center;
-    width: 80%;
-/* Evita que el texto toque los bordes */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: var(--color-primary);
+  text-align: center;
 }
 
 /* Estilos del Logo */
