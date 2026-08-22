@@ -1,1 +1,171 @@
-<p>antecedentes works!</p>
+
+<div class="page">
+
+    <header class="topbar">
+      <div class="brand">
+        <img src="logo.png" alt="Urgentia">
+        <span>Urgentia</span>
+        <p>Pre-triage inteligente<br>para urgencias</p>
+      </div>
+  
+      <div class="top-icons">
+
+        <button type="button" class="icon-button">
+        <mat-icon>notifications_none</mat-icon>
+        </button>
+    
+        <button type="button" class="icon-button">
+        <mat-icon>settings</mat-icon>
+        </button>
+        
+      </div>
+    </header>
+  
+    <main class="main-layout">
+  
+        <aside class="sidebar">
+
+            <button class="emergency-btn">
+                <mat-icon>notifications_active</mat-icon>
+              Emergencia Inmediata
+            </button>
+          
+            <div class="step active">
+              <span class="step-number">1</span>
+              Antecedentes
+            </div>
+          
+            <div class="step">
+              <span class="step-number">2</span>
+              Tipo de paciente
+            </div>
+          
+            <div class="step">
+              <span class="step-number">3</span>
+              Banderas Rojas
+            </div>
+          
+            <div class="step">
+              <span class="step-number">4</span>
+              Resultado
+            </div>
+          
+        </aside>
+  
+      <section class="card">
+  
+        <div class="card-header">
+
+            <button class="back-button">
+              <mat-icon>chevron_left</mat-icon>
+            </button>
+          
+            <div class="title-icon">
+              <mat-icon>medical_information</mat-icon>
+            </div>
+          
+            <h1>Antecedentes Importantes</h1>
+          
+          </div>
+  
+        <div class="progress">
+          <span class="circle active">1</span>
+          <span class="line"></span>
+          <span class="circle">2</span>
+          <span class="line"></span>
+          <span class="circle">3</span>
+          <span class="line"></span>
+          <span class="circle">4</span>
+        </div>
+  
+        <div class="card-content">
+  
+            <div class="options">
+
+                <button
+                  type="button"
+                  [class.selected]="isSelected('Anticoagulantes')"
+                  (click)="toggleAntecedente('Anticoagulantes')">
+                  Anticoagulantes
+                </button>
+              
+                <button
+                  type="button"
+                  [class.selected]="isSelected('Autoinmune')"
+                  (click)="toggleAntecedente('Autoinmune')">
+                  Autoinmune
+                </button>
+              
+                <button
+                  type="button"
+                  [class.selected]="isSelected('Inmunocomprometido')"
+                  (click)="toggleAntecedente('Inmunocomprometido')">
+                  Inmunocomprometido
+                </button>
+              
+                <button
+                  type="button"
+                  [class.selected]="isSelected('Hemodiálisis')"
+                  (click)="toggleAntecedente('Hemodiálisis')">
+                  Hemodiálisis
+                </button>
+              
+                <button
+                  type="button"
+                  [class.selected]="isSelected('Cáncer activo')"
+                  (click)="toggleAntecedente('Cáncer activo')">
+                  Cáncer activo
+                </button>
+              
+            </div>
+  
+            <aside class="info-box">
+                <h3>¿Por qué es importante?</h3>
+              
+                <p>
+                  Esta información nos ayuda a entender tu condición y brindarte una orientación más segura y precisa.
+                </p>
+              
+                <div class="medical-file-icon">
+                    <svg viewBox="0 0 64 72" aria-hidden="true">
+                      <path
+                        d="M14 4H42L56 18V64C56 67 54 69 51 69H14C11 69 9 67 9 64V9C9 6 11 4 14 4Z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                  
+                      <path
+                        d="M42 4V18H56"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      />
+                  
+                      <path
+                        d="M32 30V52M21 41H43"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </div>
+            </aside>
+  
+        </div>
+  
+        <div class="continue-container">
+            <button
+                type="button"
+                class="continue-btn"
+                (click)="continuar()">
+                Continuar →
+          </button>
+        </div>
+  
+      </section>
+  
+    </main>
+  
+  </div>
