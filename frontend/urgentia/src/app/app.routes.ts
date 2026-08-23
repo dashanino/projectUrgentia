@@ -78,11 +78,36 @@ export const routes: Routes = [
         .then((m) => m.Antecedentes),
   },
 
+
   {
-    path: 'emergency/red-flags',
+    path: 'emergency/red-flags/adulto',
     loadComponent: () =>
-      import('./features/emergency/pages/red-flags/red-flags')
-        .then((m) => m.RedFlags),
+      import('./features/emergency/pages/red-flags/adulto/adulto')
+        .then(m => m.Adulto)
+  },
+  {
+    path: 'emergency/red-flags/adulto-mayor',
+    loadComponent: () =>
+      import('./features/emergency/pages/red-flags/adulto-mayor/adulto-mayor')
+        .then(m => m.AdultoMayor)
+  },
+  {
+    path: 'emergency/red-flags/embarazada',
+    loadComponent: () =>
+      import('./features/emergency/pages/red-flags/embarazada/embarazada')
+        .then(m => m.Embarazada)
+  },
+  {
+    path: 'emergency/red-flags/nino',
+    loadComponent: () =>
+      import('./features/emergency/pages/red-flags/nino/nino')
+        .then(m => m.Nino)
+  },
+  {
+    path: 'emergency/red-flags/trauma',
+    loadComponent: () =>
+      import('./features/emergency/pages/red-flags/trauma/trauma')
+        .then(m => m.Trauma)
   },
   {
     path: 'perfil',

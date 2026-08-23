@@ -14,19 +14,15 @@ export class PatientGroup {
 
   poblacionSeleccionada: string | null = null;
 
-
   seleccionarPoblacion(poblacion: string) {
     this.poblacionSeleccionada = poblacion;
   }
-
 
   estaSeleccionada(poblacion: string): boolean {
     return this.poblacionSeleccionada === poblacion;
   }
 
-
   continuar() {
-
     if (!this.poblacionSeleccionada) {
       return;
     }
@@ -36,9 +32,28 @@ export class PatientGroup {
       this.poblacionSeleccionada
     );
 
-    this.router.navigate(['/emergency/red-flags']);
-  }
+    switch (this.poblacionSeleccionada) {
+      case 'Niño':
+        this.router.navigate(['/emergency/red-flags/nino']);
+        break;
 
+      case 'Adulto':
+        this.router.navigate(['/emergency/red-flags/adulto']);
+        break;
+
+      case 'Adulto Mayor':
+        this.router.navigate(['/emergency/red-flags/adulto-mayor']);
+        break;
+
+      case 'Embarazada':
+        this.router.navigate(['/emergency/red-flags/embarazada']);
+        break;
+
+      case 'Trauma/Accidente':
+        this.router.navigate(['/emergency/red-flags/trauma']);
+        break;
+    }
+  }
 
   goBack() {
     this.router.navigate(['/emergency/antecedentes']);
