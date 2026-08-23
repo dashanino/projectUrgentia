@@ -52,7 +52,7 @@ export class Adulto {
       this.sintomaSeleccionado
     );
 
-    this.router.navigate(['/login']);
+    this.router.navigate(['/resultado']);
   }
 
   goBack(): void {
