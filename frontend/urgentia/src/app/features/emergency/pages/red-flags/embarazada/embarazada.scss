@@ -279,6 +279,14 @@
   background: var(--color-primary);
   color: white;
 }
+.circle.active {
+    width: 26px;
+    height: 26px;
+
+    border: 7px solid var(--color-primary);
+
+    background: white;
+}
 
 .line {
   flex: 1;

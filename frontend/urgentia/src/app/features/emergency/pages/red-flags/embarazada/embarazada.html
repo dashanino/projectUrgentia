@@ -186,16 +186,16 @@
         <!-- CONTINUAR -->
         <div class="continue-container">
   
-          <button
+            <button
             type="button"
             class="continue-btn"
-            [disabled]="!banderaSeleccionada">
-  
+            [disabled]="!banderaSeleccionada"
+            (click)="continuar()">
+          
             Continuar
             <mat-icon>arrow_forward</mat-icon>
-  
+          
           </button>
-  
         </div>
   
       </section>
