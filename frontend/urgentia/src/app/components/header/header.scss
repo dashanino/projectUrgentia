@@ -1,0 +1,39 @@
+@use 'variables' as *;
+
+.page {
+  min-height: 100vh;
+  background: var(--color-primary-soft);
+  padding: 30px 50px;
+  box-sizing: border-box;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.brand img {
+  width: 70px;
+}
+
+.brand span {
+  font-family: $font-title;
+  font-size: 48px;
+  font-weight: $font-thin;
+  color: var(--color-primary);
+}
+
+.brand p {
+  margin: 0;
+  padding-left: 15px;
+  border-left: 1px solid #aaa;
+  font-family: $font-title;
+}
