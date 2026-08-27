@@ -1,7 +1,221 @@
-<h1> HOME! </h1>
+<div class="page">
 
-<button
-    type="button"
-    (click)="submit()">
-    Ir a perfil
-</button>
+    <!-- HEADER -->
+    <header class="topbar">
+  
+      <div class="brand">
+        <img src="logo.png" alt="Urgentia">
+  
+        <span>Urgentia</span>
+  
+        <p>
+          Pre-triage inteligente<br>
+          para urgencias
+        </p>
+      </div>
+  
+      <div class="top-icons">
+        <button type="button">
+          <mat-icon>notifications_none</mat-icon>
+        </button>
+  
+        <button type="button">
+          <mat-icon>settings</mat-icon>
+        </button>
+      </div>
+  
+    </header>
+  
+  
+    <!-- CONTENIDO -->
+    <main class="home-card">
+  
+      <!-- VOLVER -->
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+  
+  
+      <!-- ESTADO -->
+      <div class="status-bar">
+        <mat-icon>check_circle_outline</mat-icon>
+        <span>Sin evaluaciones activas</span>
+      </div>
+  
+  
+      <!-- BIENVENIDA -->
+      <h1>
+        Bienvenid@, <span>Nombre</span>
+      </h1>
+  
+  
+      <!-- PERFIL -->
+      <section class="profile-section">
+  
+        <div class="profile-photo">
+          <img src="profile.jpeg" alt="Foto de perfil">
+        </div>
+  
+  
+        <div class="profile-info">
+  
+          <div class="info-column">
+  
+            <div class="info-item">
+              <mat-icon>person</mat-icon>
+              <p>
+                <strong>Sexo:</strong>
+                Masculino
+              </p>
+            </div>
+  
+            <div class="info-item">
+              <mat-icon>calendar_today</mat-icon>
+              <p>
+                <strong>Edad:</strong>
+                26 años, 3 meses, 29 días
+              </p>
+            </div>
+  
+            <div class="info-item">
+              <mat-icon>monitor_weight</mat-icon>
+              <p>
+                <strong>Peso:</strong>
+                80kg
+              </p>
+            </div>
+  
+            <div class="info-item">
+              <mat-icon>medical_information</mat-icon>
+              <p>
+                <strong>Enfermedades:</strong>
+                Diabetes
+              </p>
+            </div>
+  
+          </div>
+  
+  
+          <div class="info-column">
+  
+            <div class="info-item">
+              <mat-icon>bed</mat-icon>
+              <p>
+                <strong>Hospitalización reciente:</strong>
+                No
+              </p>
+            </div>
+  
+            <div class="info-item">
+              <mat-icon>medication</mat-icon>
+              <p>
+                <strong>Medicamentos:</strong>
+                Insulina
+              </p>
+            </div>
+  
+            <div class="info-item">
+              <mat-icon>medical_services</mat-icon>
+              <p>
+                <strong>Alergias:</strong>
+                No
+              </p>
+            </div>
+  
+            <div class="info-item">
+              <mat-icon>star_outline</mat-icon>
+              <p>
+                <strong>Estado especial:</strong>
+                No
+              </p>
+            </div>
+  
+          </div>
+  
+  
+          <button
+            type="button"
+            class="edit-button">
+  
+            <mat-icon>edit</mat-icon>
+            Editar información médica
+  
+          </button>
+  
+        </div>
+  
+      </section>
+  
+  
+      <!-- ÚLTIMA EVALUACIÓN -->
+      <section class="last-evaluation">
+  
+        <div class="evaluation-icon">
+          <mat-icon>assignment</mat-icon>
+        </div>
+  
+  
+        <div class="evaluation-content">
+  
+          <h3>Última evaluación</h3>
+  
+          <div class="evaluation-row">
+  
+            <p>
+              <mat-icon>calendar_today</mat-icon>
+              <strong>Fecha:</strong>
+              02/04/2026
+            </p>
+  
+            <p>
+              <mat-icon>info_outline</mat-icon>
+              <strong>Nivel de prioridad:</strong>
+              Moderada-alta
+            </p>
+  
+            <p>
+              <mat-icon>question_answer</mat-icon>
+              <strong>Motivo:</strong>
+              Hiperglucemia sin signos de inestabilidad.
+            </p>
+  
+          </div>
+  
+          <p class="recommendation">
+            <strong>Recomendación:</strong>
+            Cita prioritaria &lt;24h
+          </p>
+  
+        </div>
+  
+  
+        <button
+          type="button"
+          class="details-button">
+          Ver más detalles
+        </button>
+  
+      </section>
+  
+  
+      <!-- NUEVA EVALUACIÓN -->
+      <div class="new-evaluation-container">
+  
+        <button
+          type="button"
+          class="new-evaluation-button"
+          (click)="nuevaEvaluacion()">
+  
+          <mat-icon>add</mat-icon>
+          Nueva Evaluación
+  
+        </button>
+  
+      </div>
+  
+    </main>
+  
+  </div>
