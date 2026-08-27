@@ -56,6 +56,6 @@ export class Login {
 
 
     console.log('Datos correctos');
-    this.router.navigate(['/home']);
+    this.router.navigate(['/antecedentes']);
   }
 }
