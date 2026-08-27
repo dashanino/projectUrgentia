@@ -91,6 +91,20 @@ export const routes: Routes = [
             (m) => m.Perfil
           ),
       },
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./pages/dashboard/dashboard').then(
+            (m) => m.Dashboard
+          ),
+      },
+      {
+        path: 'usuarios',
+        loadComponent: () =>
+          import('./pages/usuarios/usuarios').then(
+            (m) => m.Usuarios
+          ),
+      },
 
     ],
   },
