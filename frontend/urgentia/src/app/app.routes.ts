@@ -106,6 +106,7 @@ export const routes: Routes = [
   },
   {
     path: 'resultado',
+    
     loadComponent: () => 
       import('./features/emergency/pages/result/result').then((m) => m.Result),
   },
