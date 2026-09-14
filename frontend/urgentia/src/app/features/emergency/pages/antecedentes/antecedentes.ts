@@ -36,7 +36,7 @@ export class Antecedentes {
       JSON.stringify(this.antecedentesSeleccionados)
     );
 
-    this.router.navigate(['/patient-group']);
+    this.router.navigate(['emergency/patient-group']);
   }
 }
 

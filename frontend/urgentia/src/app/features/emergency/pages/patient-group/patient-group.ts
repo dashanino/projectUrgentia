@@ -34,28 +34,28 @@ export class PatientGroup {
 
     switch (this.poblacionSeleccionada) {
       case 'Niño':
-        this.router.navigate(['/red-flags/nino']);
+        this.router.navigate(['emergency/red-flags/nino']);
         break;
 
       case 'Adulto':
-        this.router.navigate(['/red-flags/adulto']);
+        this.router.navigate(['emergency/red-flags/adulto']);
         break;
 
       case 'Adulto Mayor':
-        this.router.navigate(['/red-flags/adulto-mayor']);
+        this.router.navigate(['emergency/red-flags/adulto-mayor']);
         break;
 
       case 'Embarazada':
-        this.router.navigate(['/red-flags/embarazada']);
+        this.router.navigate(['emergency/red-flags/embarazada']);
         break;
 
       case 'Trauma/Accidente':
-        this.router.navigate(['/red-flags/trauma']);
+        this.router.navigate(['emergency/red-flags/trauma']);
         break;
     }
   }
 
   goBack() {
-    this.router.navigate(['/antecedentes']);
+    this.router.navigate(['emergency/antecedentes']);
   }
 }

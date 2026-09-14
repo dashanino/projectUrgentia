@@ -52,10 +52,10 @@ export class Adulto {
       this.sintomaSeleccionado
     );
 
-    this.router.navigate(['/resultado']);
+    this.router.navigate(['emergency/resultado']);
   }
 
   goBack(): void {
-    this.router.navigate(['/patient-group']);
+    this.router.navigate(['emergency/patient-group']);
   }
 }

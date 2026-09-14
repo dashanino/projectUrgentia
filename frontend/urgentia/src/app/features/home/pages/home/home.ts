@@ -13,7 +13,7 @@ export class Home {
   private router = inject(Router);
 
   irPerfil() {
-    this.router.navigate(['/perfil']);
+    this.router.navigate(['app/perfil']);
   }
 
   // nuevaEvaluacion() {

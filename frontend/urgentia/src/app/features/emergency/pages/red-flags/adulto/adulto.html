@@ -1,145 +1,121 @@
-<div class="page">
 
-  <!-- HEADER -->
-  <header class="topbar">
-    <div class="brand">
-      <img src="logo.png" alt="Urgentia">
-      <span>Urgentia</span>
-      <p>
-        Pre-triaje inteligente<br>
-        para urgencias
-      </p>
+<main class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <button class="emergency-btn">
+      <img src="alerta.png" alt="Emergencia">
+      Emergencia Inmediata
+    </button>
+
+    <div class="step">
+      <span class="step-number">1</span>
+      Antecedentes
     </div>
 
-    <div class="top-icons">
-      <button type="button">
-        <mat-icon>notifications_none</mat-icon>
-      </button>
-
-      <button type="button">
-        <mat-icon>settings</mat-icon>
-      </button>
+    <div class="step">
+      <span class="step-number">2</span>
+      Tipo de paciente
     </div>
-  </header>
 
-  <main class="main-layout">
+    <div class="step active">
+      <span class="step-number">3</span>
+      Banderas Rojas
+    </div>
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+    <div class="step">
+      <span class="step-number">4</span>
+      Resultado
+    </div>
 
-      <button class="emergency-btn">
-        <img src="alerta.png" alt="Emergencia">
-        Emergencia Inmediata
+  </aside>
+
+  <!-- CARD -->
+  <section class="card">
+
+    <!-- HEADER CARD -->
+    <div class="card-header">
+
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()">
+
+        <mat-icon>chevron_left</mat-icon>
+
       </button>
 
-      <div class="step">
-        <span class="step-number">1</span>
-        Antecedentes
-      </div>
+      <h1>Seleccione su síntoma</h1>
 
-      <div class="step">
-        <span class="step-number">2</span>
-        Tipo de paciente
-      </div>
+    </div>
 
-      <div class="step active">
-        <span class="step-number">3</span>
-        Banderas Rojas
-      </div>
+    <!-- PROGRESS -->
+    <div class="progress">
 
-      <div class="step">
-        <span class="step-number">4</span>
-        Resultado
-      </div>
+      <span class="circle completed">
+        <mat-icon>check</mat-icon>
+      </span>
 
-    </aside>
+      <span class="line completed-line"></span>
 
-    <!-- CARD -->
-    <section class="card">
+      <span class="circle completed">
+        <mat-icon>check</mat-icon>
+      </span>
 
-      <!-- HEADER CARD -->
-      <div class="card-header">
+      <span class="line completed-line"></span>
 
-        <button
-          type="button"
-          class="back-button"
-          (click)="goBack()">
+      <span class="circle active"></span>
 
-          <mat-icon>chevron_left</mat-icon>
+      <span class="line"></span>
 
-        </button>
+      <span class="circle">4</span>
 
-        <h1>Seleccione su síntoma</h1>
+    </div>
 
-      </div>
+    <!-- CONTENT -->
+    <div class="symptom-content">
 
-      <!-- PROGRESS -->
-      <div class="progress">
+      <div class="symptom-grid">
 
-        <span class="circle completed">
-          <mat-icon>check</mat-icon>
-        </span>
+        @for (sintoma of sintomas; track sintoma.id) {
 
-        <span class="line completed-line"></span>
+          <button
+            type="button"
+            class="symptom-card"
+            [class.selected]="sintomaSeleccionado === sintoma.id"
+            (click)="seleccionarSintoma(sintoma.id)">
 
-        <span class="circle completed">
-          <mat-icon>check</mat-icon>
-        </span>
+            <p>{{ sintoma.nombre }}</p>
 
-        <span class="line completed-line"></span>
+          </button>
 
-        <span class="circle active"></span>
-
-        <span class="line"></span>
-
-        <span class="circle">4</span>
+        }
 
       </div>
 
-      <!-- CONTENT -->
-      <div class="symptom-content">
+    </div>
 
-        <div class="symptom-grid">
+    <!-- CONTINUAR -->
+    <div class="continue-container">
 
-          @for (sintoma of sintomas; track sintoma.id) {
+      <button
+        type="button"
+        class="continue-btn"
+        [disabled]="!sintomaSeleccionado"
+        (click)="continuar()">
 
-            <button
-              type="button"
-              class="symptom-card"
-              [class.selected]="sintomaSeleccionado === sintoma.id"
-              (click)="seleccionarSintoma(sintoma.id)">
+        Continuar
 
-              <p>{{ sintoma.nombre }}</p>
+        <mat-icon>
+          arrow_forward
+        </mat-icon>
 
-            </button>
+      </button>
 
-          }
+    </div>
 
-        </div>
+  </section>
 
-      </div>
+</main>
 
-      <!-- CONTINUAR -->
-      <div class="continue-container">
-
-        <button
-          type="button"
-          class="continue-btn"
-          [disabled]="!sintomaSeleccionado"
-          (click)="continuar()">
-
-          Continuar
-
-          <mat-icon>
-            arrow_forward
-          </mat-icon>
-
-        </button>
-
-      </div>
-
-    </section>
-
-  </main>
-
-</div>

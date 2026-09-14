@@ -32,9 +32,9 @@ export class Embarazada {
       this.banderaSeleccionada
     );
 
-    this.router.navigate(['/resultado']);
+    this.router.navigate(['emergency/resultado']);
   }
   goBack() {
-    this.router.navigate(['/patient-group']);
+    this.router.navigate(['emergency/patient-group']);
   }
 }

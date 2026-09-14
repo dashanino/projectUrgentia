@@ -1,13 +1,11 @@
-.layout-container{
-    display: flex;
+.layout-container {
+  min-height: 100vh;
+  background: var(--color-primary-soft);
+  background-color: var(--color-background)
 }
 
-app-sidebar{
-    width: 250px;
-}
-
-.content{
-    flex: 1;
-    padding: 20px;
-    padding-bottom: 30%;
+.content {
+  padding: 30px 50px;
+  box-sizing: border-box;
+  
 }
