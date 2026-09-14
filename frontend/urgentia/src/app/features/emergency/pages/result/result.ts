@@ -11,6 +11,6 @@ import { Router } from '@angular/router';
 export class Result {
   private router = inject(Router);
   goBack() {
-    this.router.navigate(['/red-flags/embarazada']);
+    this.router.navigate(['emergency/red-flags/embarazada']);
   }
 }
