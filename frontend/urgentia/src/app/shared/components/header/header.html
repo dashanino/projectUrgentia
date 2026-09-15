@@ -6,9 +6,27 @@
   </div>
 
   <div class="top-icons">
-    <button type="button" class="profile-button" (click)="toggleProfileMenu()">
-      Perfil
-    </button>
+
+    <div class="profile-container">
+      <button
+        type="button"
+        class="profile-button"
+        (click)="toggleProfileMenu()">
+        Perfil
+      </button>
+
+      @if (showProfileMenu){
+        <div class="profile-menu">
+          <button routerLink="/app/perfil">
+            Ver perfil
+          </button>
+
+          <button (click)="logout()">
+            Cerrar sesión
+          </button>
+        </div>}
+    </div>
+    
 
     <button type="button" class="icon-button">
       <mat-icon>notifications_none</mat-icon>

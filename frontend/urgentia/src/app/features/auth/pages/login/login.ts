@@ -20,6 +20,8 @@ export class Login {
 
   showPasswordValue = false;
 
+  loginError = false;
+
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
@@ -48,14 +50,18 @@ export class Login {
     );
 
     if (!userFound){
-      alert ('Correo o contraseña incorrectos')
-      return
+      console.log('error login');
+      this.loginError = true;
+      console.log(this.loginError);
+      return;
     }
 
+    this.loginError = false;
+    
    sessionStorage.setItem('isLoggedIn', 'true');
 
 
     console.log('Datos correctos');
-    this.router.navigate(['/app/dashboard']);
+    this.router.navigate(['/app/home']);
   }
 }

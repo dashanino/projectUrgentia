@@ -68,7 +68,15 @@
                 <span><a href="/recuperar-contraseña">Olvidé mi contraseña</a></span>
                 
                 <button type="submit" >Iniciar Sesión</button>
-                
+
+                <div class="error-message">
+                @if (loginError) {
+                    <p >
+                        Correo o contraseña incorrectos.
+                    </p>
+                }
+                </div>
+                                
             </form>
         </div>
     </section>

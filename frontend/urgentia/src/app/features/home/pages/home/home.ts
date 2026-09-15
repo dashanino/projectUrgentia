@@ -16,8 +16,6 @@ export class Home {
     this.router.navigate(['app/perfil']);
   }
 
-  // nuevaEvaluacion() {
-  //   this.router.navigate(['/red-flags/adulto']);
-  // }
+  
 
 }

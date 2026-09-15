@@ -313,3 +313,10 @@ a {
   height: 22px;
   font-size: 22px;
 }
+
+div .error-message p{
+  font-family: $font-title;
+  font-weight: $font-medium;
+  font-size: 18px;
+  color: var(--color-error)
+}
