@@ -37,9 +37,17 @@
             <button
               type="button"
               class="emergency-button"
-              (click)="irEmergencia()">
-              Emergencia Inmediata
+              (click)="irEmergencia()"
+              [disabled]="cargandoEmergencia"
+            >
+              {{ cargandoEmergencia ? 'Iniciando...' : 'Emergencia Inmediata' }}
             </button>
+
+            @if (errorEmergencia) {
+              <p class="error-message">
+                {{ errorEmergencia }}
+              </p>
+            }
         
             <p>
               Acceso rápido para atención prioritaria

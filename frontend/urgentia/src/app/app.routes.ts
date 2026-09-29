@@ -21,6 +21,54 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/begin/pages/begin').then((m) => m.Begin),
   },
+  {
+    path: 'antecedentes',
+    loadComponent: () =>
+      import('./features/emergency/pages/antecedentes/antecedentes')
+        .then((m) => m.Antecedentes),
+  },
+  {
+    path: 'patient-group',
+    loadComponent: () =>
+      import('./features/emergency/pages/patient-group/patient-group')
+        .then((m) => m.PatientGroup),
+  },
+  // BANDERAS ROJAS SEGÚN LA POBLACIÓN
+
+  {
+    path: 'red-flags/adulto',
+    loadComponent: () =>
+      import('./features/emergency/pages/red-flags/adulto/adulto')
+        .then((m) => m.Adulto),
+  },
+
+  {
+    path: 'red-flags/adulto-mayor',
+    loadComponent: () =>
+      import('./features/emergency/pages/red-flags/adulto-mayor/adulto-mayor')
+        .then((m) => m.AdultoMayor),
+  },
+
+  {
+    path: 'red-flags/embarazada',
+    loadComponent: () =>
+      import('./features/emergency/pages/red-flags/embarazada/embarazada')
+        .then((m) => m.Embarazada),
+  },
+
+  {
+    path: 'red-flags/nino',
+    loadComponent: () =>
+      import('./features/emergency/pages/red-flags/nino/nino')
+        .then((m) => m.Nino),
+  },
+
+  {
+    path: 'red-flags/trauma',
+    loadComponent: () =>
+      import('./features/emergency/pages/red-flags/trauma/trauma')
+        .then((m) => m.Trauma),
+  },
 
   {
     path: 'login',
@@ -75,112 +123,43 @@ export const routes: Routes = [
     path: '',
     component: MainLayout,
     canActivate: [authGuard],
-
+  
     children: [
-
       {
         path: 'home',
         loadComponent: () =>
-          import('./features/home/pages/home/home').then((m) => m.Home),
+          import('./features/home/pages/home/home')
+            .then((m) => m.Home),
+  
+        data: { title: 'Inicio' }
       },
-
+  
       {
         path: 'perfil',
         loadComponent: () =>
-          import('./features/perfil/pages/perfil/perfil').then(
-            (m) => m.Perfil
-          ),
+          import('./features/perfil/pages/perfil/perfil')
+            .then((m) => m.Perfil),
+  
+        data: { title: 'Mi perfil' }
       },
+  
       {
         path: 'dashboard',
         loadComponent: () =>
           import('./features/dashboard/pages/dashboard/dashboard')
             .then((m) => m.Dashboard),
+  
+        data: { title: 'Dashboard' }
       },
-      
+  
       {
         path: 'usuarios',
         loadComponent: () =>
           import('./features/usuarios/pages/usuarios/usuarios')
             .then((m) => m.Usuarios),
-      },
-
-    ],
-  },
-
-  // -------------------------
-  // EMERGENCY
-  // -------------------------
-
-  {
-    path: 'patient-group',
-    loadComponent: () =>
-      import(
-        './features/emergency/pages/patient-group/patient-group'
-      ).then((m) => m.PatientGroup),
-  },
-
-  {
-    path: 'antecedentes',
-    loadComponent: () =>
-      import(
-        './features/emergency/pages/antecedentes/antecedentes'
-      ).then((m) => m.Antecedentes),
-  },
-
-  {
-    path: 'red-flags/adulto',
-    loadComponent: () =>
-      import(
-        './features/emergency/pages/red-flags/adulto/adulto'
-      ).then((m) => m.Adulto),
-  },
-
-  {
-    path: 'red-flags/adulto-mayor',
-    loadComponent: () =>
-      import(
-        './features/emergency/pages/red-flags/adulto-mayor/adulto-mayor'
-      ).then((m) => m.AdultoMayor),
-  },
-
-  {
-    path: 'red-flags/embarazada',
-    loadComponent: () =>
-      import(
-        './features/emergency/pages/red-flags/embarazada/embarazada'
-      ).then((m) => m.Embarazada),
-  },
-
-  {
-    path: 'red-flags/nino',
-    loadComponent: () =>
-      import(
-        './features/emergency/pages/red-flags/nino/nino'
-      ).then((m) => m.Nino),
-  },
-
-  {
-    path: 'red-flags/trauma',
-    loadComponent: () =>
-      import(
-        './features/emergency/pages/red-flags/trauma/trauma'
-      ).then((m) => m.Trauma),
-  },
-
-  {
-    path: 'resultado',
-    loadComponent: () => 
-      import('./features/emergency/pages/result/result').then((m) => m.Result),
-  },
-
-  // -------------------------
-  // RUTA NO ENCONTRADA
-  // -------------------------
-
-  {
-    path: '**',
-    redirectTo: 'begin',
-  },
-
-];
+  
+        data: { title: 'Usuarios' }
+      }
+    ]
+  }
+]
