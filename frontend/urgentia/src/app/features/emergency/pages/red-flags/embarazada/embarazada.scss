@@ -222,61 +222,63 @@
    BANDERAS ROJAS
 ========================= */
 
-.flags-grid {
-  width: 78%;
+.symptom-content {
+  width: 100%;
 
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
 
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-
-  gap: 14px 18px;
+  margin-top: 10px;
 }
 
-.flag-button {
-  min-height: 52px;
+.symptom-grid {
+  width: 62%;
 
-  padding: 8px 20px;
+  display: flex;
+  flex-direction: column;
 
-  border: 2px solid transparent;
-  border-radius: 28px;
+  gap: 10px;
+}
+
+.symptom-card {
+  height: 48px;
+
+  border: none;
+  border-radius: 24px;
 
   background: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   font-family: $font-title;
   font-size: 18px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 
   cursor: pointer;
 
   transition: all 0.2s ease;
 }
 
-.flag-button:hover {
-  background: #eeeeee;
-
-  transform: translateY(-2px);
+.symptom-card p {
+  margin: 0;
 }
 
-.flag-button.selected {
+.symptom-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+.symptom-card.selected {
   background: var(--color-primary-soft);
 
-  border-color: var(--color-primary);
+  border: 2px solid var(--color-primary);
 
   color: var(--color-primary);
 }
-
-.flag-button small {
-  font-size: 11px;
-  line-height: 1;
-}
-
 
 /* =========================
    CONTINUAR

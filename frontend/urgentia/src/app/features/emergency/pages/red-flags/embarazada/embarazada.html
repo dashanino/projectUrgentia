@@ -77,97 +77,22 @@
 
 
       <!-- BANDERAS -->
-      <div class="flags-grid">
+      <div class="symptom-grid">
 
-        <button
-          type="button"
-          class="flag-button"
-          [class.selected]="estaSeleccionada('Dolor de cabeza')"
-          (click)="seleccionarBandera('Dolor de cabeza')">
-          Dolor de cabeza
-        </button>
-
-        <button
-          type="button"
-          class="flag-button"
-          [class.selected]="estaSeleccionada('Dolor en abdomen')"
-          (click)="seleccionarBandera('Dolor en abdomen')">
-          Dolor en abdomen
-        </button>
-
-        <button
-          type="button"
-          class="flag-button"
-          [class.selected]="estaSeleccionada('Hemorragia vaginal')"
-          (click)="seleccionarBandera('Hemorragia vaginal')">
-          Hemorragia vaginal
-        </button>
-
-        <button
-          type="button"
-          class="flag-button"
-          [class.selected]="estaSeleccionada('Tos con sangre')"
-          (click)="seleccionarBandera('Tos con sangre')">
-          Tos con sangre
-        </button>
-
-        <button
-          type="button"
-          class="flag-button"
-          [class.selected]="estaSeleccionada('No siente al bebé')"
-          (click)="seleccionarBandera('No siente al bebé')">
-          No siente al bebé
-        </button>
-
-        <button
-          type="button"
-          class="flag-button"
-          [class.selected]="estaSeleccionada('Contracciones prematuras')"
-          (click)="seleccionarBandera('Contracciones prematuras')">
-          <span>Contracciones prematuras</span>
-          <small>(Antes de la semana 37)</small>
-        </button>
-
-        <button
-          type="button"
-          class="flag-button"
-          [class.selected]="estaSeleccionada('Presión alta')"
-          (click)="seleccionarBandera('Presión alta')">
-          Presión alta
-        </button>
-
-        <button
-          type="button"
-          class="flag-button"
-          [class.selected]="estaSeleccionada('Visión borrosa')"
-          (click)="seleccionarBandera('Visión borrosa')">
-          Visión borrosa
-        </button>
-
-        <button
-          type="button"
-          class="flag-button"
-          [class.selected]="estaSeleccionada('Zumbidos o pitos en los oídos')"
-          (click)="seleccionarBandera('Zumbidos o pitos en los oídos')">
-          Zumbidos o pitos en los oídos
-        </button>
-
-      </div>
-
-
-      <!-- CONTINUAR -->
-      <div class="continue-container">
+        @for (sintoma of sintomas; track sintoma.id) {
 
           <button
-          type="button"
-          class="continue-btn"
-          [disabled]="!banderaSeleccionada"
-          (click)="continuar()">
-        
-          Continuar
-          <mat-icon>arrow_forward</mat-icon>
-        
-        </button>
+            type="button"
+            class="symptom-card"
+            [class.selected]="sintomaSeleccionado === sintoma.id"
+            (click)="seleccionarSintoma(sintoma.id)">
+
+            <p>{{ sintoma.nombre }}</p>
+
+          </button>
+
+        }
+
       </div>
 
     </section>
