@@ -81,14 +81,14 @@
         @for (sintoma of sintomas; track sintoma.id) {
 
           <button
-            type="button"
-            class="symptom-card"
-            [class.selected]="sintomaSeleccionado === sintoma.id"
-            (click)="seleccionarSintoma(sintoma.id)">
-
-            <p>{{ sintoma.nombre }}</p>
-
-          </button>
+          type="button"
+          class="symptom-card"
+          [class.selected]="sintomasSeleccionados.includes(sintoma.id)"
+          (click)="seleccionarSintoma(sintoma.id)">
+        
+          <p>{{ sintoma.nombre }}</p>
+        
+        </button>
 
         }
 
@@ -102,7 +102,7 @@
       <button
         type="button"
         class="continue-btn"
-        [disabled]="!sintomaSeleccionado"
+        [disabled]="sintomasSeleccionados.length === 0"
         (click)="continuar()">
 
         Continuar

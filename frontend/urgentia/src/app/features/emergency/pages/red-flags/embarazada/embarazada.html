@@ -1,101 +1,174 @@
+<main class="main-layout">
 
-  
+  <!-- MENU IZQUIERDO -->
+  <aside class="sidebar">
 
-  <main class="main-layout">
+    <button class="emergency-btn">
+      <img src="alerta.png" alt="Emergencia">
+      Emergencia Inmediata
+    </button>
 
-    <!-- MENU IZQUIERDO -->
-    <aside class="sidebar">
+    <div class="step completed-step">
+      <span class="step-number">1</span>
+      Antecedentes
+    </div>
 
-      <button class="emergency-btn">
-        <img src="alerta.png" alt="Emergencia">
-        Emergencia Inmediata
+    <div class="step completed-step">
+      <span class="step-number">2</span>
+      Tipo de paciente
+    </div>
+
+    <div class="step active">
+      <span class="step-number">3</span>
+      Banderas Rojas
+    </div>
+
+    <div class="step">
+      <span class="step-number">4</span>
+      Resultado
+    </div>
+
+  </aside>
+
+
+  <!-- TARJETA PRINCIPAL -->
+  <section class="card">
+
+    <!-- TITULO -->
+    <div class="card-header">
+
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()">
+        <mat-icon>chevron_left</mat-icon>
       </button>
 
-      <div class="step completed-step">
-        <span class="step-number">1</span>
-        Antecedentes
-      </div>
+      <h1>Banderas Rojas</h1>
 
-      <div class="step completed-step">
-        <span class="step-number">2</span>
-        Tipo de paciente
-      </div>
-
-      <div class="step active">
-        <span class="step-number">3</span>
-        Banderas Rojas
-      </div>
-
-      <div class="step">
-        <span class="step-number">4</span>
-        Resultado
-      </div>
-
-    </aside>
+    </div>
 
 
-    <!-- TARJETA PRINCIPAL -->
-    <section class="card">
+    <!-- PROGRESO -->
+    <div class="progress">
 
-      <!-- TITULO -->
-      <div class="card-header">
+      <span class="circle completed">
+        <mat-icon>check</mat-icon>
+      </span>
 
-          <button
-          type="button"
-          class="back-button"
-          (click)="goBack()">
-          <mat-icon>chevron_left</mat-icon>
-        </button>
+      <span class="line completed-line"></span>
 
-        <h1>Banderas Rojas</h1>
+      <span class="circle completed">
+        <mat-icon>check</mat-icon>
+      </span>
 
-      </div>
+      <span class="line completed-line"></span>
 
+      <span class="circle active"></span>
 
-      <!-- PROGRESO -->
-      <div class="progress">
+      <span class="line"></span>
 
-        <span class="circle completed">
-          <mat-icon>check</mat-icon>
-        </span>
+      <span class="circle">4</span>
 
-        <span class="line completed-line"></span>
-
-        <span class="circle completed">
-          <mat-icon>check</mat-icon>
-        </span>
-
-        <span class="line completed-line"></span>
-
-        <span class="circle active"></span>
-
-        <span class="line"></span>
-
-        <span class="circle">4</span>
-
-      </div>
+    </div>
 
 
-      <!-- BANDERAS -->
-      <div class="symptom-grid">
+    <!-- BANDERAS -->
+    <div class="flags-grid">
 
-        @for (sintoma of sintomas; track sintoma.id) {
+      <button
+        type="button"
+        class="flag-button"
+        [class.selected]="estaSeleccionada(2)"
+        (click)="seleccionarBandera(2)">
+        Dolor de cabeza
+      </button>
 
-          <button
-            type="button"
-            class="symptom-card"
-            [class.selected]="sintomaSeleccionado === sintoma.id"
-            (click)="seleccionarSintoma(sintoma.id)">
+      <button
+        type="button"
+        class="flag-button"
+        [class.selected]="estaSeleccionada(4)"
+        (click)="seleccionarBandera(4)">
+        Dolor en abdomen
+      </button>
 
-            <p>{{ sintoma.nombre }}</p>
+      <button
+        type="button"
+        class="flag-button"
+        [class.selected]="estaSeleccionada(8)"
+        (click)="seleccionarBandera(8)">
+        Hemorragia vaginal
+      </button>
 
-          </button>
+      <button
+        type="button"
+        class="flag-button"
+        [class.selected]="estaSeleccionada(9)"
+        (click)="seleccionarBandera(9)">
+        Tos con sangre
+      </button>
 
-        }
+      <button
+        type="button"
+        class="flag-button"
+        [class.selected]="estaSeleccionada(10)"
+        (click)="seleccionarBandera(10)">
+        No siente al bebé
+      </button>
 
-      </div>
+      <button
+        type="button"
+        class="flag-button"
+        [class.selected]="estaSeleccionada(11)"
+        (click)="seleccionarBandera(11)">
+        <span>Contracciones prematuras</span>
+        <small>(Antes de la semana 37)</small>
+      </button>
 
-    </section>
+      <button
+        type="button"
+        class="flag-button"
+        [class.selected]="estaSeleccionada(12)"
+        (click)="seleccionarBandera(12)">
+        Presión alta
+      </button>
 
-  </main>
+      <button
+        type="button"
+        class="flag-button"
+        [class.selected]="estaSeleccionada(13)"
+        (click)="seleccionarBandera(13)">
+        Visión borrosa
+      </button>
+
+      <button
+        type="button"
+        class="flag-button"
+        [class.selected]="estaSeleccionada(14)"
+        (click)="seleccionarBandera(14)">
+        Zumbidos o pitos en los oídos
+      </button>
+
+    </div>
+
+
+    <!-- CONTINUAR -->
+    <div class="continue-container">
+
+      <button
+        type="button"
+        class="continue-btn"
+        [disabled]="sintomasSeleccionados.length === 0"
+        (click)="continuar()">
+
+        Continuar
+        <mat-icon>arrow_forward</mat-icon>
+
+      </button>
+
+    </div>
+
+  </section>
+
+</main>
   
