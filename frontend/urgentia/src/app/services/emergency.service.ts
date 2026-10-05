@@ -84,7 +84,7 @@ export class EmergencyService {
   ): Observable<any> {
   
     return this.http.post(
-      `${this.apiUrl}/pretriage/${idPretriage}/evaluar-triaje`,
+      `${this.apiUrl}/pretriage/${idPretriage}/evaluar-triage`,
       {},
       {
         headers: {
