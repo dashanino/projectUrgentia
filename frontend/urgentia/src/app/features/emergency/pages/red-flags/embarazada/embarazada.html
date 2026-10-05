@@ -74,80 +74,25 @@
 
 
     <!-- BANDERAS -->
-    <div class="flags-grid">
+    <div class="symptom-content">
 
-      <button
-        type="button"
-        class="flag-button"
-        [class.selected]="estaSeleccionada(2)"
-        (click)="seleccionarBandera(2)">
-        Dolor de cabeza
-      </button>
+      <div class="symptom-grid">
 
-      <button
-        type="button"
-        class="flag-button"
-        [class.selected]="estaSeleccionada(4)"
-        (click)="seleccionarBandera(4)">
-        Dolor en abdomen
-      </button>
+        @for (sintoma of sintomas; track sintoma.id) {
 
-      <button
-        type="button"
-        class="flag-button"
-        [class.selected]="estaSeleccionada(8)"
-        (click)="seleccionarBandera(8)">
-        Hemorragia vaginal
-      </button>
+          <button
+            type="button"
+            class="symptom-card"
+            [class.selected]="sintomasSeleccionados.includes(sintoma.id)"
+            (click)="seleccionarSintoma(sintoma.id)">
 
-      <button
-        type="button"
-        class="flag-button"
-        [class.selected]="estaSeleccionada(9)"
-        (click)="seleccionarBandera(9)">
-        Tos con sangre
-      </button>
+            <p>{{ sintoma.nombre }}</p>
 
-      <button
-        type="button"
-        class="flag-button"
-        [class.selected]="estaSeleccionada(10)"
-        (click)="seleccionarBandera(10)">
-        No siente al bebé
-      </button>
+          </button>
 
-      <button
-        type="button"
-        class="flag-button"
-        [class.selected]="estaSeleccionada(11)"
-        (click)="seleccionarBandera(11)">
-        <span>Contracciones prematuras</span>
-        <small>(Antes de la semana 37)</small>
-      </button>
+        }
 
-      <button
-        type="button"
-        class="flag-button"
-        [class.selected]="estaSeleccionada(12)"
-        (click)="seleccionarBandera(12)">
-        Presión alta
-      </button>
-
-      <button
-        type="button"
-        class="flag-button"
-        [class.selected]="estaSeleccionada(13)"
-        (click)="seleccionarBandera(13)">
-        Visión borrosa
-      </button>
-
-      <button
-        type="button"
-        class="flag-button"
-        [class.selected]="estaSeleccionada(14)"
-        (click)="seleccionarBandera(14)">
-        Zumbidos o pitos en los oídos
-      </button>
+      </div>
 
     </div>
 

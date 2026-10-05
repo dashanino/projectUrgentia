@@ -29,7 +29,7 @@ export class Embarazada {
 
   sintomasSeleccionados: number[] = [];
 
-  seleccionarBandera(id: number): void {
+  seleccionarSintoma(id: number): void {
 
     if (this.sintomasSeleccionados.includes(id)) {
 

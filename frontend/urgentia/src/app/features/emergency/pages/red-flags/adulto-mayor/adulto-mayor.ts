@@ -47,7 +47,7 @@ export class AdultoMayor {
       sessionStorage.getItem('access_token');
   
     if (!idPretriage || !token) {
-      console.error('No existe un pretriaje activo');
+      console.error('No existe un pretriage activo');
       return;
     }
   
