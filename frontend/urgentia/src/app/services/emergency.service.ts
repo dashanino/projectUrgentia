@@ -78,7 +78,7 @@ export class EmergencyService {
       }
     );
   }
-  evaluarTriaje(
+  evaluarTriage(
     idPretriage: number,
     token: string
   ): Observable<any> {

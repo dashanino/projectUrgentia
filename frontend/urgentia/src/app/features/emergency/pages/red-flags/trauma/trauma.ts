@@ -87,7 +87,7 @@ export class Trauma {
       sessionStorage.getItem('access_token');
 
     if (!idPretriage || !token) {
-      console.error('No existe un pretriaje activo');
+      console.error('No existe un pretriage activo');
       return;
     }
 
@@ -107,8 +107,8 @@ export class Trauma {
           respuestaBanderas
         );
 
-        // 2. Evaluar reglas de triaje
-        this.emergencyService.evaluarTriaje(
+        // 2. Evaluar reglas de triage
+        this.emergencyService.evaluarTriage(
           id,
           token
         ).subscribe({
@@ -116,12 +116,12 @@ export class Trauma {
           next: (resultado) => {
 
             console.log(
-              'Resultado del triaje:',
+              'Resultado del triage:',
               resultado
             );
 
             sessionStorage.setItem(
-              'resultadoTriaje',
+              'resultadotriage',
               JSON.stringify(resultado)
             );
 
@@ -146,7 +146,7 @@ export class Trauma {
           error: (error) => {
 
             console.error(
-              'Error al evaluar triaje:',
+              'Error al evaluar triage:',
               error
             );
 

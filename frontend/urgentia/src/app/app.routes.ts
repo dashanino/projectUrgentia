@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './guards/auth.guards';
 import { MainLayout } from './layouts/main-layout/main-layout';
-import { SubBanderas } from './features/emergency/pages/sub-banderas/sub-banderas';
+
 
 export const routes: Routes = [
   // Ruta inicial
@@ -134,7 +134,7 @@ export const routes: Routes = [
     },
     {
         path: 'sub-banderas',
-        loadComponent: () => import('./features/emergency/pages/sub-banderas/sub-banderas').then((m) => m.SubBanderas)
+        loadComponent: () => import('./features/emergency/pages/sub-banderas/sub-banderas').then((m) => m.SubBanderas),
     },
     ],
   },
