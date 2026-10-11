@@ -1,0 +1,16 @@
+<app-header></app-header>
+
+<main class="emergency-layout">
+
+  <app-pretriage-stepper
+    [steps]="steps"
+    [currentStep]="currentStep">
+  </app-pretriage-stepper>
+
+  <section class="emergency-content">
+    <router-outlet></router-outlet>
+  </section>
+
+</main>
+
+<app-footer></app-footer>

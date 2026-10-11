@@ -60,18 +60,6 @@ export class Adulto {
 
   continuar(): void {
 
-    // =========================================================
-    // 1. VALIDAR QUE HAYA BANDERAS SELECCIONADAS
-    // =========================================================
-
-    if (this.sintomasSeleccionados.length === 0) {
-      return;
-    }
-
-    // =========================================================
-    // 2. OBTENER DATOS DEL PRETRIAGE
-    // =========================================================
-
     const idPretriage =
       sessionStorage.getItem('id_pretriage');
 
@@ -89,9 +77,37 @@ export class Adulto {
 
     const id = Number(idPretriage);
 
-    // =========================================================
-    // 3. GUARDAR LAS BANDERAS ROJAS
-    // =========================================================
+
+    // ==========================================
+    // CASO 1: NO SELECCIONÓ NINGÚN SÍNTOMA
+    // ==========================================
+
+    if (this.sintomasSeleccionados.length === 0) {
+
+      this.generarPreguntasAdicionales(
+        id,
+        token
+      );
+
+      return;
+    }
+
+
+    // ==========================================
+    // CASO 2: SÍ SELECCIONÓ SÍNTOMAS
+    // ==========================================
+
+    this.guardarYEvaluar(
+      id,
+      token
+    );
+  }
+
+
+  private guardarYEvaluar(
+    id: number,
+    token: string
+  ): void {
 
     this.emergencyService.guardarBanderasRojas(
       id,
@@ -106,96 +122,10 @@ export class Adulto {
           respuestaBanderas
         );
 
-        // =====================================================
-        // 4. EVALUAR EL TRIAGE
-        //
-        // El backend:
-        // - evalúa primero triage_rules
-        // - si hay alta prioridad devuelve alerta
-        // - si no hay alta prioridad ejecuta la IA
-        // =====================================================
-
-        this.emergencyService.evaluarTriage(
+        this.evaluarTriage(
           id,
           token
-        ).subscribe({
-
-          next: (resultado) => {
-
-            console.log(
-              'Resultado del triage:',
-              resultado
-            );
-
-            // =================================================
-            // 5. GUARDAR EL RESULTADO
-            // =================================================
-
-            sessionStorage.setItem(
-              'resultadoTriage',
-              JSON.stringify(resultado)
-            );
-
-            // =================================================
-            // 6. ALTA PRIORIDAD DETECTADA POR TRIAGE_RULES
-            // =================================================
-
-            if (
-              resultado.origen === 'reglas' &&
-              resultado.accion === 'alerta'
-            ) {
-
-              console.log(
-                'Alta prioridad detectada por reglas.'
-              );
-
-              this.router.navigate([
-                'emergency/resultado'
-              ]);
-
-              return;
-            }
-
-            // =================================================
-            // 7. RESULTADO GENERADO POR IA
-            // =================================================
-
-            if (
-              resultado.origen === 'ia' &&
-              resultado.accion === 'resultado_ia'
-            ) {
-
-              console.log(
-                'Resultado generado por IA:',
-                resultado.resultado
-              );
-
-              this.router.navigate([
-                'emergency/resultado'
-              ]);
-
-              return;
-            }
-
-            // =================================================
-            // 8. RESPUESTA NO RECONOCIDA
-            // =================================================
-
-            console.error(
-              'Respuesta de triage no reconocida:',
-              resultado
-            );
-          },
-
-          error: (error) => {
-
-            console.error(
-              'Error al evaluar triage:',
-              error
-            );
-          }
-
-        });
+        );
       },
 
       error: (error) => {
@@ -207,6 +137,126 @@ export class Adulto {
       }
 
     });
+  }
+
+
+  private evaluarTriage(
+    id: number,
+    token: string
+  ): void {
+
+    this.emergencyService.evaluarTriage(
+      id,
+      token
+    ).subscribe({
+
+      next: (resultado) => {
+
+        console.log(
+          'Resultado del triage:',
+          resultado
+        );
+
+        sessionStorage.setItem(
+          'resultadoTriage',
+          JSON.stringify(resultado)
+        );
+
+
+        // =====================================
+        // ALTA POR REGLAS
+        // =====================================
+
+        if (
+          resultado.origen === 'reglas' &&
+          resultado.accion === 'alerta'
+        ) {
+
+          this.router.navigate([
+            'emergency/resultado'
+          ]);
+
+          return;
+        }
+
+
+        // =====================================
+        // RESULTADO DE IA
+        // =====================================
+
+        if (
+          resultado.origen === 'ia' &&
+          resultado.accion === 'resultado_ia'
+        ) {
+
+          this.router.navigate([
+            'emergency/resultado'
+          ]);
+
+          return;
+        }
+
+
+        console.error(
+          'Respuesta de triage no reconocida:',
+          resultado
+        );
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Error al evaluar triage:',
+          error
+        );
+      }
+
+    });
+  }
+
+
+  // ==========================================
+  // NO HAY SÍNTOMAS → PEDIR PREGUNTAS A IA
+  // ==========================================
+
+  private generarPreguntasAdicionales(
+    id: number,
+    token: string
+  ): void {
+
+    this.emergencyService
+      .generarPreguntasAdicionales(
+        id,
+        token
+      )
+      .subscribe({
+
+        next: (respuesta) => {
+
+          console.log(
+            'Preguntas generadas:',
+            respuesta
+          );
+
+          sessionStorage.setItem(
+            'preguntasAdicionales',
+            JSON.stringify(respuesta.preguntas)
+          );
+
+          this.router.navigate([
+            'emergency/informacion-adicional'
+          ]);
+        },
+
+        error: (error) => {
+
+          console.error(
+            'Error generando preguntas adicionales:',
+            error
+          );
+        }
+
+      });
   }
 
 

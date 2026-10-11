@@ -1,0 +1,11 @@
+.emergency-layout {
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+.emergency-content {
+  flex: 1;
+  min-width: 0;
+}

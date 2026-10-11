@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { EmergencyService } from '../../../../services/emergency.service';
 @Component({
   selector: 'app-antecedentes',
-  imports: [MatIconModule,ReactiveFormsModule],
+  imports: [MatIconModule],
   templateUrl: './antecedentes.html',
   styleUrl: './antecedentes.scss',
 })
@@ -69,7 +69,7 @@ export class Antecedentes {
         );
   
         this.router.navigate([
-          'emergency/patient-group'
+          '/emergency/patient-group'
         ]);
       },
   

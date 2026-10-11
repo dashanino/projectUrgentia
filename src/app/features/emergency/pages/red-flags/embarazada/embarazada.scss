@@ -1,126 +1,16 @@
 @use 'variables' as *;
 
 
-/* =========================
-   ESTRUCTURA
-========================= */
-
-.main-layout {
-  display: flex;
-  gap: 30px;
-}
-
-
-/* =========================
-   SIDEBAR
-========================= */
-
-.sidebar {
-  width: 240px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.emergency-btn {
-  width: 100%;
-  height: 68px;
-
-  border: none;
-  border-radius: 18px;
-
-  background: #d94b4b;
-  color: white;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 12px;
-
-  font-family: $font-title;
-  font-size: 17px;
-
-  cursor: pointer;
-}
-
-.emergency-btn img {
-  width: 36px;
-  height: 36px;
-
-  object-fit: contain;
-}
-
-.step {
-  width: 100%;
-  height: 50px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 15px;
-
-  padding: 0 18px;
-  box-sizing: border-box;
-
-  border-radius: 15px;
-
-  font-family: $font-title;
-  font-size: 17px;
-
-  color: #aaa;
-}
-
-.step-number {
-  width: 27px;
-  height: 27px;
-
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: #bbb;
-  color: white;
-
-  font-size: 14px;
-}
-
-.step.active {
-  background: #dce5ff;
-  color: var(--color-primary);
-}
-
-.step.active .step-number {
-  background: #123e9e;
-}
-
-.completed-step {
-  color: #aaa;
-}
-
-
-/* =========================
-   TARJETA PRINCIPAL
-========================= */
-
 .card {
-  flex: 1;
-
-  min-height: 600px;
+  width: 95%;
+  box-sizing: border-box;
 
   background: white;
-
   border-radius: 45px;
+  padding: 35px 45px;
 
-  padding: 30px 40px;
-  box-sizing: border-box;
 
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-
-  position: relative;
 }
 
 

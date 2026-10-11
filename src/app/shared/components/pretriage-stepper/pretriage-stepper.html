@@ -1,0 +1,25 @@
+<aside class="sidebar">
+
+  <button class="emergency-btn" type="button">
+    <img src="alerta.png" alt="Emergencia">
+    <span>Emergencia<br>Inmediata</span>
+  </button>
+
+  @for (step of visibleSteps; track step.id) {
+
+    <div
+      class="step"
+      [class.active]="step.id === currentStep"
+    >
+
+      <span class="step-number">
+        {{ getStepNumber(step.id) }}
+      </span>
+
+      {{ step.label }}
+
+    </div>
+
+  }
+
+</aside>

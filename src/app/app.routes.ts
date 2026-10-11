@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './guards/auth.guards';
 import { MainLayout } from './layouts/main-layout/main-layout';
+import { EmergencyLayout } from './layouts/emergency-layout/emergency-layout';
 
 
 export const routes: Routes = [
@@ -11,6 +12,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     redirectTo: 'begin',
   },
+
 
 
   {
@@ -75,13 +77,14 @@ export const routes: Routes = [
       },
     ],
   },
+  
 
   // -------------------------
   // EMERGENCY
   // -------------------------
   {
     path: 'emergency',
-    component: MainLayout,
+    component: EmergencyLayout,
     children:[
     {
       path: 'patient-group',
@@ -133,9 +136,10 @@ export const routes: Routes = [
       loadComponent: () => import('./features/emergency/pages/result/result').then((m) => m.Result),
     },
     {
-        path: 'sub-banderas',
-        loadComponent: () => import('./features/emergency/pages/sub-banderas/sub-banderas').then((m) => m.SubBanderas),
+      path: 'sub-banderas',
+      loadComponent: () => import('./features/emergency/pages/sub-banderas/sub-banderas').then((m) => m.SubBanderas),
     },
+    
     ],
   },
 
