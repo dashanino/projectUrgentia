@@ -39,70 +39,98 @@ export class Adulto {
   ];
 
   sintomasSeleccionados: number[] = [];
+  ningunoSeleccionado = false;
 
+  seleccionarNinguno(): void {
+    this.ningunoSeleccionado = !this.ningunoSeleccionado;
 
-  seleccionarSintoma(id: number): void {
-
-    if (this.sintomasSeleccionados.includes(id)) {
-
-      this.sintomasSeleccionados =
-        this.sintomasSeleccionados.filter(
-          item => item !== id
-        );
-
-    } else {
-
-      this.sintomasSeleccionados.push(id);
-
+    if (this.ningunoSeleccionado) {
+      this.sintomasSeleccionados = [];
     }
   }
+  
+  seleccionarSintoma(id: number): void {
+  // Si selecciona un síntoma, "Ninguno" deja de estar seleccionado
+  this.ningunoSeleccionado = false;
 
+  if (this.sintomasSeleccionados.includes(id)) {
+    this.sintomasSeleccionados =
+      this.sintomasSeleccionados.filter(item => item !== id);
+  } else {
+    this.sintomasSeleccionados.push(id);
+  }
+}
 
   continuar(): void {
 
-    const idPretriage =
-      sessionStorage.getItem('id_pretriage');
+  const idPretriage =
+    sessionStorage.getItem('id_pretriage');
 
-    const token =
-      sessionStorage.getItem('access_token');
+  const token =
+    sessionStorage.getItem('access_token');
 
-    if (!idPretriage || !token) {
-
-      console.error(
-        'No existe un pretriage activo'
-      );
-
-      return;
-    }
-
-    const id = Number(idPretriage);
-
-
-    // ==========================================
-    // CASO 1: NO SELECCIONÓ NINGÚN SÍNTOMA
-    // ==========================================
-
-    if (this.sintomasSeleccionados.length === 0) {
-
-      this.generarPreguntasAdicionales(
-        id,
-        token
-      );
-
-      return;
-    }
-
-
-    // ==========================================
-    // CASO 2: SÍ SELECCIONÓ SÍNTOMAS
-    // ==========================================
-
-    this.guardarYEvaluar(
-      id,
-      token
-    );
+  if (!idPretriage || !token) {
+    console.error('No existe un pretriage activo');
+    return;
   }
 
+  const id = Number(idPretriage);
+
+  // No seleccionó nada
+  if (
+    this.sintomasSeleccionados.length === 0 &&
+    !this.ningunoSeleccionado
+  ) {
+    return;
+  }
+
+  // ==========================================
+  // CASO 1: NINGUNO DE LOS ANTERIORES
+  // ==========================================
+
+  if (this.ningunoSeleccionado) {
+
+    this.emergencyService.guardarBanderasRojas(
+      id,
+      [],
+      token
+    ).subscribe({
+
+      next: (respuesta) => {
+
+        console.log(
+          'No hay banderas rojas:',
+          respuesta
+        );
+
+        this.generarPreguntasAdicionales(
+          id,
+          token
+        );
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Error al guardar banderas:',
+          error
+        );
+      }
+
+    });
+
+    return;
+  }
+
+  // ==========================================
+  // CASO 2: SÍ SELECCIONÓ SÍNTOMAS
+  // ==========================================
+
+  this.guardarYEvaluar(
+    id,
+    token
+  );
+}
 
   private guardarYEvaluar(
     id: number,

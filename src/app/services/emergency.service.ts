@@ -93,4 +93,20 @@ export class EmergencyService {
       }
     );
   }
+  generarPreguntasAdicionales(
+  idPretriage: number,
+  token: string
+): Observable<any> {
+
+  return this.http.post(
+    `${this.apiUrl}/pretriage/${idPretriage}/preguntas-adicionales`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+  );
+}
+
 }

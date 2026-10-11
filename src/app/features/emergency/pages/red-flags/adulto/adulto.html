@@ -56,10 +56,21 @@
         (click)="seleccionarSintoma(sintoma.id)">
       
         <p>{{ sintoma.nombre }}</p>
+        
       
       </button>
+      
 
       }
+      <button
+        type="button"
+        class="symptom-card"
+        [class.selected]="ningunoSeleccionado"
+        (click)="seleccionarNinguno()">
+        <mat-icon>block</mat-icon>
+        <span>Ninguno de los anteriores</span>
+      
+      </button>
 
     </div>
 
@@ -71,7 +82,7 @@
     <button
       type="button"
       class="continue-btn"
-      [disabled]="sintomasSeleccionados.length === 0"
+      [disabled]="sintomasSeleccionados.length === 0 && !ningunoSeleccionado"
       (click)="continuar()">
 
       Continuar
