@@ -25,6 +25,15 @@ export class Antecedentes {
   };
 
   antecedentesSeleccionados: string[] = [];
+  ningunoSeleccionado = false;
+
+  seleccionarNinguno(): void {
+    this.ningunoSeleccionado = !this.ningunoSeleccionado;
+
+    if (this.ningunoSeleccionado) {
+      this.antecedentesSeleccionados = [];
+    }
+  }
 
   toggleAntecedente(antecedente: string) {
     if (this.antecedentesSeleccionados.includes(antecedente)) {
@@ -81,6 +90,12 @@ export class Antecedentes {
       }
   
     });
+  }
+  goBack(): void {
+
+    this.router.navigate([
+      '/begin'
+    ]);
   }
 }
 

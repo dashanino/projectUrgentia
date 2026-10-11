@@ -1,101 +1,147 @@
-
-
-
 <section class="card">
 
+  <!-- HEADER -->
   <div class="card-header">
 
-    <button class="back-button">
+    <button
+      type="button"
+      class="back-button"
+      (click)="goBack()"
+    >
       <mat-icon>chevron_left</mat-icon>
     </button>
-  
+
     <div class="title-icon">
       <mat-icon>medical_information</mat-icon>
     </div>
-  
+
     <h1>Antecedentes Importantes</h1>
-    
+
   </div>
 
+
+  <!-- PROGRESS -->
   <div class="progress">
+
     <span class="circle active">1</span>
+
     <span class="line"></span>
+
     <span class="circle">2</span>
+
     <span class="line"></span>
+
     <span class="circle">3</span>
+
     <span class="line"></span>
+
     <span class="circle">4</span>
+
   </div>
 
-  
 
+  <!-- CONTENT -->
   <div class="card-content">
 
-      <div class="options">
+    <!-- OPTIONS -->
+    <div class="options">
 
-          <button
-            type="button"
-            [class.selected]="isSelected('Anticoagulantes')"
-            (click)="toggleAntecedente('Anticoagulantes')">
-            Anticoagulantes
-          </button>
-        
-          <button
-            type="button"
-            [class.selected]="isSelected('Autoinmune')"
-            (click)="toggleAntecedente('Autoinmune')">
-            Autoinmune
-          </button>
-        
-          <button
-            type="button"
-            [class.selected]="isSelected('Inmunocomprometido')"
-            (click)="toggleAntecedente('Inmunocomprometido')">
-            Inmunocomprometido
-          </button>
-        
-          <button
-            type="button"
-            [class.selected]="isSelected('Hemodiálisis')"
-            (click)="toggleAntecedente('Hemodiálisis')">
-            Hemodiálisis
-          </button>
-        
-          <button
-            type="button"
-            [class.selected]="isSelected('Cáncer activo')"
-            (click)="toggleAntecedente('Cáncer activo')">
-            Cáncer activo
-          </button>
-        
+      <button
+        type="button"
+        [class.selected]="isSelected('Anticoagulantes')"
+        (click)="toggleAntecedente('Anticoagulantes')"
+      >
+        Anticoagulantes
+      </button>
+
+      <button
+        type="button"
+        [class.selected]="isSelected('Autoinmune')"
+        (click)="toggleAntecedente('Autoinmune')"
+      >
+        Autoinmune
+      </button>
+
+      <button
+        type="button"
+        [class.selected]="isSelected('Inmunocomprometido')"
+        (click)="toggleAntecedente('Inmunocomprometido')"
+      >
+        Inmunocomprometido
+      </button>
+
+      <button
+        type="button"
+        [class.selected]="isSelected('Hemodiálisis')"
+        (click)="toggleAntecedente('Hemodiálisis')"
+      >
+        Hemodiálisis
+      </button>
+
+      <button
+        type="button"
+        [class.selected]="isSelected('Cáncer activo')"
+        (click)="toggleAntecedente('Cáncer activo')"
+      >
+        Cáncer activo
+      </button>
+
+      <!-- NINGUNO -->
+      <button
+        type="button"
+        class="none-option"
+        [class.selected]="ningunoSeleccionado"
+        (click)="seleccionarNinguno()"
+      >
+        <mat-icon>block</mat-icon>
+        <span>Ninguno de los anteriores</span>
+      </button>
+
+    </div>
+
+
+    <!-- INFORMATION BOX -->
+    <aside class="info-box">
+
+      <h3>¿Por qué es importante?</h3>
+
+      <p>
+        Esta información nos ayuda a entender tu condición y brindarte
+        una orientación más segura y precisa.
+      </p>
+
+      <div class="medical-file-icon">
+        <img
+          src="Group.png"
+          alt="Información médica"
+        >
       </div>
 
-      <aside class="info-box">
-          <h3>¿Por qué es importante?</h3>
-        
-          <p>
-            Esta información nos ayuda a entender tu condición y brindarte una orientación más segura y precisa.
-          </p>
-        
-          <div class="medical-file-icon">
-              <div class="medical-file-icon">
-                  <img src="Group.png" alt="Información médica">
-                </div>
-            </div>
-      </aside>
+    </aside>
 
   </div>
 
+
+  <!-- CONTINUE -->
   <div class="continue-container">
-      <button
-          type="button"
-          class="continue-btn"
-          (click)="continuar()">
-          Continuar →
+
+    <button
+      type="button"
+      class="continue-btn"
+      (click)="continuar()"
+      [disabled]="
+        antecedentesSeleccionados.length === 0 &&
+        !ningunoSeleccionado
+      "
+    >
+      <span>Continuar</span>
+
+      <mat-icon>
+        arrow_forward
+      </mat-icon>
+
     </button>
+
   </div>
 
 </section>
-
-
-
