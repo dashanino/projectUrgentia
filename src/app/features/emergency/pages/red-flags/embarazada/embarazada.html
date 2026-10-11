@@ -1,6 +1,6 @@
 <main class="main-layout">
 
-  <!-- SIDEBAR -->
+  <!-- MENU IZQUIERDO -->
   <aside class="sidebar">
 
     <button class="emergency-btn">
@@ -8,19 +8,19 @@
       Emergencia Inmediata
     </button>
 
-    <div class="step">
+    <div class="step completed-step">
       <span class="step-number">1</span>
       Antecedentes
     </div>
 
-    <div class="step">
+    <div class="step completed-step">
       <span class="step-number">2</span>
       Tipo de paciente
     </div>
 
     <div class="step active">
       <span class="step-number">3</span>
-      Banderas Rojas
+      Síntomas
     </div>
 
     <div class="step">
@@ -30,26 +30,26 @@
 
   </aside>
 
-  <!-- CARD -->
+
+  <!-- TARJETA PRINCIPAL -->
   <section class="card">
 
-    <!-- HEADER CARD -->
+    <!-- TITULO -->
     <div class="card-header">
 
       <button
         type="button"
         class="back-button"
         (click)="goBack()">
-
         <mat-icon>chevron_left</mat-icon>
-
       </button>
 
-      <h1>Seleccione su síntoma</h1>
+      <h1>Síntomas</h1>
 
     </div>
 
-    <!-- PROGRESS -->
+
+    <!-- PROGRESO -->
     <div class="progress">
 
       <span class="circle completed">
@@ -72,42 +72,48 @@
 
     </div>
 
-   <!-- CONTENT -->
-<div class="symptom-content">
 
-  <div class="symptom-grid">
+    <!-- BANDERAS -->
+    <div class="symptom-content">
 
-    @for (sintoma of sintomas; track sintoma.id) {
+      <div class="symptom-grid">
+
+        @for (sintoma of sintomas; track sintoma.id) {
+
+          <button
+            type="button"
+            class="symptom-card"
+            [class.selected]="sintomasSeleccionados.includes(sintoma.id)"
+            (click)="seleccionarSintoma(sintoma.id)">
+
+            <p>{{ sintoma.nombre }}</p>
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+
+    <!-- CONTINUAR -->
+    <div class="continue-container">
 
       <button
         type="button"
-        class="symptom-card"
-        [class.selected]="sintomasSeleccionados.includes(sintoma.id)"
-        (click)="seleccionarSintoma(sintoma.id)">
+        class="continue-btn"
+        [disabled]="sintomasSeleccionados.length === 0"
+        (click)="continuar()">
 
-        <p>{{ sintoma.nombre }}</p>
+        Continuar
+        <mat-icon>arrow_forward</mat-icon>
 
       </button>
 
-    }
+    </div>
 
-  </div>
+  </section>
 
-</div>
-
-<!-- CONTINUAR -->
-<div class="continue-container">
-
-  <button
-    type="button"
-    class="continue-btn"
-    [disabled]="sintomasSeleccionados.length === 0"
-    (click)="continuar()">
-
-    Continuar
-
-    <mat-icon>arrow_forward</mat-icon>
-
-  </button>
-
-</div>
+</main>
+  
