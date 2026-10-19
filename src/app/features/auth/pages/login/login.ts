@@ -54,13 +54,11 @@ export class Login {
 
         this.loginError = false;
 
-        // Guardamos el token
         sessionStorage.setItem(
           'access_token',
           response.access_token
         );
 
-        // Guardamos los datos del usuario
         sessionStorage.setItem(
           'user',
           JSON.stringify(response.user)
@@ -68,14 +66,6 @@ export class Login {
 
         this.router.navigate(['/app/home']);
       },
-
-      error: (error) => {
-
-        console.error('Error en login:', error);
-
-        this.loginError = true;
-      }
-
     });
   }
 }
