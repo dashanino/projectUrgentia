@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import {LOGIN_USERS_MOCK} from '../../../../mocks/login/login.mock';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -10,23 +10,19 @@ import {LOGIN_USERS_MOCK} from '../../../../mocks/login/login.mock';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-
 export class Login {
+
   private fb = inject(FormBuilder);
   private router = inject(Router);
-
-  emailTest = 'urgentia@gmail.com';
-  passwordTest = '123456';
+  private authService = inject(AuthService);
 
   showPasswordValue = false;
-
   loginError = false;
 
   form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    document_number: ['', [Validators.required]],
     password: ['', Validators.required],
-  })
-
+  });
 
   goBack() {
     this.router.navigate(['/begin']);
@@ -37,31 +33,49 @@ export class Login {
   }
 
   submit() {
+
     if (this.form.invalid) {
       alert('Por favor, complete todos los campos correctamente.');
       return;
     }
 
-    const password = this.form.value.password;
-    const email = this.form.value.email;
+    const document_number = this.form.value.document_number!;
+    const password = this.form.value.password!;
 
-    const userFound = LOGIN_USERS_MOCK.find(
-      (user)=> user.email === email && user.password ===password,
-    );
+    this.authService.login({
+      document_number,
+      password
+    }).subscribe({
 
-    if (!userFound){
-      console.log('error login');
-      this.loginError = true;
-      console.log(this.loginError);
-      return;
-    }
+      next: (response) => {
 
-    this.loginError = false;
-    
-   sessionStorage.setItem('isLoggedIn', 'true');
+        console.log('Login correcto');
+        console.log(response);
 
+        this.loginError = false;
 
-    console.log('Datos correctos');
-    this.router.navigate(['/app/home']);
+        // Guardamos el token
+        sessionStorage.setItem(
+          'access_token',
+          response.access_token
+        );
+
+        // Guardamos los datos del usuario
+        sessionStorage.setItem(
+          'user',
+          JSON.stringify(response.user)
+        );
+
+        this.router.navigate(['/app/home']);
+      },
+
+      error: (error) => {
+
+        console.error('Error en login:', error);
+
+        this.loginError = true;
+      }
+
+    });
   }
 }

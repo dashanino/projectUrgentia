@@ -1,6 +1,5 @@
 @use 'variables' as *;
 
-
 /* =========================
    CONTENEDOR PRINCIPAL
 ========================= */
@@ -8,6 +7,7 @@
 .ParentDiv {
   display: flex;
   min-height: 100vh;
+  width: 100%;
 }
 
 
@@ -21,31 +21,31 @@
 }
 
 .imagen-fondo {
-    width: 100%;
-    height: 100vh;
-    display: block;
-  
-    object-fit: contain;
-    object-position: bottom center;
-  
-    background: #d4e1fc;
-  }
-  
-  .nombre-visual {
-    position: absolute;
-    top: 5%;
-    left: 50%;
-    transform: translateX(-55%);
-  
-    width: 100%;
-  
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  
-    color: var(--color-primary);
-    text-align: center;
-  }
+  width: 100%;
+  height: 100vh;
+  display: block;
+
+  object-fit: contain;
+  object-position: bottom center;
+
+  background: #d4e1fc;
+}
+
+.nombre-visual {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-55%);
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  color: var(--color-primary);
+  text-align: center;
+}
 
 .logo {
   width: 150px;
@@ -86,18 +86,9 @@
   align-items: center;
   justify-content: center;
 
-  padding: 40px;
-}
+  padding: 30px 40px;
 
-.register p {
-  grid-column: 1 / -1;
-
-  font-family: $font-title;
-  font-weight: $font-light;
-  font-size: 16px;
-  font-style: italic;
-
-  color: var(--color-primary);
+  box-sizing: border-box;
 }
 
 
@@ -108,9 +99,15 @@
 .formulario {
   width: 90%;
   max-width: 770px;
-  height: 90vh;
 
-  padding: 50px 70px;
+  /*
+    IMPORTANTE:
+    Quitamos height: 90vh porque al agregar
+    la cédula el contenido ya no cabe.
+  */
+  min-height: 0;
+
+  padding: 35px 55px;
 
   box-sizing: border-box;
 
@@ -129,7 +126,7 @@
   position: relative;
 
   width: 100%;
-  margin-bottom: 25px;
+  margin-bottom: 22px;
 }
 
 .header-form h1 {
@@ -151,7 +148,7 @@
 .back-button {
   position: absolute;
 
-  left: -55px;
+  left: -50px;
   top: 50%;
 
   transform: translateY(-50%);
@@ -191,8 +188,11 @@
 
 .form {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
+
   column-gap: 35px;
+  row-gap: 0;
 
   width: 100%;
 }
@@ -204,11 +204,12 @@
 }
 
 .form h4 {
-  margin-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 5px;
 
   font-family: $font-title;
   font-weight: $font-medium;
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .form label {
@@ -221,6 +222,17 @@
 /* =========================
    INPUTS Y SELECT
 ========================= */
+
+.input-field {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  margin-bottom: 16px;
+}
 
 .form input,
 .form select {
@@ -237,9 +249,69 @@
   background-color: var(--color-primary-soft);
 
   font-family: $font-title;
-  font-size: 20px;
+  font-size: 18px;
 
   color: #666;
+
+  outline: none;
+}
+
+.form input:focus,
+.form select:focus {
+  outline: 2px solid var(--color-primary);
+}
+
+
+/* =========================
+   ICONOS DENTRO DE INPUTS
+========================= */
+
+.input-field mat-icon {
+  position: absolute;
+
+  left: 15px;
+
+  width: 22px;
+  height: 22px;
+
+  font-size: 22px;
+
+  color: var(--color-text-muted);
+
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+.input-field input,
+.input-field select {
+  padding-left: 50px;
+}
+
+
+/* EPS */
+
+.form .eps-field select {
+  padding-left: 50px;
+  text-indent: 0;
+}
+
+
+/* =========================
+   TEXTO CONTRASEÑA
+========================= */
+
+.register .form > p {
+  grid-column: 1 / -1;
+
+  margin: 0 0 10px 0;
+
+  font-family: $font-title;
+  font-weight: $font-light;
+  font-size: 14px;
+  font-style: italic;
+
+  color: var(--color-primary);
 }
 
 
@@ -252,21 +324,21 @@
 
   width: 100%;
 
-  margin-top: 10px;
-  margin-bottom: 5px;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 
 .checkbox-container label {
   width: 100%;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
 
   gap: 10px;
 
   font-family: $font-title;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: $font-regular;
 
   color: var(--color-text-primary);
@@ -289,7 +361,12 @@
 
 .checkbox-container a {
   color: var(--color-primary);
+
   text-decoration: none;
+}
+
+.checkbox-container a:hover {
+  text-decoration: underline;
 }
 
 
@@ -300,10 +377,13 @@
 .form button {
   grid-column: 1 / -1;
 
-  margin-top: 1%;
+  width: 100%;
 
-  padding: 20px 30px;
+  margin-top: 5px;
 
+  padding: 16px 30px;
+
+  border: none;
   border-radius: 18px;
 
   background-color: var(--color-primary);
@@ -312,33 +392,80 @@
   font-family: $font-title;
   font-weight: $font-medium;
   font-size: 20px;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
-.input-field {
-    position: relative;
-    display: flex;
-    align-items: center;
+
+
+/* BOTÓN DESHABILITADO */
+
+.form button:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+
+/* BOTÓN HABILITADO */
+
+.form button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+  .begin-visual {
+    display: none;
+  }
+
+  .register {
     width: 100%;
+    padding: 30px 20px;
   }
-  
-  .input-field mat-icon {
-    position: absolute;
-    left: 15px;
-  
-    font-size: 22px;
-    width: 22px;
-    height: 22px;
-  
-    color: var(--color-text-muted);
-  
-    z-index: 2;
-  }
-  
-  .input-field input,
-  .input-field select {
+
+  .formulario {
     width: 100%;
-    padding-left: 50px;
+    max-width: 770px;
+
+    padding: 35px 45px;
   }
-  .form .eps-field select {
-    padding-left: 20px;
-    text-indent: 40px;
+}
+
+
+@media (max-width: 700px) {
+
+  .form {
+    grid-template-columns: 1fr;
   }
+
+  .formulario {
+    padding: 30px 25px;
+    border-radius: 30px;
+  }
+
+  .back-button {
+    left: -10px;
+  }
+
+  .header-form h1 {
+    margin-left: 40px;
+    font-size: 30px;
+  }
+
+  .register .form > p,
+  .checkbox-container,
+  .form button {
+    grid-column: 1;
+  }
+}

@@ -51,6 +51,15 @@
                     placeholder="Ingrese sus nombres"
                   />
                 </label>
+                <h4>Número de cédula</h4>
+                <label class="input-field">
+                  <mat-icon>badge</mat-icon>
+                  <input
+                    type="text"
+                    formControlName="document_number"
+                    placeholder="Ingrese su número de cédula"
+                  />
+                </label>
             
                 <h4>Correo electrónico</h4>
                 <label class="input-field">
@@ -110,16 +119,28 @@
                 <label class="input-field eps-field">
                   <mat-icon>medical_services</mat-icon>
 
-                  <select formControlName="EPS">
-                    <option value="" disabled selected>Seleccione su EPS</option>
-                    <option value="SURA">SURA</option>
-                    <option value="Sanitas">Sanitas</option>
-                    <option value="Nueva EPS">Nueva EPS</option>
-                    <option value="Salud Total">Salud Total</option>
-                    <option value="Coosalud">Coosalud</option>
-                    <option value="Savia Salud">Emssanar</option>
-                    <option value="Compensar">Compensar</option>
-                    <option value="Famisanar">Famisanar</option>
+                  <select formControlName="id_eps">
+                    <option [ngValue]="null" disabled>
+                      Seleccione su EPS
+                    </option>
+
+                    @for (epsItem of eps; track epsItem.id) {
+                      <option [ngValue]="epsItem.id">
+                        {{ epsItem.nombre }}
+                      </option>
+                    }
+                  </select>
+                </label>
+
+                <h4>Sexo</h4>
+                <label class="input-field">
+                  <mat-icon>wc</mat-icon>
+
+                  <select formControlName="sex">
+                    <option value="" disabled>Seleccione su sexo</option>
+                    <option value="F">Femenino</option>
+                    <option value="M">Masculino</option>
+                    <option value="Otro">Otro</option>
                   </select>
                 </label>
             
@@ -152,7 +173,10 @@
                 </label>
               </div>
             
-              <button type="submit">
+              <button
+                type="submit"
+                [disabled]="!form.get('terminos')?.value"
+              >
                 Crear Cuenta
               </button>
             
