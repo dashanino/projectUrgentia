@@ -153,10 +153,8 @@
 
 .actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  gap: 45px;
-
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
   width: 100%;
 }
 
@@ -195,6 +193,11 @@
 
 .login-button {
   background: var(--color-primary);
+}
+/* BOTÓN AZUL */
+
+.tramites-button {
+  background: #bb38dd;
 }
 
 

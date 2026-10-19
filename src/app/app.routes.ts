@@ -142,6 +142,30 @@ export const routes: Routes = [
     
     ],
   },
+  // -------------------------
+// TRÁMITES
+// -------------------------
+
+{
+  path: 'tramites',
+  loadComponent: () =>
+    import('./features/tramites/pages/seleccionar-eps/seleccionar-eps')
+      .then((m) => m.SeleccionarEps),
+},
+
+{
+  path: 'tramites/seleccionar-tramite',
+  loadComponent: () =>
+    import('./features/tramites/pages/seleccionar-tramite/seleccionar-tramite')
+      .then((m) => m.SeleccionarTramite),
+},
+
+{
+  path: 'tramites/resultado-tramite',
+  loadComponent: () =>
+    import('./features/tramites/pages/resultado-tramite/resultado-tramite')
+      .then((m) => m.ResultadoTramite),
+},
 
   // -------------------------
   // RUTA NO ENCONTRADA

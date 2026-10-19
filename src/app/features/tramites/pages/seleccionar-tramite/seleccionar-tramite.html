@@ -1,0 +1,95 @@
+
+<div class="ParentDiv">
+
+    <!-- LADO IZQUIERDO -->
+    <section class="begin-visual">
+  
+      <img
+        src="hospital.png"
+        alt="Ilustración de urgencias"
+        class="imagen-fondo"
+      />
+  
+      <div class="nombre-visual">
+  
+        <img
+          class="logo"
+          src="logo.png"
+          alt="Urgentia"
+        />
+  
+        <h1>Urgentia</h1>
+  
+        <p>
+          Sistema De Pre-Triage Para
+          <br>
+          Urgencias
+        </p>
+  
+      </div>
+  
+    </section>
+  
+    <!-- LADO DERECHO -->
+    <main class="tramites-content">
+  
+      <div class="tramites-container">
+  
+        <h2>
+          ¿Qué <span>trámite</span> necesitas?
+        </h2>
+  
+        <p class="description">
+          Selecciona el trámite que deseas realizar.
+          Te orientaremos según tu EPS.
+        </p>
+  
+        <div class="tramites-lista">
+  
+          @for (tramite of tramites; track tramite.id) {
+  
+            <button
+              type="button"
+              class="tramite-option"
+              (click)="seleccionarTramite(tramite.id)"
+            >
+              <span>{{ tramite.nombre }}</span>
+              <span class="arrow" aria-hidden="true">→</span>
+            </button>
+  
+          }
+  
+        </div>
+  
+        <button
+          type="button"
+          class="volver-button"
+          (click)="volver()"
+        >
+          ← Volver a seleccionar EPS
+        </button>
+  
+      </div>
+  
+      <div class="footer-container">
+  
+        <div class="divider">
+          <span></span>
+          <div class="shield">✚</div>
+          <span></span>
+        </div>
+  
+        <footer>
+          <p>Tus datos están protegidos</p>
+          <p>
+            Orientación administrativa ·
+            Consulta los canales oficiales de tu EPS
+          </p>
+        </footer>
+  
+      </div>
+  
+    </main>
+  
+  </div>
+  
