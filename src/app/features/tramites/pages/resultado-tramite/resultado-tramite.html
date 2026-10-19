@@ -1,0 +1,216 @@
+
+<div class="ParentDiv">
+
+    <!-- LADO IZQUIERDO -->
+    <section class="begin-visual">
+  
+      <img
+        src="hospital.png"
+        alt="Ilustración de urgencias"
+        class="imagen-fondo"
+      />
+  
+      <div class="nombre-visual">
+  
+        <img class="logo" src="logo.png" alt="Urgentia" />
+  
+        <h1>Urgentia</h1>
+  
+        <p>
+          Sistema De Pre-Triage Para
+          <br>
+          Urgencias
+        </p>
+  
+      </div>
+    </section>
+  
+    <!-- LADO DERECHO -->
+    <main class="resultado-content">
+  
+      <div class="resultado-container">
+  
+        <h2>
+          Información de tu <span>trámite</span>
+        </h2>
+  
+        <p class="description">
+          Te ayudaremos a encontrar la información
+          necesaria para realizar tu solicitud.
+        </p>
+  
+        <div class="resultado-card">
+  
+          <div class="info-group">
+            <span class="info-label">EPS seleccionada</span>
+            <h3>{{ nombreEps }}</h3>
+          </div>
+  
+          <div class="info-group">
+            <span class="info-label">Trámite solicitado</span>
+            <h3>{{ nombreTramite }}</h3>
+          </div>
+  
+          @if (cargando) {
+            <div class="estado-informacion">
+              <p>Consultando información de tu EPS...</p>
+            </div>
+          }
+  
+          @if (error) {
+            <div class="estado-informacion">
+              <p>{{ error }}</p>
+            </div>
+          }
+  
+          @if (mostrarAutorizacionSura && !cargando && !error) {
+  
+            <div class="estado-informacion">
+  
+              <h4>¿Cómo realizar este trámite?</h4>
+  
+              <p>
+                EPS SURA dispone de servicios virtuales
+                para gestionar solicitudes de autorización
+                y consultar su estado.
+              </p>
+  
+              <h4>Documentos que debes tener disponibles</h4>
+  
+              <ul>
+                <li>Documento de identidad.</li>
+                <li>Orden médica o solicitud del servicio.</li>
+                <li>
+                  Soportes clínicos adicionales, cuando
+                  sean requeridos por la EPS.
+                </li>
+              </ul>
+  
+              <h4>Pasos para solicitar la autorización</h4>
+  
+              <ol>
+                <li>
+                  Ingresa a los servicios digitales de EPS SURA.
+                </li>
+                <li>
+                  Inicia sesión con tus credenciales
+                  en el portal oficial.
+                </li>
+                <li>
+                  Busca la opción correspondiente
+                  a solicitudes o autorizaciones.
+                </li>
+                <li>
+                  Sigue las instrucciones del portal
+                  y adjunta los documentos solicitados.
+                </li>
+                <li>
+                  Consulta el estado de tu solicitud
+                  por los canales habilitados.
+                </li>
+              </ol>
+  
+              <p>
+                Los requisitos y las opciones disponibles
+                pueden variar según el servicio solicitado.
+              </p>
+  
+              <!-- DOS OPCIONES PARA SURA -->
+              <div class="opciones-sura">
+  
+                <a
+                  [href]="urlLoginSura"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="portal-sura-button"
+                >
+                  Iniciar sesión en SURA ↗
+                </a>
+  
+                <a
+                  [href]="urlPortalSura"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="portal-sura-button secundario"
+                >
+                  Consultar portal oficial ↗
+                </a>
+  
+              </div>
+  
+              <p class="nota-seguridad">
+                Por seguridad, ingresa tus datos de acceso
+                únicamente en el sitio oficial de SURA.
+                Urgentia no solicita ni almacena
+                esas credenciales.
+              </p>
+  
+            </div>
+  
+          } @else if (!cargando && !error) {
+  
+            <div class="estado-informacion">
+  
+              <h4>Orientación del trámite</h4>
+  
+              <p>
+                Estamos preparando la información
+                específica de este trámite para tu EPS.
+              </p>
+  
+              <p>
+                Próximamente podrás consultar los requisitos,
+                documentos necesarios, pasos y canales
+                oficiales de atención.
+              </p>
+  
+            </div>
+  
+          }
+  
+        </div>
+  
+        <div class="acciones">
+  
+          <button
+            type="button"
+            class="volver-button"
+            (click)="volver()"
+          >
+            ← Cambiar trámite
+          </button>
+  
+          <button
+            type="button"
+            class="cambiar-eps-button"
+            (click)="cambiarEps()"
+          >
+            Cambiar EPS
+          </button>
+  
+        </div>
+  
+      </div>
+  
+      <div class="footer-container">
+  
+        <div class="divider">
+          <span></span>
+          <div class="shield">✚</div>
+          <span></span>
+        </div>
+  
+        <footer>
+          <p>Tus datos están protegidos</p>
+          <p>
+            Orientación administrativa ·
+            Consulta los canales oficiales de tu EPS
+          </p>
+        </footer>
+  
+      </div>
+  
+    </main>
+  
+  </div>
+  

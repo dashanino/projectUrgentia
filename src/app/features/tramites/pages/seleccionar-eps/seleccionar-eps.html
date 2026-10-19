@@ -1,0 +1,113 @@
+
+<div class="ParentDiv">
+
+    <!-- LADO IZQUIERDO -->
+    <section class="begin-visual">
+  
+      <img
+        src="hospital.png"
+        alt="Ilustración de urgencias"
+        class="imagen-fondo"
+      />
+  
+      <div class="nombre-visual">
+  
+        <img
+          class="logo"
+          src="logo.png"
+          alt="Urgentia"
+        />
+  
+        <h1>Urgentia</h1>
+  
+        <p>
+          Sistema De Pre-Triage Para
+          <br>
+          Urgencias
+        </p>
+  
+      </div>
+  
+    </section>
+  
+    <!-- LADO DERECHO -->
+    <main class="eps-content">
+  
+      <div class="eps-container">
+  
+        <h2>
+          ¿Cuál es tu <span>EPS?</span>
+        </h2>
+  
+        <p class="description">
+          Selecciona tu entidad promotora de salud
+          para ayudarte con tus trámites y solicitudes.
+        </p>
+  
+        <div class="eps-form">
+  
+          <label for="eps">
+            Selecciona tu EPS
+          </label>
+  
+          <select
+            id="eps"
+            name="eps"
+            [(ngModel)]="epsSeleccionada"
+          >
+  
+          <option [ngValue]="null" disabled>
+            Selecciona una opción
+          </option>
+  
+            @for (eps of listaEps; track eps.id) {
+                <option [ngValue]="eps.id">
+                {{ eps.nombre }}
+              </option>
+            }
+  
+          </select>
+  
+          <button
+            type="button"
+            class="continuar-button"
+            [disabled]="!epsSeleccionada"
+            (click)="continuar()"
+          >
+            Continuar
+          </button>
+  
+          <button
+            type="button"
+            class="volver-button"
+            (click)="volver()"
+          >
+            ← Volver
+          </button>
+  
+        </div>
+  
+      </div>
+  
+      <div class="footer-container">
+  
+        <div class="divider">
+          <span></span>
+          <div class="shield">✚</div>
+          <span></span>
+        </div>
+  
+        <footer>
+          <p>Tus datos están protegidos</p>
+          <p>
+            Orientación administrativa ·
+            Consulta los canales oficiales de tu EPS
+          </p>
+        </footer>
+  
+      </div>
+  
+    </main>
+  
+  </div>
+  

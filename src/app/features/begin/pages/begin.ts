@@ -52,4 +52,7 @@ export class Begin {
   irLogin() {
     this.router.navigate(['/login']);
   }
+  irTramites() {
+    this.router.navigate(['/tramites']);
+  }
 }

@@ -1,0 +1,162 @@
+
+@use 'variables' as *;
+
+/* Reutilizamos el diseño de Seleccionar EPS */
+@use '../seleccionar-eps/seleccionar-eps.scss';
+
+/* =========================
+   CONTENIDO DE TRÁMITES
+========================= */
+
+.tramites-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 55px 6% 135px;
+  box-sizing: border-box;
+
+  background: var(--color-surface);
+}
+
+.tramites-container {
+  width: 100%;
+  max-width: 650px;
+  text-align: center;
+}
+
+.tramites-container h2 {
+  margin: 0 0 22px;
+
+  font-family: $font-title;
+  font-weight: $font-light;
+  font-size: 43px;
+
+  color: var(--color-text);
+}
+
+.tramites-container h2 span {
+  color: var(--color-primary);
+}
+
+.description {
+  max-width: 560px;
+  margin: 0 auto 32px;
+
+  font-family: $font-title;
+  font-weight: $font-regular;
+  font-size: 17px;
+  line-height: 1.4;
+
+  color: var(--color-text);
+}
+
+/* =========================
+   BOTONES DE TRÁMITES
+========================= */
+
+.tramites-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: 100%;
+}
+
+.tramite-option {
+  width: 100%;
+  min-height: 57px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+  padding: 13px 22px;
+
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+
+  background: var(--color-surface);
+  color: var(--color-primary);
+
+  font-family: $font-title;
+  font-weight: $font-semi-bold;
+  font-size: 15px;
+  line-height: 1.3;
+
+  text-align: left;
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.tramite-option:hover {
+  background: #eef3ff;
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.tramite-option:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.arrow {
+  flex-shrink: 0;
+  font-size: 22px;
+  font-weight: $font-regular;
+}
+
+/* =========================
+   VOLVER
+========================= */
+
+.volver-button {
+  margin-top: 27px;
+
+  background: transparent;
+  border: none;
+
+  color: var(--color-primary);
+
+  font-family: $font-title;
+  font-size: 16px;
+
+  cursor: pointer;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .tramites-content {
+    min-height: calc(100vh - 230px);
+    padding: 45px 24px 170px;
+  }
+
+  .tramites-container h2 {
+    font-size: 34px;
+  }
+
+  .description {
+    font-size: 15px;
+  }
+
+  .tramite-option {
+    font-size: 14px;
+    padding: 13px 15px;
+  }
+}
