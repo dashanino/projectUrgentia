@@ -1,27 +1,16 @@
-
-
 <!-- CARD -->
 <section class="card">
-
-    <!-- HEADER CARD -->
+  <!-- HEADER CARD -->
   <div class="card-header">
-
-    <button
-      type="button"
-      class="back-button"
-      (click)="goBack()">
-
+    <button type="button" class="back-button" (click)="goBack()">
       <mat-icon>chevron_left</mat-icon>
-
     </button>
 
     <h1>Seleccione su síntoma</h1>
-
   </div>
 
-    <!-- PROGRESS -->
+  <!-- PROGRESS -->
   <div class="progress">
-
     <span class="circle completed">
       <mat-icon>check</mat-icon>
     </span>
@@ -39,56 +28,44 @@
     <span class="line"></span>
 
     <span class="circle">4</span>
-
   </div>
 
-    <!-- CONTENT -->
+  <!-- CONTENT -->
   <div class="symptom-content">
-
     <div class="symptom-grid">
-
       @for (sintoma of sintomas; track sintoma.id) {
-
         <button
           type="button"
           class="symptom-card"
           [class.selected]="sintomasSeleccionados.includes(sintoma.id)"
-          (click)="seleccionarSintoma(sintoma.id)">
-
+          (click)="seleccionarSintoma(sintoma.id)"
+        >
           <p>{{ sintoma.nombre }}</p>
-
         </button>
-
       }
       <button
         type="button"
         class="symptom-card"
         [class.selected]="ningunoSeleccionado"
-        (click)="seleccionarNinguno()">
+        (click)="seleccionarNinguno()"
+      >
         <mat-icon>block</mat-icon>
         <span>Ninguno de los anteriores</span>
-      
       </button>
-
     </div>
-
   </div>
 
   <!-- CONTINUAR -->
   <div class="continue-container">
-
     <button
       type="button"
       class="continue-btn"
       [disabled]="sintomasSeleccionados.length === 0 && !ningunoSeleccionado"
-      (click)="continuar()">
-
+      (click)="continuar()"
+    >
       Continuar
 
       <mat-icon>arrow_forward</mat-icon>
-
     </button>
-
   </div>
-
 </section>

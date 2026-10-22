@@ -1,0 +1,30 @@
+<div class="sintomas-container">
+  @if (cargando) {
+    <div class="loading">
+      <p>Cargando...</p>
+    </div>
+  } @else if (sintomas.length > 0) {
+    <h2>¿Presenta alguno de los siguientes síntomas?</h2>
+
+    <div class="sintomas-list">
+      @for (sintoma of sintomas; track sintoma.id) {
+        <button
+          type="button"
+          class="sintoma"
+          [class.seleccionado]="estaSeleccionado(sintoma.id)"
+          (click)="seleccionarSintoma(sintoma.id)"
+        >
+          <span class="nombre-sintoma">
+            {{ sintoma.nombre }}
+          </span>
+
+          @if (estaSeleccionado(sintoma.id)) {
+            <span class="check"> ✓ </span>
+          }
+        </button>
+      }
+    </div>
+
+    <button type="button" class="continuar" (click)="continuar()">Continuar</button>
+  }
+</div>

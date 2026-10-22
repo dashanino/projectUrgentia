@@ -4,7 +4,6 @@ import { authGuard } from './guards/auth.guards';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { EmergencyLayout } from './layouts/emergency-layout/emergency-layout';
 
-
 export const routes: Routes = [
   // Ruta inicial
   {
@@ -12,8 +11,6 @@ export const routes: Routes = [
     pathMatch: 'full',
     redirectTo: 'begin',
   },
-
-
 
   {
     path: 'begin',
@@ -60,7 +57,6 @@ export const routes: Routes = [
       import('./features/auth/pages/forgot-password/success/success').then((m) => m.Success),
   },
 
-
   {
     path: 'app',
     component: MainLayout,
@@ -77,7 +73,6 @@ export const routes: Routes = [
       },
     ],
   },
-  
 
   // -------------------------
   // EMERGENCY
@@ -85,87 +80,103 @@ export const routes: Routes = [
   {
     path: 'emergency',
     component: EmergencyLayout,
-    children:[
-    {
-      path: 'patient-group',
-      loadComponent: () => import('./features/emergency/pages/patient-group/patient-group').then((m) => m.PatientGroup),
-    },
+    children: [
+      {
+        path: 'patient-group',
+        loadComponent: () =>
+          import('./features/emergency/pages/patient-group/patient-group').then(
+            (m) => m.PatientGroup,
+          ),
+      },
 
-    {
-      path: 'antecedentes',
-      loadComponent: () =>
-        import('./features/emergency/pages/antecedentes/antecedentes').then((m) => m.Antecedentes),
-    },
+      {
+        path: 'antecedentes',
+        loadComponent: () =>
+          import('./features/emergency/pages/antecedentes/antecedentes').then(
+            (m) => m.Antecedentes,
+          ),
+      },
 
-    {
-      path: 'red-flags/adulto',
-      loadComponent: () =>
-        import('./features/emergency/pages/red-flags/adulto/adulto').then((m) => m.Adulto),
-    },
+      {
+        path: 'red-flags/adulto',
+        loadComponent: () =>
+          import('./features/emergency/pages/red-flags/adulto/adulto').then((m) => m.Adulto),
+      },
 
-    {
-      path: 'red-flags/adulto-mayor',
-      loadComponent: () =>
-        import('./features/emergency/pages/red-flags/adulto-mayor/adulto-mayor').then(
-          (m) => m.AdultoMayor,
-        ),
-    },
+      {
+        path: 'red-flags/adulto-mayor',
+        loadComponent: () =>
+          import('./features/emergency/pages/red-flags/adulto-mayor/adulto-mayor').then(
+            (m) => m.AdultoMayor,
+          ),
+      },
 
-    {
-      path: 'red-flags/embarazada',
-      loadComponent: () =>
-        import('./features/emergency/pages/red-flags/embarazada/embarazada').then(
-          (m) => m.Embarazada,
-        ),
-    },
+      {
+        path: 'red-flags/embarazada',
+        loadComponent: () =>
+          import('./features/emergency/pages/red-flags/embarazada/embarazada').then(
+            (m) => m.Embarazada,
+          ),
+      },
 
-    {
-      path: 'red-flags/nino',
-      loadComponent: () =>
-        import('./features/emergency/pages/red-flags/nino/nino').then((m) => m.Nino),
-    },
+      {
+        path: 'red-flags/nino',
+        loadComponent: () =>
+          import('./features/emergency/pages/red-flags/nino/nino').then((m) => m.Nino),
+      },
 
-    {
-      path: 'red-flags/trauma',
-      loadComponent: () =>
-        import('./features/emergency/pages/red-flags/trauma/trauma').then((m) => m.Trauma),
-    },
+      {
+        path: 'red-flags/trauma',
+        loadComponent: () =>
+          import('./features/emergency/pages/red-flags/trauma/trauma').then((m) => m.Trauma),
+      },
 
-    {
-      path: 'resultado',
-      loadComponent: () => import('./features/emergency/pages/result/result').then((m) => m.Result),
-    },
-    {
-      path: 'sub-banderas',
-      loadComponent: () => import('./features/emergency/pages/sub-banderas/sub-banderas').then((m) => m.SubBanderas),
-    },
-    
+      {
+        path: 'resultado',
+        loadComponent: () =>
+          import('./features/emergency/pages/result/result').then((m) => m.Result),
+      },
+      {
+        path: 'sub-banderas',
+        loadComponent: () =>
+          import('./features/emergency/pages/sub-banderas/sub-banderas').then((m) => m.SubBanderas),
+      },
+      {
+        path: 'sintomas',
+        loadComponent: () =>
+          import('./features/emergency/pages/sintomas-red-flags/sintomas-red-flags').then(
+            (m) => m.SintomasRedFlags,
+          ),
+      },
     ],
   },
   // -------------------------
-// TRÁMITES
-// -------------------------
+  // TRÁMITES
+  // -------------------------
 
-{
-  path: 'tramites',
-  loadComponent: () =>
-    import('./features/tramites/pages/seleccionar-eps/seleccionar-eps')
-      .then((m) => m.SeleccionarEps),
-},
+  {
+    path: 'tramites',
+    loadComponent: () =>
+      import('./features/tramites/pages/seleccionar-eps/seleccionar-eps').then(
+        (m) => m.SeleccionarEps,
+      ),
+  },
 
-{
-  path: 'tramites/seleccionar-tramite',
-  loadComponent: () =>
-    import('./features/tramites/pages/seleccionar-tramite/seleccionar-tramite')
-      .then((m) => m.SeleccionarTramite),
-},
+  {
+    path: 'tramites/seleccionar-tramite',
+    loadComponent: () =>
+      import('./features/tramites/pages/seleccionar-tramite/seleccionar-tramite').then(
+        (m) => m.SeleccionarTramite,
+      ),
+  },
 
-{
-  path: 'tramites/resultado-tramite',
-  loadComponent: () =>
-    import('./features/tramites/pages/resultado-tramite/resultado-tramite')
-      .then((m) => m.ResultadoTramite),
-},
+  {
+    path: 'tramites/resultado-tramite',
+    loadComponent: () =>
+      import('./features/tramites/pages/resultado-tramite/resultado-tramite').then(
+        (m) => m.ResultadoTramite,
+      ),
+  },
 
   // -------------------------
   // RUTA NO ENCONTRADA
