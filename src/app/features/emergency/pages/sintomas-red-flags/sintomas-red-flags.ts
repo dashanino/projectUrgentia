@@ -21,6 +21,21 @@ export class SintomasRedFlags implements OnInit {
   sintomas: Sintoma[] = [];
   sintomasSeleccionados: number[] = [];
 
+  // Banderas seleccionadas por el usuario
+  banderasSeleccionadas: number[] = [];
+
+  // Nombres de las banderas
+  readonly nombresBanderas: { [key: number]: string } = {
+    2: 'Dolor de Cabeza',
+    3: 'Dolor de Pecho',
+    4: 'Dolor de Abdomen',
+    5: 'Dificultad Respiratoria',
+    6: 'Fiebre',
+    7: 'Caída o Golpe reciente',
+    9: 'Tos con sangre',
+    17: 'Posible fractura o deformidad',
+  };
+
   cargando = true;
 
   ngOnInit(): void {
@@ -34,11 +49,12 @@ export class SintomasRedFlags implements OnInit {
       return;
     }
 
-    const banderasSeleccionadas: number[] = JSON.parse(banderasGuardadas);
+    // Guardamos las banderas como propiedad de la clase
+    this.banderasSeleccionadas = JSON.parse(banderasGuardadas);
 
-    console.log('Banderas recuperadas:', banderasSeleccionadas);
+    console.log('Banderas recuperadas:', this.banderasSeleccionadas);
 
-    if (banderasSeleccionadas.length === 0) {
+    if (this.banderasSeleccionadas.length === 0) {
       console.log('No hay banderas seleccionadas. Pasando a IA.');
 
       this.cargando = false;
@@ -46,7 +62,7 @@ export class SintomasRedFlags implements OnInit {
       return;
     }
 
-    this.cargarSintomasDeTodasLasBanderas(banderasSeleccionadas);
+    this.cargarSintomasDeTodasLasBanderas(this.banderasSeleccionadas);
   }
 
   cargarSintomasDeTodasLasBanderas(banderas: number[]): void {
@@ -64,17 +80,10 @@ export class SintomasRedFlags implements OnInit {
 
         this.cargando = false;
 
-        /*
-         * Le indicamos explícitamente a Angular
-         * que actualice la interfaz.
-         */
+        // Forzamos actualización de la interfaz
         this.cdr.detectChanges();
 
-        /*
-         * Si ninguna de las banderas seleccionadas
-         * tiene síntomas visuales, pasamos directamente
-         * a la etapa de preguntas de IA.
-         */
+        // Si no hay síntomas visuales → IA
         if (this.sintomas.length === 0) {
           console.log('No hay síntomas visuales. Pasando a IA.');
 
@@ -101,10 +110,7 @@ export class SintomasRedFlags implements OnInit {
       this.sintomasSeleccionados.splice(index, 1);
     }
 
-    /*
-     * Creamos una nueva referencia para que Angular
-     * detecte el cambio inmediatamente.
-     */
+    // Nueva referencia para Angular
     this.sintomasSeleccionados = [...this.sintomasSeleccionados];
   }
 
@@ -112,16 +118,21 @@ export class SintomasRedFlags implements OnInit {
     return this.sintomasSeleccionados.includes(sintomaId);
   }
 
+  // Devuelve solamente los síntomas pertenecientes
+  // a una bandera específica
+  getSintomasPorBandera(idBandera: number): Sintoma[] {
+    return this.sintomas.filter((sintoma) => sintoma.id_bandera === idBandera);
+  }
+
+  // Devuelve el nombre de la bandera
+  getNombreBandera(idBandera: number): string {
+    return this.nombresBanderas[idBandera] ?? 'Síntomas adicionales';
+  }
+
   continuar(): void {
     console.log('Síntomas seleccionados:', this.sintomasSeleccionados);
 
-    /*
-     * Por ahora solamente avanzamos a la etapa
-     * de preguntas de IA.
-     *
-     * Después aquí agregaremos el endpoint para
-     * guardar los síntomas en pretriage_sintomas.
-     */
+    // Por ahora vamos a IA
     this.irAIA();
   }
 

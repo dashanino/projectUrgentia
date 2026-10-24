@@ -1,271 +1,156 @@
 <main class="main-layout">
-
-
-
-
   <!-- TARJETA PRINCIPAL -->
   <section class="card">
-
     <!-- TITULO -->
     <div class="card-header">
-
-      <button
-        type="button"
-        class="back-button"
-        (click)="goBack()">
-
-        <mat-icon>
-          chevron_left
-        </mat-icon>
-
+      <button type="button" class="back-button" (click)="goBack()">
+        <mat-icon>chevron_left</mat-icon>
       </button>
-
-      <h1>
-        Resultado de Pre-triage
-      </h1>
-
+      <h1>Resultado de Pre-triage</h1>
     </div>
-
 
     <!-- PROGRESO COMPLETO -->
     <div class="progress">
-
-      <span class="circle completed">
-        <mat-icon>check</mat-icon>
-      </span>
-
+      <span class="circle completed"><mat-icon>check</mat-icon></span>
       <span class="line completed-line"></span>
-
-      <span class="circle completed">
-        <mat-icon>check</mat-icon>
-      </span>
-
+      <span class="circle completed"><mat-icon>check</mat-icon></span>
       <span class="line completed-line"></span>
-
-      <span class="circle completed">
-        <mat-icon>check</mat-icon>
-      </span>
-
+      <span class="circle completed"><mat-icon>check</mat-icon></span>
       <span class="line completed-line"></span>
-
-      <span class="circle completed">
-        <mat-icon>check</mat-icon>
-      </span>
-
+      <span class="circle completed"><mat-icon>check</mat-icon></span>
     </div>
 
-
     <!-- RESULTADO PRINCIPAL -->
-    <div
-      class="priority-box"
-      [ngClass]="'priority-' + prioridad">
-
+    <div class="priority-box" [ngClass]="'priority-' + prioridad">
       <div class="priority-info">
-
         <div class="warning-icon">
-
-          <mat-icon>
-            {{ iconoPrioridad }}
-          </mat-icon>
-
+          <mat-icon>{{ iconoPrioridad }}</mat-icon>
         </div>
-
         <div>
-
-          <h2>
-            {{ tituloPrioridad }}
-          </h2>
-
-          <p>
-            {{ justificacion }}
-          </p>
-
+          <h2>{{ tituloPrioridad }}</h2>
+          <p>{{ justificacion }}</p>
         </div>
-
       </div>
-
 
       <!-- LLAMADA DE EMERGENCIA SOLO EN ALTA PRIORIDAD -->
       @if (prioridad === 'alta') {
-
-        <a
-          href="tel:123"
-          class="call-button">
-
-          <mat-icon>
-            call
-          </mat-icon>
-
+        <a href="tel:123" class="call-button">
+          <mat-icon>call</mat-icon>
           <div>
-
-            <strong>
-              LLAMAR AL 123
-            </strong>
-
-            <span>
-              Atención de emergencias
-            </span>
-
+            <strong>LLAMAR AL 123</strong>
+            <span>Atención de emergencias</span>
           </div>
-
         </a>
-
       }
-
     </div>
-
 
     <!-- INCERTIDUMBRE DE LA IA -->
     @if (incertidumbre && detalleIncertidumbre) {
-
       <div class="result-card">
-
-        <mat-icon class="result-icon">
-          info
-        </mat-icon>
-
+        <mat-icon class="result-icon">info</mat-icon>
         <div>
-
-          <h3>
-            Información adicional
-          </h3>
-
-          <p>
-            {{ detalleIncertidumbre }}
-          </p>
-
+          <h3>Información adicional</h3>
+          <p>{{ detalleIncertidumbre }}</p>
         </div>
-
       </div>
-
     }
-
 
     <!-- TARJETAS INFORMATIVAS -->
     <div class="result-grid">
-
       <div class="result-card">
-
-        <mat-icon class="result-icon">
-          local_hospital
-        </mat-icon>
-
+        <mat-icon class="result-icon">local_hospital</mat-icon>
         <div>
-
-          <h3>
-            Atención médica
-          </h3>
-
+          <h3>Atención médica</h3>
           @if (prioridad === 'alta') {
-
-            <p>
-              Busca atención médica inmediata
-              o comunícate con los servicios
-              de emergencia.
-            </p>
-
+            <p>Busca atención médica inmediata o comunícate con los servicios de emergencia.</p>
           } @else if (prioridad === 'media_alta') {
-
-            <p>
-              Se recomienda una valoración médica
-              prioritaria.
-            </p>
-
+            <p>Se recomienda una valoración médica prioritaria.</p>
           } @else if (prioridad === 'media_baja') {
-
-            <p>
-              Se recomienda valoración médica
-              según la evolución de los síntomas.
-            </p>
-
+            <p>Se recomienda valoración médica según la evolución de los síntomas.</p>
           } @else {
-
             <p>
-              La información disponible sugiere
-              una prioridad baja, pero debes vigilar
-              cualquier cambio en tus síntomas.
+              La información disponible sugiere una prioridad baja, pero debes vigilar cualquier
+              cambio en tus síntomas.
             </p>
-
           }
-
         </div>
-
       </div>
-
 
       <div class="result-card">
-
-        <mat-icon class="result-icon">
-          description
-        </mat-icon>
-
+        <mat-icon class="result-icon">description</mat-icon>
         <div>
-
-          <h3>
-            Resumen de tu información
-          </h3>
-
+          <h3>Resumen de tu información</h3>
           <p>
-            Tu información del pre-triage puede ser
-            utilizada como apoyo durante la atención
-            por personal de salud.
+            Tu información del pre-triage puede ser utilizada como apoyo durante la atención por
+            personal de salud.
           </p>
-
         </div>
-
       </div>
-
 
       <div class="result-card">
-
-        <mat-icon class="result-icon">
-          info
-        </mat-icon>
-
+        <mat-icon class="result-icon">info</mat-icon>
         <div>
-
-          <h3>
-            Importante
-          </h3>
-
-          <p>
-            Este resultado NO reemplaza la valoración
-            realizada por un profesional de la salud.
-          </p>
-
+          <h3>Importante</h3>
+          <p>Este resultado NO reemplaza la valoración realizada por un profesional de la salud.</p>
         </div>
-
       </div>
-
     </div>
-
 
     <!-- MENSAJE FINAL -->
     <div class="final-message">
-
-      <mat-icon>
-        verified_user
-      </mat-icon>
-
+      <mat-icon>verified_user</mat-icon>
       @if (prioridad === 'alta') {
-
         <p>
           Urgentia recomienda buscar atención médica inmediata.
-          <br>
+          <br />
           En caso de emergencia, llama al 123.
         </p>
-
-      } @else {
-
+      } @else if (prioridad === 'media_alta') {
         <p>
-          Sigue las recomendaciones indicadas y busca
-          atención médica si tus síntomas empeoran.
+          Se recomienda buscar atención médica prioritaria.
+          <br />
+          Puedes consultar las instituciones cercanas disponibles.
         </p>
-
+      } @else if (prioridad === 'media_baja') {
+        <p>
+          Se recomienda solicitar valoración médica.
+          <br />
+          Puedes consultar las instituciones cercanas disponibles.
+        </p>
+      } @else {
+        <p>
+          No parece tratarse de una emergencia.
+          <br />
+          Te recomendamos consultar en la IPS donde estás afiliado o seguir los canales de atención
+          de tu EPS.
+        </p>
       }
-
     </div>
+    <p style="color: red; font-size: 20px;">
+      PRIORIDAD ACTUAL: {{ prioridad }}
+    </p>
 
+    <app-location
+      (locationSelected)="onLocationSelected($event)">
+    </app-location>
+
+    <!-- UBICACIÓN -->
+    @if (prioridad !== 'baja') {
+      <section class="institutions-section">
+        <h2>Instituciones cercanas</h2>
+        <p>
+          Estas son algunas instituciones cercanas que pueden ofrecer el servicio que necesitas.
+        </p>
+        @for (institution of institutions; track institution.id) {
+          <div class="institution-card">
+            <div>
+              <h3>{{ institution.name }}</h3>
+              <p>{{ institution.address }}</p>
+            </div>
+            <span>{{ institution.distance_km }} km</span>
+          </div>
+        }
+      </section>
+    }
   </section>
-
 </main>

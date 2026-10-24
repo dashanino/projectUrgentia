@@ -1,0 +1,29 @@
+<section class="location-section">
+
+  <h2>Encuentra instituciones cercanas</h2>
+
+  <p>
+    Podemos utilizar tu ubicación para mostrarte
+    las instituciones más cercanas que ofrecen el servicio que necesitas.
+  </p>
+
+  <button
+    type="button"
+    (click)="getCurrentLocation()"
+    [disabled]="loading">
+
+    @if (!loading) {
+      Usar mi ubicación
+    } @else {
+      Obteniendo ubicación...
+    }
+
+  </button>
+
+  @if (errorMessage) {
+    <p class="error-message">
+      {{ errorMessage }}
+    </p>
+  }
+
+</section>

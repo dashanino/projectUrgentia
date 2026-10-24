@@ -2,6 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Location, LocationData } from '../../../location/location';
+import { InstitutionsService, Institution } from '../../../../services/institutions.service';
 
 interface ResultadoIA {
   prioridad: 'alta' | 'media_alta' | 'media_baja' | 'baja';
@@ -22,24 +24,47 @@ interface ResultadoTriage {
 @Component({
   selector: 'app-result',
   standalone: true,
-  imports: [
-    MatIconModule,
-    CommonModule
-  ],
+  imports: [MatIconModule, CommonModule, Location],
   templateUrl: './result.html',
   styleUrl: './result.scss',
 })
 export class Result implements OnInit {
-
   private router = inject(Router);
+  private institutionsService = inject(InstitutionsService);
 
   resultadoTriage: ResultadoTriage | null = null;
 
-  prioridad:
-    'alta' |
-    'media_alta' |
-    'media_baja' |
-    'baja' = 'baja';
+  institutions: Institution[] = [];
+
+  location: LocationData | null = null;
+
+  onLocationSelected(location: LocationData): void {
+    this.location = location;
+
+    console.log('📍 Ubicación recibida:', location);
+
+    this.institutionsService
+      .getNearbyInstitutions(location.latitude, location.longitude, this.prioridad)
+      .subscribe({
+        next: (response) => {
+          console.log('🏥 Instituciones recibidas:', response);
+
+          this.institutions = response.institutions;
+        },
+
+        error: (error) => {
+
+          console.error(
+            '❌ Error buscando instituciones:',
+            error
+          );
+
+          this.institutions = [];
+        }
+      });
+  }
+
+  prioridad: 'alta' | 'media_alta' | 'media_baja' | 'baja' = 'baja';
 
   justificacion = '';
 
@@ -47,48 +72,29 @@ export class Result implements OnInit {
 
   detalleIncertidumbre: string | null = null;
 
-
   ngOnInit(): void {
-
-    const resultadoGuardado =
-      sessionStorage.getItem('resultadoTriage');
+    const resultadoGuardado = sessionStorage.getItem('resultadoTriage');
 
     if (!resultadoGuardado) {
+      console.error('No existe un resultado de triage');
 
-      console.error(
-        'No existe un resultado de triage'
-      );
-
-      this.router.navigate([
-        'emergency/patient-group'
-      ]);
+      this.router.navigate(['emergency/patient-group']);
 
       return;
     }
 
     try {
-
-      this.resultadoTriage =
-        JSON.parse(resultadoGuardado);
+      this.resultadoTriage = JSON.parse(resultadoGuardado);
 
       this.procesarResultado();
-
     } catch (error) {
+      console.error('No se pudo leer el resultado de triage:', error);
 
-      console.error(
-        'No se pudo leer el resultado de triage:',
-        error
-      );
-
-      this.router.navigate([
-        'emergency/patient-group'
-      ]);
+      this.router.navigate(['emergency/patient-group']);
     }
   }
 
-
   private procesarResultado(): void {
-
     if (!this.resultadoTriage) {
       return;
     }
@@ -97,63 +103,45 @@ export class Result implements OnInit {
     // RESULTADO PROVENIENTE DE TRIAGE_RULES
     // =========================================================
 
-    if (
-      this.resultadoTriage.origen === 'reglas' &&
-      this.resultadoTriage.accion === 'alerta'
-    ) {
+    console.log('RESULTADO TRIAGE:', this.resultadoTriage);
 
+    if (this.resultadoTriage.origen === 'reglas' && this.resultadoTriage.accion === 'alerta') {
       this.prioridad = 'alta';
+
+      console.log('PRIORIDAD ASIGNADA:', this.prioridad);
 
       this.justificacion =
         'Se identificaron signos o síntomas que requieren atención médica inmediata.';
 
       this.incertidumbre = false;
-
       this.detalleIncertidumbre = null;
 
       return;
     }
 
-
     // =========================================================
     // RESULTADO PROVENIENTE DE IA
     // =========================================================
 
-    if (
-      this.resultadoTriage.origen === 'ia' &&
-      this.resultadoTriage.accion === 'resultado_ia'
-    ) {
+    if (this.resultadoTriage.origen === 'ia' && this.resultadoTriage.accion === 'resultado_ia') {
+      const resultadoIA: ResultadoIA = this.resultadoTriage.resultado;
 
-      const resultadoIA: ResultadoIA =
-        this.resultadoTriage.resultado;
+      this.prioridad = resultadoIA.prioridad;
 
-      this.prioridad =
-        resultadoIA.prioridad;
+      this.justificacion = resultadoIA.justificacion;
 
-      this.justificacion =
-        resultadoIA.justificacion;
+      this.incertidumbre = resultadoIA.incertidumbre;
 
-      this.incertidumbre =
-        resultadoIA.incertidumbre;
-
-      this.detalleIncertidumbre =
-        resultadoIA.detalle_incertidumbre;
+      this.detalleIncertidumbre = resultadoIA.detalle_incertidumbre;
 
       return;
     }
 
-
-    console.error(
-      'Formato de resultado de triage no reconocido:',
-      this.resultadoTriage
-    );
+    console.error('Formato de resultado de triage no reconocido:', this.resultadoTriage);
   }
 
-
   get tituloPrioridad(): string {
-
     switch (this.prioridad) {
-
       case 'alta':
         return 'ALTA PRIORIDAD';
 
@@ -171,11 +159,8 @@ export class Result implements OnInit {
     }
   }
 
-
   get iconoPrioridad(): string {
-
     switch (this.prioridad) {
-
       case 'alta':
         return 'warning';
 
@@ -193,11 +178,7 @@ export class Result implements OnInit {
     }
   }
 
-
   goBack(): void {
-
-    this.router.navigate([
-      'emergency/patient-group'
-    ]);
+    this.router.navigate(['emergency/patient-group']);
   }
 }

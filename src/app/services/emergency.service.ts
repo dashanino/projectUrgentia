@@ -12,6 +12,7 @@ export interface PretriageResponse {
 export interface Sintoma {
   id: number;
   nombre: string;
+  id_bandera: number;
 }
 
 export interface SintomasResponse {
