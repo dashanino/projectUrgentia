@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 
 export interface Institution {
   id: number;
@@ -28,12 +27,13 @@ export class InstitutionsService {
 
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://127.0.0.1:5000/api/institutions';
+  private apiUrl = 'http://127.0.0.1:3000/api/institution';
 
   getNearbyInstitutions(
     latitude: number,
     longitude: number,
-    prioridad: string
+    prioridad: string,
+    token: string
   ): Observable<InstitutionsResponse> {
 
     const params = new HttpParams()
@@ -41,9 +41,16 @@ export class InstitutionsService {
       .set('longitude', longitude.toString())
       .set('prioridad', prioridad);
 
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
     return this.http.get<InstitutionsResponse>(
       `${this.apiUrl}/nearby`,
-      { params }
+      {
+        params,
+        headers
+      }
     );
   }
 }

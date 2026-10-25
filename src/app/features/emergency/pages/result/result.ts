@@ -37,30 +37,37 @@ export class Result implements OnInit {
   institutions: Institution[] = [];
 
   location: LocationData | null = null;
+  token = sessionStorage.getItem('access_token');
 
   onLocationSelected(location: LocationData): void {
     this.location = location;
 
     console.log('📍 Ubicación recibida:', location);
+    console.log('🏥 Prioridad:', this.prioridad);
+
+    const token = sessionStorage.getItem('access_token');
+
+    if (!token) {
+      console.error('❌ No existe access_token en sessionStorage');
+      return;
+    }
 
     this.institutionsService
-      .getNearbyInstitutions(location.latitude, location.longitude, this.prioridad)
+      .getNearbyInstitutions(location.latitude, location.longitude, this.prioridad, token)
       .subscribe({
         next: (response) => {
-          console.log('🏥 Instituciones recibidas:', response);
+          console.log('✅ Instituciones recibidas:', response);
 
           this.institutions = response.institutions;
         },
 
         error: (error) => {
-
-          console.error(
-            '❌ Error buscando instituciones:',
-            error
-          );
+          console.error('❌ Error buscando instituciones:', error);
+          console.error('Status:', error.status);
+          console.error('Backend:', error.error);
 
           this.institutions = [];
-        }
+        },
       });
   }
 
