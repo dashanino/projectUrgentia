@@ -39,3 +39,6 @@
     <button type="button" class="continuar" (click)="continuar()">Continuar</button>
   }
 </div>
+@if (mensajeError) {
+  <p class="error-message">{{ mensajeError }}</p>
+}

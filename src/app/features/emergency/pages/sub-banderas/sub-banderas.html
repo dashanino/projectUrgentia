@@ -1,4 +1,78 @@
-<main>
-    <h1>Sub-banderas</h1>
-    <p>Aquí continuará posteriormente la evaluación con IA.</p>
-  </main>
+
+<main class="cuestionario-container">
+
+  <h1>Preguntas adicionales</h1>
+
+  <p class="descripcion">
+    Responde las siguientes preguntas para ayudarnos
+    a comprender mejor tu situación.
+  </p>
+
+  @if (cargando) {
+    <div class="estado">
+      <p>Generando pregunta...</p>
+    </div>
+  }
+
+  @if (mensajeError) {
+    <div class="mensaje-error" role="alert">
+      <p>{{ mensajeError }}</p>
+    </div>
+  }
+
+  @if (finalizado) {
+    <div
+      class="mensaje-estado"
+      [class.alerta]="alerta"
+      role="alert"
+    >
+      <h2>
+        {{ alerta ? 'Atención médica necesaria' : 'Cuestionario detenido' }}
+      </h2>
+
+      <p>{{ mensajeEstado }}</p>
+
+      @if (alerta) {
+        <p>
+          Si presentas síntomas graves o una emergencia,
+          busca atención médica inmediata.
+        </p>
+      }
+    </div>
+  }
+
+  @if (preguntaActual && !finalizado && !cargando) {
+    <section class="pregunta-card">
+
+      <span class="numero-pregunta">
+        Pregunta {{ preguntaActual.orden }}
+      </span>
+
+      <h2>{{ preguntaActual.pregunta }}</h2>
+
+      <label for="respuesta">
+        Tu respuesta
+      </label>
+
+      <textarea
+        id="respuesta"
+        name="respuesta"
+        [(ngModel)]="respuestaPaciente"
+        [disabled]="guardando"
+        placeholder="Escribe tu respuesta aquí..."
+        rows="5"
+      ></textarea>
+
+      <button
+        type="button"
+        class="boton-continuar"
+        (click)="enviarRespuesta()"
+        [disabled]="guardando || !respuestaPaciente.trim()"
+      >
+        {{ guardando ? 'Guardando respuesta...' : 'Continuar' }}
+      </button>
+
+    </section>
+  }
+
+</main>

@@ -1,5 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
@@ -37,6 +37,8 @@ export class SintomasRedFlags implements OnInit {
   };
 
   cargando = true;
+  guardando = false;
+  mensajeError = '';
 
   ngOnInit(): void {
     const banderasGuardadas = sessionStorage.getItem('banderas_seleccionadas');
@@ -45,20 +47,37 @@ export class SintomasRedFlags implements OnInit {
       console.error('No hay banderas seleccionadas en sessionStorage.');
 
       this.cargando = false;
-      this.irAIA();
+      this.continuar();
       return;
     }
 
-    // Guardamos las banderas como propiedad de la clase
-    this.banderasSeleccionadas = JSON.parse(banderasGuardadas);
+    try {
+      const banderas = JSON.parse(banderasGuardadas);
+
+      if (
+        !Array.isArray(banderas) ||
+        !banderas.every((id) => Number.isInteger(id))
+      ) {
+        throw new Error('Formato de banderas inválido');
+      }
+
+      this.banderasSeleccionadas = banderas;
+    } catch (error) {
+      console.error('Error al recuperar las banderas:', error);
+
+      this.cargando = false;
+      this.mensajeError = 'No se pudo recuperar la selección de banderas.';
+      this.cdr.detectChanges();
+      return;
+    }
 
     console.log('Banderas recuperadas:', this.banderasSeleccionadas);
 
     if (this.banderasSeleccionadas.length === 0) {
-      console.log('No hay banderas seleccionadas. Pasando a IA.');
+      console.log('No hay banderas seleccionadas. Guardando selección vacía.');
 
       this.cargando = false;
-      this.irAIA();
+      this.continuar();
       return;
     }
 
@@ -66,28 +85,34 @@ export class SintomasRedFlags implements OnInit {
   }
 
   cargarSintomasDeTodasLasBanderas(banderas: number[]): void {
+    this.cargando = true;
+    this.mensajeError = '';
+
     const peticiones = banderas.map((idBandera) =>
-      this.emergencyService.obtenerSintomasPorRedFlag(idBandera),
+      this.emergencyService.obtenerSintomasPorRedFlag(idBandera)
     );
 
     forkJoin(peticiones).subscribe({
       next: (respuestas) => {
-        const todosLosSintomas = respuestas.flatMap((respuesta) => respuesta.sintomas);
+        const todosLosSintomas = respuestas.flatMap(
+          (respuesta) => respuesta.sintomas
+        );
 
-        this.sintomas = todosLosSintomas;
+        // Evitar síntomas duplicados
+        this.sintomas = todosLosSintomas.filter(
+          (sintoma, index, arreglo) =>
+            arreglo.findIndex((item) => item.id === sintoma.id) === index
+        );
 
         console.log('Todos los síntomas encontrados:', this.sintomas);
 
         this.cargando = false;
-
-        // Forzamos actualización de la interfaz
         this.cdr.detectChanges();
 
-        // Si no hay síntomas visuales → IA
+        // Si no hay síntomas disponibles, registrar lista vacía
         if (this.sintomas.length === 0) {
-          console.log('No hay síntomas visuales. Pasando a IA.');
-
-          this.irAIA();
+          console.log('No hay síntomas visuales. Guardando selección vacía.');
+          this.continuar();
         }
       },
 
@@ -95,13 +120,17 @@ export class SintomasRedFlags implements OnInit {
         console.error('Error cargando síntomas:', error);
 
         this.cargando = false;
-
+        this.mensajeError = 'No fue posible cargar los síntomas. Intenta nuevamente.';
         this.cdr.detectChanges();
       },
     });
   }
 
   seleccionarSintoma(sintomaId: number): void {
+    if (this.guardando) {
+      return;
+    }
+
     const index = this.sintomasSeleccionados.indexOf(sintomaId);
 
     if (index === -1) {
@@ -121,7 +150,9 @@ export class SintomasRedFlags implements OnInit {
   // Devuelve solamente los síntomas pertenecientes
   // a una bandera específica
   getSintomasPorBandera(idBandera: number): Sintoma[] {
-    return this.sintomas.filter((sintoma) => sintoma.id_bandera === idBandera);
+    return this.sintomas.filter(
+      (sintoma) => sintoma.id_bandera === idBandera
+    );
   }
 
   // Devuelve el nombre de la bandera
@@ -129,14 +160,76 @@ export class SintomasRedFlags implements OnInit {
     return this.nombresBanderas[idBandera] ?? 'Síntomas adicionales';
   }
 
+  // Guardar síntomas antes de continuar con IA
   continuar(): void {
+    if (this.guardando) {
+      return;
+    }
+
+    const idPretriage = sessionStorage.getItem('id_pretriage');
+    const token = sessionStorage.getItem('access_token');
+
+    if (!idPretriage || !token) {
+      console.error('No existe un pretriage activo.');
+
+      this.mensajeError = 'No existe un pre-triage activo. Debes iniciar nuevamente.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const id = Number(idPretriage);
+
+    if (!Number.isInteger(id) || id <= 0) {
+      this.mensajeError = 'El identificador del pre-triage no es válido.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    this.guardando = true;
+    this.cargando = true;
+    this.mensajeError = '';
+
     console.log('Síntomas seleccionados:', this.sintomasSeleccionados);
 
-    // Por ahora vamos a IA
-    this.irAIA();
+    this.emergencyService
+      .guardarSintomas(
+        id,
+        this.sintomasSeleccionados,
+        token
+      )
+      .subscribe({
+        next: (respuesta) => {
+          console.log('Síntomas guardados:', respuesta);
+
+          this.guardando = false;
+          this.cargando = false;
+
+          if (respuesta.ok === true && respuesta.accion === 'iniciar_ia') {
+            this.irAIA();
+          } else {
+            this.mensajeError =
+              'El servidor no confirmó el guardado de los síntomas.';
+            this.cdr.detectChanges();
+          }
+        },
+
+        error: (error) => {
+          console.error('Error al guardar síntomas:', error);
+
+          this.guardando = false;
+          this.cargando = false;
+
+          this.mensajeError =
+            error.error?.error ||
+            'No fue posible guardar los síntomas. Intenta nuevamente.';
+
+          this.cdr.detectChanges();
+        },
+      });
   }
 
+  // Navegar a las preguntas de IA
   private irAIA(): void {
-    this.router.navigate(['emergency/sub-banderas']);
+    this.router.navigate(['/emergency/sub-banderas']);
   }
 }

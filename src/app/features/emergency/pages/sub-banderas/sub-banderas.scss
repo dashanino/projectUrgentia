@@ -1,0 +1,97 @@
+
+.cuestionario-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 24px;
+  
+    h1 {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+  
+    .descripcion {
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+  }
+  
+  .pregunta-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+  
+    h2 {
+      font-size: 22px;
+      line-height: 1.5;
+    }
+  
+    label {
+      font-weight: 600;
+    }
+  
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font: inherit;
+      resize: vertical;
+  
+      &:focus {
+        outline: 2px solid #6477d9;
+        border-color: transparent;
+      }
+    }
+  }
+  
+  .numero-pregunta {
+    color: #6477d9;
+    font-weight: 600;
+  }
+  
+  .boton-continuar {
+    padding: 14px 24px;
+    border: none;
+    border-radius: 10px;
+    background: #6477d9;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+  
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  
+  .estado,
+  .mensaje-error,
+  .mensaje-estado {
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+  }
+  
+  .estado {
+    background: #f3f4f6;
+  }
+  
+  .mensaje-error {
+    background: #fff1f1;
+    color: #a11d1d;
+  }
+  
+  .mensaje-estado {
+    background: #f3f4f6;
+  
+    &.alerta {
+      background: #fff1f1;
+      color: #a11d1d;
+    }
+  }
+  
