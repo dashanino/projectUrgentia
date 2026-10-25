@@ -1,12 +1,19 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Location, LocationData } from '../../../location/location';
 import { InstitutionsService, Institution } from '../../../../services/institutions.service';
+import { EmergencyService } from '../../../../services/emergency.service';
+import { finalize } from 'rxjs';
+
+type TipoAtencionUrgencias =
+  'general' | 'pediatrica' | 'ginecoobstetrica' | 'trauma' | 'neurologica' | 'cardiovascular';
 
 interface ResultadoIA {
   prioridad: 'alta' | 'media_alta' | 'media_baja' | 'baja';
+  tipo_atencion_urgencias: TipoAtencionUrgencias | null;
+  servicio_recomendado: string | null;
   justificacion: string;
   incertidumbre: boolean;
   detalle_incertidumbre: string | null;
@@ -20,7 +27,6 @@ interface ResultadoTriage {
   accion: 'alerta' | 'resultado_ia';
   resultado: any;
 }
-
 @Component({
   selector: 'app-result',
   standalone: true,
@@ -31,13 +37,18 @@ interface ResultadoTriage {
 export class Result implements OnInit {
   private router = inject(Router);
   private institutionsService = inject(InstitutionsService);
+  private emergencyService = inject(EmergencyService);
+  private cdr = inject(ChangeDetectorRef);
 
   resultadoTriage: ResultadoTriage | null = null;
 
   institutions: Institution[] = [];
-  tipoAtencion = '';
+
   loadingInstitutions = false;
   institutionsError = '';
+
+  tipoAtencionUrgencias: TipoAtencionUrgencias | null = null;
+  servicioRecomendado: string | null = null;
 
   location: LocationData | null = null;
   token = sessionStorage.getItem('access_token');
@@ -45,11 +56,7 @@ export class Result implements OnInit {
   onLocationSelected(location: LocationData): void {
     this.location = location;
     this.institutionsError = '';
-
-    if (!this.tipoAtencion) {
-      this.institutionsError = 'No se pudo determinar el tipo de atención requerido.';
-      return;
-    }
+    this.institutions = [];
 
     const token = sessionStorage.getItem('access_token');
 
@@ -58,32 +65,132 @@ export class Result implements OnInit {
       return;
     }
 
+    // Media-baja: buscar por servicio clínico.
+    if (this.prioridad === 'media_baja') {
+      if (!this.servicioRecomendado) {
+        this.institutionsError = 'No se pudo determinar un servicio médico recomendado.';
+        return;
+      }
+
+      this.buscarPorServicio(location, this.servicioRecomendado, token);
+      return;
+    }
+
+    // Alta/media-alta con categoría ya obtenida del JSON.
+    if (this.tipoAtencionUrgencias) {
+      this.buscarPorUrgencias(location, this.tipoAtencionUrgencias, token);
+      return;
+    }
+
+    // Alta detectada por reglas: clasificación complementaria.
+    if (
+      this.prioridad === 'alta' &&
+      this.resultadoTriage?.origen === 'reglas' &&
+      this.resultadoTriage.accion === 'alerta'
+    ) {
+      this.loadingInstitutions = true;
+
+      this.emergencyService
+        .clasificarTipoAtencion(this.resultadoTriage.id_pretriage, token)
+        .subscribe({
+          next: (response) => {
+            const tipoAtencion = response.tipo_atencion_urgencias as TipoAtencionUrgencias;
+
+            this.tipoAtencionUrgencias = tipoAtencion;
+
+            this.buscarPorUrgencias(location, tipoAtencion, token);
+          },
+          error: () => {
+            this.loadingInstitutions = false;
+            this.institutionsError = 'No fue posible determinar el tipo de urgencia requerido.';
+          },
+        });
+
+      return;
+    }
+
+    this.institutionsError = 'No se pudo determinar el tipo de atención requerido.';
+  }
+
+  private buscarPorUrgencias(
+    location: LocationData,
+    tipoAtencion: TipoAtencionUrgencias,
+    token: string,
+  ): void {
     this.loadingInstitutions = true;
+    this.institutionsError = '';
+    this.institutions = [];
+
+    this.cdr.detectChanges();
+
+    console.log('[URGENTIA] Buscando instituciones:', {
+      latitude: location.latitude,
+      longitude: location.longitude,
+      prioridad: this.prioridad,
+      tipo_atencion: tipoAtencion,
+    });
 
     this.institutionsService
       .getNearbyInstitutions(
         location.latitude,
         location.longitude,
         this.prioridad,
-        this.tipoAtencion,
+        tipoAtencion,
         token,
       )
+      .subscribe({
+        next: (response) => {
+          console.log('[URGENTIA] Respuesta completa:', response);
+
+          this.institutions = response.institutions ?? [];
+
+          if (this.institutions.length === 0) {
+            this.institutionsError =
+              'No encontramos instituciones registradas que cumplan los criterios.';
+          } else {
+            this.institutionsError = '';
+          }
+
+          this.loadingInstitutions = false;
+
+          // Actualizar la interfaz inmediatamente.
+          this.cdr.detectChanges();
+
+          console.table(this.institutions);
+        },
+
+        error: (error) => {
+          console.error('[URGENTIA] Error consultando instituciones:', error);
+
+          this.institutions = [];
+          this.loadingInstitutions = false;
+          this.institutionsError =
+            'No fue posible consultar las instituciones. Inténtalo nuevamente.';
+
+          this.cdr.detectChanges();
+        },
+      });
+  }
+
+  private buscarPorServicio(location: LocationData, servicio: string, token: string): void {
+    this.loadingInstitutions = true;
+
+    this.institutionsService
+      .getNearbyInstitutionsByService(location.latitude, location.longitude, servicio, token)
       .subscribe({
         next: (response) => {
           this.institutions = response.institutions ?? [];
           this.loadingInstitutions = false;
 
-          if (this.institutions.length === 0) {
-            this.institutionsError =
-              'No encontramos instituciones registradas con las características requeridas en esta búsqueda.';
+          if (!this.institutions.length) {
+            this.institutionsError = `No encontramos instituciones registradas que ofrezcan ${servicio}.`;
           }
         },
-        error: (error) => {
-          console.error('Error buscando instituciones:', error);
-          this.institutions = [];
+        error: () => {
           this.loadingInstitutions = false;
-          this.institutionsError =
-            'No fue posible consultar las instituciones. Inténtalo nuevamente.';
+          this.institutionsError = 'No fue posible consultar las instituciones.';
+          
+          this.cdr.detectChanges();
         },
       });
   }
@@ -149,6 +256,8 @@ export class Result implements OnInit {
 
     if (this.resultadoTriage.origen === 'ia' && this.resultadoTriage.accion === 'resultado_ia') {
       const resultadoIA: ResultadoIA = this.resultadoTriage.resultado;
+      this.tipoAtencionUrgencias = resultadoIA.tipo_atencion_urgencias;
+      this.servicioRecomendado = resultadoIA.servicio_recomendado;
 
       this.prioridad = resultadoIA.prioridad;
 

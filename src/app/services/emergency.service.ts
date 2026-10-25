@@ -26,7 +26,7 @@ export interface SintomasResponse {
 export class EmergencyService {
   private http = inject(HttpClient);
 
-  private apiUrl = 'http://127.0.0.1:5001/api';
+  private apiUrl = 'http://127.0.0.1:3000/api';
 
   iniciarPretriage(): Observable<PretriageResponse> {
     return this.http.post<PretriageResponse>(`${this.apiUrl}/pretriage`, {});
@@ -106,78 +106,88 @@ export class EmergencyService {
     return this.http.get<SintomasResponse>(`${this.apiUrl}/sintomas/${idRedFlag}`);
   }
 
-guardarSintomas(
-  idPretriage: number,
-  idsSintomas: number[],
-  token: string
-): Observable<any> {
-  return this.http.post(
-    `${this.apiUrl}/pretriage/${idPretriage}/sintomas`,
-    {
-      ids_sintomas: idsSintomas
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
-  );
-}
+  guardarSintomas(idPretriage: number, idsSintomas: number[], token: string): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/pretriage/${idPretriage}/sintomas`,
+      {
+        ids_sintomas: idsSintomas,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  }
 
-generarPreguntaIA(
-  idPretriage: number,
-  token: string
-): Observable<any> {
-  return this.http.post(
-    `${this.apiUrl}/pretriage-agent/pregunta`,
-    {
-      id_pretriage: idPretriage
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
-  );
-}
+  generarPreguntaIA(idPretriage: number, token: string): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/pretriage-agent/pregunta`,
+      {
+        id_pretriage: idPretriage,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  }
 
-guardarRespuestaIA(
-  idPretriage: number,
-  idPregunta: number,
-  respuesta: string,
-  token: string
-): Observable<any> {
-  return this.http.post(
-    `${this.apiUrl}/pretriage-agent/respuesta`,
-    {
-      id_pretriage: idPretriage,
-      id_pregunta: idPregunta,
-      respuesta: respuesta
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
-  );
-}
+  guardarRespuestaIA(
+    idPretriage: number,
+    idPregunta: number,
+    respuesta: string,
+    token: string,
+  ): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/pretriage-agent/respuesta`,
+      {
+        id_pretriage: idPretriage,
+        id_pregunta: idPregunta,
+        respuesta: respuesta,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  }
 
-evaluarConIA(
-  idPretriage: number,
-  token: string
-): Observable<any> {
-  return this.http.post(
-    `${this.apiUrl}/pretriage-agent/evaluate`,
-    {
-      id_pretriage: idPretriage
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }
-  );
-}
-
-
+  evaluarConIA(idPretriage: number, token: string): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/pretriage-agent/evaluate`,
+      {
+        id_pretriage: idPretriage,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  }
+  clasificarTipoAtencion(
+    idPretriage: number,
+    token: string,
+  ): Observable<{
+    ok: boolean;
+    id_pretriage: number;
+    tipo_atencion_urgencias: string;
+  }> {
+    return this.http.post<{
+      ok: boolean;
+      id_pretriage: number;
+      tipo_atencion_urgencias: string;
+    }>(
+      `${this.apiUrl}/pretriage-agent/tipo-atencion`,
+      { id_pretriage: idPretriage },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  }
 }

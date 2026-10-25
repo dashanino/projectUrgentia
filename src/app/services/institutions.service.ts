@@ -47,4 +47,22 @@ export class InstitutionsService {
 
     return this.http.get<InstitutionsResponse>(`${this.apiUrl}/nearby`, { params, headers });
   }
+  getNearbyInstitutionsByService(
+    latitude: number,
+    longitude: number,
+    servicioRecomendado: string,
+    token: string,
+  ): Observable<InstitutionsResponse> {
+    const params = new HttpParams()
+      .set('latitude', latitude.toString())
+      .set('longitude', longitude.toString())
+      .set('prioridad', 'media_baja')
+      .set('servicio_recomendado', servicioRecomendado);
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<InstitutionsResponse>(`${this.apiUrl}/nearby`, { params, headers });
+  }
 }

@@ -99,6 +99,7 @@
     <!-- MENSAJE FINAL -->
     <div class="final-message">
       <mat-icon>verified_user</mat-icon>
+
       @if (prioridad === 'alta') {
         <p>
           Urgentia recomienda buscar atención médica inmediata.
@@ -115,53 +116,50 @@
         <p>
           Se recomienda solicitar valoración médica.
           <br />
-          Puedes consultar las instituciones cercanas disponibles.
+          Puedes consultar las instituciones cercanas que ofrecen el servicio recomendado.
         </p>
       } @else {
         <p>
-          No parece tratarse de una emergencia.
-          <br />
           Te recomendamos consultar en la IPS donde estás afiliado o seguir los canales de atención
           de tu EPS.
         </p>
       }
     </div>
-    <p style="color: red; font-size: 20px">PRIORIDAD ACTUAL: {{ prioridad }}</p>
 
-    <app-location (locationSelected)="onLocationSelected($event)"> </app-location>
-
-    <!-- UBICACIÓN -->
+    <!-- UBICACIÓN E INSTITUCIONES -->
     @if (prioridad !== 'baja') {
-      <section class="institutions-section">
-        @if (prioridad !== 'baja') {
-          <app-location (locationSelected)="onLocationSelected($event)"> </app-location>
-
-          @if (loadingInstitutions) {
-            <p>Buscando instituciones compatibles...</p>
-          }
-
-          @if (institutionsError) {
-            <p class="error-message">
-              {{ institutionsError }}
-            </p>
-          }
-
-          @if (institutions.length > 0) {
-            <section class="institutions-section">
-              <h2>Instituciones cercanas</h2>
-
-              @for (institution of institutions; track institution.id) {
-                <article class="institution-card">
-                  <h3>{{ institution.name }}</h3>
-                  <p>{{ institution.address }}</p>
-                  <p>{{ institution.municipality }}</p>
-                  <strong>{{ institution.distance_km }} km</strong>
-                </article>
-              }
-            </section>
-          }
-        }
+      <section class="location-section">
+        <app-location (locationSelected)="onLocationSelected($event)"> </app-location>
       </section>
+
+      @if (prioridad === 'media_baja' && servicioRecomendado) {
+        <p>Servicio recomendado: {{ servicioRecomendado }}</p>
+      }
+
+      @if (loadingInstitutions) {
+        <p>Buscando instituciones compatibles...</p>
+      }
+
+      @if (institutionsError) {
+        <p class="error-message">
+          {{ institutionsError }}
+        </p>
+      }
+
+      @if (institutions.length > 0) {
+        <section class="institutions-section">
+          <h2>Instituciones cercanas</h2>
+
+          @for (institution of institutions; track institution.id) {
+            <article class="institution-card">
+              <h3>{{ institution.name }}</h3>
+              <p>{{ institution.address }}</p>
+              <p>{{ institution.municipality }}</p>
+              <strong>{{ institution.distance_km }} km</strong>
+            </article>
+          }
+        </section>
+      }
     }
   </section>
 </main>
