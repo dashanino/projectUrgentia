@@ -1,103 +1,176 @@
+
 <main class="main-layout">
   <!-- TARJETA PRINCIPAL -->
   <section class="card">
+
     <!-- TITULO -->
     <div class="card-header">
-      <button type="button" class="back-button" (click)="goBack()">
+      <button
+        type="button"
+        class="back-button"
+        (click)="goBack()"
+      >
         <mat-icon>chevron_left</mat-icon>
       </button>
+
       <h1>Resultado de Pre-triage</h1>
     </div>
 
     <!-- PROGRESO COMPLETO -->
     <div class="progress">
-      <span class="circle completed"><mat-icon>check</mat-icon></span>
+      <span class="circle completed">
+        <mat-icon>check</mat-icon>
+      </span>
+
       <span class="line completed-line"></span>
-      <span class="circle completed"><mat-icon>check</mat-icon></span>
+
+      <span class="circle completed">
+        <mat-icon>check</mat-icon>
+      </span>
+
       <span class="line completed-line"></span>
-      <span class="circle completed"><mat-icon>check</mat-icon></span>
+
+      <span class="circle completed">
+        <mat-icon>check</mat-icon>
+      </span>
+
       <span class="line completed-line"></span>
-      <span class="circle completed"><mat-icon>check</mat-icon></span>
+
+      <span class="circle completed">
+        <mat-icon>check</mat-icon>
+      </span>
     </div>
 
     <!-- RESULTADO PRINCIPAL -->
-    <div class="priority-box" [ngClass]="'priority-' + prioridad">
+    <div
+      class="priority-box"
+      [ngClass]="'priority-' + prioridad"
+    >
       <div class="priority-info">
+
         <div class="warning-icon">
           <mat-icon>{{ iconoPrioridad }}</mat-icon>
         </div>
+
         <div>
           <h2>{{ tituloPrioridad }}</h2>
           <p>{{ justificacion }}</p>
         </div>
+
       </div>
 
-      <!-- LLAMADA DE EMERGENCIA SOLO EN ALTA PRIORIDAD -->
+      <!-- EMERGENCIA INMEDIATA -->
       @if (prioridad === 'alta') {
         <a href="tel:123" class="call-button">
           <mat-icon>call</mat-icon>
+
           <div>
             <strong>LLAMAR AL 123</strong>
             <span>Atención de emergencias</span>
           </div>
         </a>
       }
+
     </div>
 
     <!-- INCERTIDUMBRE DE LA IA -->
     @if (incertidumbre && detalleIncertidumbre) {
       <div class="result-card">
-        <mat-icon class="result-icon">info</mat-icon>
+
+        <mat-icon class="result-icon">
+          info
+        </mat-icon>
+
         <div>
           <h3>Información adicional</h3>
           <p>{{ detalleIncertidumbre }}</p>
         </div>
+
       </div>
     }
 
     <!-- TARJETAS INFORMATIVAS -->
     <div class="result-grid">
+
+      <!-- ATENCIÓN MÉDICA -->
       <div class="result-card">
-        <mat-icon class="result-icon">local_hospital</mat-icon>
+
+        <mat-icon class="result-icon">
+          local_hospital
+        </mat-icon>
+
         <div>
           <h3>Atención médica</h3>
+
           @if (prioridad === 'alta') {
-            <p>Busca atención médica inmediata o comunícate con los servicios de emergencia.</p>
+            <p>
+              Busca atención médica inmediata o
+              comunícate con los servicios de emergencia.
+            </p>
+
           } @else if (prioridad === 'media_alta') {
-            <p>Se recomienda una valoración médica prioritaria.</p>
+            <p>
+              Se recomienda una valoración médica prioritaria.
+            </p>
+
           } @else if (prioridad === 'media_baja') {
-            <p>Se recomienda valoración médica según la evolución de los síntomas.</p>
+            <p>
+              Se recomienda valoración médica según
+              la evolución de los síntomas.
+            </p>
+
           } @else {
             <p>
-              La información disponible sugiere una prioridad baja, pero debes vigilar cualquier
-              cambio en tus síntomas.
+              La información disponible sugiere una prioridad
+              baja, pero debes vigilar cualquier cambio
+              en tus síntomas.
             </p>
           }
+
         </div>
       </div>
 
+      <!-- RESUMEN -->
       <div class="result-card">
-        <mat-icon class="result-icon">description</mat-icon>
+
+        <mat-icon class="result-icon">
+          description
+        </mat-icon>
+
         <div>
           <h3>Resumen de tu información</h3>
+
           <p>
-            Tu información del pre-triage puede ser utilizada como apoyo durante la atención por
-            personal de salud.
+            Tu información del pre-triage puede ser utilizada
+            como apoyo durante la atención por personal de salud.
           </p>
         </div>
+
       </div>
 
+      <!-- IMPORTANTE -->
       <div class="result-card">
-        <mat-icon class="result-icon">info</mat-icon>
+
+        <mat-icon class="result-icon">
+          info
+        </mat-icon>
+
         <div>
           <h3>Importante</h3>
-          <p>Este resultado NO reemplaza la valoración realizada por un profesional de la salud.</p>
+
+          <p>
+            Este resultado NO reemplaza la valoración
+            realizada por un profesional de la salud.
+          </p>
         </div>
+
       </div>
+
     </div>
 
     <!-- MENSAJE FINAL -->
     <div class="final-message">
+
       <mat-icon>verified_user</mat-icon>
 
       @if (prioridad === 'alta') {
@@ -106,60 +179,108 @@
           <br />
           En caso de emergencia, llama al 123.
         </p>
+
       } @else if (prioridad === 'media_alta') {
         <p>
           Se recomienda buscar atención médica prioritaria.
           <br />
           Puedes consultar las instituciones cercanas disponibles.
         </p>
+
       } @else if (prioridad === 'media_baja') {
         <p>
           Se recomienda solicitar valoración médica.
           <br />
-          Puedes consultar las instituciones cercanas que ofrecen el servicio recomendado.
+          Puedes consultar las instituciones cercanas
+          que ofrecen el servicio recomendado.
         </p>
+
       } @else {
         <p>
-          Te recomendamos consultar en la IPS donde estás afiliado o seguir los canales de atención
-          de tu EPS.
+          Te recomendamos consultar en la IPS donde estás
+          afiliado o seguir los canales de atención de tu EPS.
         </p>
       }
+
     </div>
 
     <!-- UBICACIÓN E INSTITUCIONES -->
     @if (prioridad !== 'baja') {
+
       <section class="location-section">
-        <app-location (locationSelected)="onLocationSelected($event)"> </app-location>
+
+        <app-location
+          (locationSelected)="onLocationSelected($event)">
+        </app-location>
+
       </section>
 
-      @if (prioridad === 'media_baja' && servicioRecomendado) {
-        <p>Servicio recomendado: {{ servicioRecomendado }}</p>
+      <!-- SERVICIO RECOMENDADO -->
+      @if (
+        prioridad === 'media_baja' &&
+        servicioRecomendado
+      ) {
+        <p>
+          Servicio recomendado:
+          {{ servicioRecomendado }}
+        </p>
       }
 
+      <!-- ESTADO DE CARGA -->
       @if (loadingInstitutions) {
-        <p>Buscando instituciones compatibles...</p>
+        <p>
+          Buscando instituciones compatibles...
+        </p>
       }
 
+      <!-- ERRORES -->
       @if (institutionsError) {
         <p class="error-message">
           {{ institutionsError }}
         </p>
       }
 
+      <!-- INSTITUCIONES ENCONTRADAS -->
       @if (institutions.length > 0) {
+
         <section class="institutions-section">
+
           <h2>Instituciones cercanas</h2>
 
-          @for (institution of institutions; track institution.id) {
+          @for (
+            institution of institutions;
+            track institution.id
+          ) {
+
             <article class="institution-card">
-              <h3>{{ institution.name }}</h3>
-              <p>{{ institution.address }}</p>
-              <p>{{ institution.municipality }}</p>
-              <strong>{{ institution.distance_km }} km</strong>
+
+              <h3>
+                {{ institution.name }}
+              </h3>
+
+              <p>
+                {{ institution.address }}
+              </p>
+
+              <p>
+                {{ institution.municipality }}
+              </p>
+
+              <strong>
+                {{ institution.distance_km }} km
+              </strong>
+
             </article>
+
           }
+
         </section>
+
       }
+
     }
+
   </section>
 </main>
+
+
