@@ -85,6 +85,31 @@ export class SubBanderas implements OnInit {
       .subscribe({
         next: (respuesta) => {
           this.cargando = false;
+          if (respuesta?.accion === 'revision_clinica') {
+            sessionStorage.setItem(
+              'resultadoTriage',
+              JSON.stringify({
+                ok: true,
+                id_pretriage: this.idPretriage,
+                origen: 'ia',
+                alta_prioridad: false,
+                accion: 'revision_clinica',
+                resultado: {
+                  prioridad: null,
+                  justificacion:
+                    respuesta.message ||
+                    'Se requiere valoración médica presencial.',
+                  incertidumbre: true,
+                  detalle_incertidumbre: null,
+                  tipo_atencion_urgencias: null,
+                  servicio_recomendado: null
+                }
+              })
+            );
+          
+            this.router.navigate(['/emergency/resultado']);
+            return;
+          }
 
           if (!respuesta.ok) {
             this.mensajeError =
@@ -99,14 +124,12 @@ export class SubBanderas implements OnInit {
           // Todavía NO significa que exista una
           // clasificación final autorizada.
           if (resultado?.accion === 'cuestionario_completado') {
-            this.finalizado = true;
             this.preguntaActual = null;
-
-            this.mensajeEstado =
-              resultado.mensaje ||
-              'Se completaron las preguntas adicionales.';
-
+            this.mensajeEstado = 'Analizando tus respuestas...';
+          
             this.cdr.detectChanges();
+          
+            this.evaluarPretriage();
             return;
           }
 
@@ -115,6 +138,12 @@ export class SubBanderas implements OnInit {
             resultado?.accion === 'revision_clinica' ||
             resultado?.accion === 'informacion_insuficiente'
           ) {
+            this.enviarARevisionClinica(
+              resultado.mensaje ||
+              'No fue posible determinar una prioridad confiable.'
+            );
+            return;
+          } {
             this.finalizado = true;
             this.preguntaActual = null;
 
@@ -245,14 +274,10 @@ export class SubBanderas implements OnInit {
             revision.estado_seguridad_ia === 'pendiente' ||
             revision.estado_seguridad_ia === 'en_revision'
           ) {
-            this.finalizado = true;
-            this.preguntaActual = null;
-
-            this.mensajeEstado =
+            this.enviarARevisionClinica(
               revision.mensaje ||
-              'Tu respuesta fue registrada. Se requiere una revisión de seguridad antes de continuar.';
-
-            this.cdr.detectChanges();
+              'Se requiere valoración por personal de salud.'
+            );
             return;
           }
 
@@ -298,6 +323,119 @@ export class SubBanderas implements OnInit {
         }
       });
   }
+  evaluarPretriage(): void {
+    if (this.cargando || this.guardando || this.finalizado) {
+      return;
+    }
+  
+    this.cargando = true;
+    this.mensajeError = '';
+  
+    this.emergencyService
+      .evaluarConIA(this.idPretriage, this.token)
+      .subscribe({
+        next: (respuesta) => {
+          this.cargando = false;
+  
+          if (!respuesta?.ok || !respuesta?.result) {
+            this.mensajeError =
+              'No fue posible obtener la evaluación final.';
+            this.cdr.detectChanges();
+            return;
+          }
+  
+          const resultado = respuesta.result;
+  
+          const prioridadesValidas = [
+            'alta',
+            'media_alta',
+            'media_baja',
+            'baja'
+          ];
+  
+          if (!prioridadesValidas.includes(resultado.prioridad)) {
+            this.mensajeError =
+              'El servidor no devolvió una prioridad válida.';
+            this.cdr.detectChanges();
+            return;
+          }
+  
+          // Una incertidumbre clínicamente relevante
+          // requiere una revisión antes de mostrar prioridad.
+          if (resultado.incertidumbre === true) {
+            sessionStorage.setItem(
+              'resultadoTriage',
+              JSON.stringify({
+                ok: true,
+                id_pretriage: this.idPretriage,
+                origen: 'ia',
+                alta_prioridad: false,
+                accion: 'revision_clinica',
+                resultado: {
+                  prioridad: null,
+                  justificacion:
+                    'Se requiere valoración médica presencial.',
+                  incertidumbre: true,
+                  detalle_incertidumbre:
+                    resultado.detalle_incertidumbre ?? null,
+                  tipo_atencion_urgencias: null,
+                  servicio_recomendado: null
+                }
+              })
+            );
+          
+            this.router.navigate(['/emergency/resultado']);
+            return;
+          }
+  
+          sessionStorage.setItem(
+            'resultadoTriage',
+            JSON.stringify({
+              ok: true,
+              id_pretriage: this.idPretriage,
+              origen: 'ia',
+              alta_prioridad: resultado.prioridad === 'alta',
+              accion: 'resultado_ia',
+              resultado
+            })
+          );
+  
+          this.router.navigate(['/emergency/resultado']);
+        },
+  
+        error: (error) => {
+          this.cargando = false;
+  
+          this.mensajeError =
+            error.error?.message ||
+            'No fue posible completar la evaluación. Intenta nuevamente.';
+  
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+private enviarARevisionClinica(mensaje: string): void {
+  sessionStorage.setItem(
+    'resultadoTriage',
+    JSON.stringify({
+      ok: true,
+      id_pretriage: this.idPretriage,
+      origen: 'ia',
+      alta_prioridad: false,
+      accion: 'revision_clinica',
+      resultado: {
+        prioridad: null,
+        incertidumbre: true,
+        justificacion: mensaje,
+        detalle_incertidumbre: mensaje
+      }
+    })
+  );
+
+  this.router.navigate(['/emergency/resultado']);
+}
+
 
   volver(): void {
     this.router.navigate(['/emergency/sintomas']);

@@ -24,7 +24,7 @@ interface ResultadoTriage {
   id_pretriage: number;
   origen: 'reglas' | 'ia';
   alta_prioridad: boolean;
-  accion: 'alerta' | 'resultado_ia';
+  accion: 'alerta' | 'resultado_ia' | 'revision_clinica';
   resultado: any;
 }
 @Component({
@@ -64,6 +64,46 @@ export class Result implements OnInit {
       this.institutionsError = 'Tu sesión ha expirado. Inicia sesión nuevamente.';
       return;
     }
+
+    if (this.revisionClinica) {
+      const epsId = Number(sessionStorage.getItem('eps_pretriage'));
+
+      if (!Number.isInteger(epsId) || epsId <= 0) {
+        this.institutionsError = 'Selecciona una EPS válida.';
+        return;
+      }
+
+      this.loadingInstitutions = true;
+
+      this.institutionsService
+        .getNearbyInstitutionsForClinicalReview(
+          location.latitude,
+          location.longitude,
+          epsId,
+          token
+        )
+        .subscribe({
+          next: (response) => {
+            this.institutions = response.institutions ?? [];
+            this.loadingInstitutions = false;
+
+            this.institutionsError = this.institutions.length
+              ? ''
+              : 'No encontramos instituciones registradas para esta EPS que ofrezcan consulta de medicina general.';
+
+            this.cdr.detectChanges();
+          },
+          error: () => {
+            this.loadingInstitutions = false;
+            this.institutionsError =
+              'No fue posible consultar instituciones para valoración clínica.';
+            this.cdr.detectChanges();
+          }
+        });
+
+      return;
+    }
+
 
     // Media-baja: buscar por servicio clínico.
     if (this.prioridad === 'media_baja') {
@@ -117,6 +157,11 @@ export class Result implements OnInit {
     tipoAtencion: TipoAtencionUrgencias,
     token: string,
   ): void {
+    if (this.prioridad !== 'alta' && this.prioridad !== 'media_alta') {
+      this.institutionsError =
+        'No existe una prioridad de urgencias válida para esta búsqueda.';
+      return;
+    }
     this.loadingInstitutions = true;
     this.institutionsError = '';
     this.institutions = [];
@@ -195,7 +240,9 @@ export class Result implements OnInit {
       });
   }
 
-  prioridad: 'alta' | 'media_alta' | 'media_baja' | 'baja' = 'baja';
+  prioridad: 'alta' | 'media_alta' | 'media_baja' | 'baja' | null = null;
+
+  revisionClinica = false;
 
   justificacion = '';
 
@@ -227,6 +274,27 @@ export class Result implements OnInit {
 
   private procesarResultado(): void {
     if (!this.resultadoTriage) {
+      return;
+    }
+    // =========================================================
+    // RESULTADO QUE REQUIERE VALORACIÓN CLÍNICA
+    // =========================================================
+
+    if (this.resultadoTriage.accion === 'revision_clinica') {
+      this.revisionClinica = true;
+      this.prioridad = null;
+      this.incertidumbre = true;
+
+      this.justificacion =
+        this.resultadoTriage.resultado?.justificacion ||
+        'La información disponible no permite determinar una prioridad confiable. Se requiere valoración médica.';
+
+      this.detalleIncertidumbre =
+        this.resultadoTriage.resultado?.detalle_incertidumbre ?? null;
+
+      this.tipoAtencionUrgencias = null;
+      this.servicioRecomendado = null;
+
       return;
     }
 
@@ -274,6 +342,9 @@ export class Result implements OnInit {
   }
 
   get tituloPrioridad(): string {
+    if (this.revisionClinica) {
+      return 'VALORACIÓN MÉDICA REQUERIDA';
+    }
     switch (this.prioridad) {
       case 'alta':
         return 'ALTA PRIORIDAD';
@@ -293,6 +364,9 @@ export class Result implements OnInit {
   }
 
   get iconoPrioridad(): string {
+    if (this.revisionClinica) {
+      return 'medical_services';
+    }
     switch (this.prioridad) {
       case 'alta':
         return 'warning';
@@ -313,5 +387,21 @@ export class Result implements OnInit {
 
   goBack(): void {
     this.router.navigate(['emergency/patient-group']);
+  }
+  get requiereEps(): boolean {
+    return this.prioridad === 'media_baja' || this.revisionClinica;
+  }
+  
+  get epsSeleccionada(): string | null {
+    return sessionStorage.getItem('eps_pretriage');
+  }
+  
+  seleccionarEps(): void {
+    this.router.navigate(['/tramites'], {
+      queryParams: { origen: 'pretriage' }
+    });
+  }
+  irATramites(): void {
+    this.router.navigate(['/tramites']);
   }
 }

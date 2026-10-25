@@ -3,7 +3,7 @@
   <!-- TARJETA PRINCIPAL -->
   <section class="card">
 
-    <!-- TITULO -->
+    <!-- TÍTULO -->
     <div class="card-header">
       <button
         type="button"
@@ -44,7 +44,7 @@
     <!-- RESULTADO PRINCIPAL -->
     <div
       class="priority-box"
-      [ngClass]="'priority-' + prioridad"
+      [ngClass]="revisionClinica ? 'priority-revision' : 'priority-' + prioridad"
     >
       <div class="priority-info">
 
@@ -102,7 +102,19 @@
         <div>
           <h3>Atención médica</h3>
 
-          @if (prioridad === 'alta') {
+          @if (revisionClinica) {
+            <p>
+              La información disponible no permite
+              determinar una prioridad confiable.
+              Se requiere valoración por personal de salud.
+            </p>
+
+            <p>
+              Ingresa tu EPS y dirección para recibir
+              orientación hacia una institución médica.
+            </p>
+
+          } @else if (prioridad === 'alta') {
             <p>
               Busca atención médica inmediata o
               comunícate con los servicios de emergencia.
@@ -110,20 +122,28 @@
 
           } @else if (prioridad === 'media_alta') {
             <p>
-              Se recomienda una valoración médica prioritaria.
+              Busca atención urgente sin demora.
+              No esperes a realizar trámites administrativos.
             </p>
 
           } @else if (prioridad === 'media_baja') {
             <p>
-              Se recomienda valoración médica según
-              la evolución de los síntomas.
+              Se recomienda solicitar valoración médica.
+              Indica tu EPS y dirección para buscar
+              instituciones que ofrezcan el servicio recomendado.
+            </p>
+
+          } @else if (prioridad === 'baja') {
+            <p>
+              Se evaluará si tu necesidad puede resolverse
+              mediante un trámite administrativo o si
+              necesitas acudir a una institución de salud.
             </p>
 
           } @else {
             <p>
-              La información disponible sugiere una prioridad
-              baja, pero debes vigilar cualquier cambio
-              en tus síntomas.
+              No fue posible determinar una orientación.
+              Se requiere valoración por personal de salud.
             </p>
           }
 
@@ -162,6 +182,12 @@
             Este resultado NO reemplaza la valoración
             realizada por un profesional de la salud.
           </p>
+
+          <p>
+            Si presentas síntomas graves o señales de alarma,
+            busca atención urgente sin esperar la búsqueda
+            de instituciones.
+          </p>
         </div>
 
       </div>
@@ -173,39 +199,97 @@
 
       <mat-icon>verified_user</mat-icon>
 
-      @if (prioridad === 'alta') {
+      @if (revisionClinica) {
+        <p>
+          Urgentia no pudo determinar una prioridad confiable.
+          Se requiere valoración médica.
+          Indica tu EPS y ubicación para buscar opciones de atención.
+        </p>
+
+      } @else if (prioridad === 'alta') {
         <p>
           Urgentia recomienda buscar atención médica inmediata.
-          <br />
           En caso de emergencia, llama al 123.
         </p>
 
       } @else if (prioridad === 'media_alta') {
         <p>
-          Se recomienda buscar atención médica prioritaria.
-          <br />
-          Puedes consultar las instituciones cercanas disponibles.
+          Urgentia recomienda acudir a un servicio de urgencias
+          sin demora. No esperes a registrar tu EPS o dirección.
         </p>
 
       } @else if (prioridad === 'media_baja') {
         <p>
           Se recomienda solicitar valoración médica.
-          <br />
-          Puedes consultar las instituciones cercanas
-          que ofrecen el servicio recomendado.
+          Puedes consultar instituciones que ofrezcan
+          el servicio recomendado.
+        </p>
+
+      } @else if (prioridad === 'baja') {
+        <p>
+          Urgentia debe verificar si tu necesidad puede
+          resolverse mediante los trámites de tu EPS.
+          Si necesitas atención presencial, se buscará
+          una institución adecuada.
         </p>
 
       } @else {
         <p>
-          Te recomendamos consultar en la IPS donde estás
-          afiliado o seguir los canales de atención de tu EPS.
+          No se dispone de una clasificación válida.
+          Solicita orientación de personal de salud.
         </p>
       }
 
     </div>
+    <!-- ORIENTACIÓN ADMINISTRATIVA PARA PRIORIDAD BAJA -->
+    @if (prioridad === 'baja' && !revisionClinica) {
+      <section class="location-section">
+        <h3>Orientación administrativa</h3>
+
+        <p>
+          Puedes consultar si tu necesidad corresponde a un
+          trámite de tu EPS, como autorizaciones, citas o
+          renovación de fórmulas.
+        </p>
+
+        <button type="button" (click)="irATramites()">
+          Consultar trámites de mi EPS
+        </button>
+
+        <p>
+          Si necesitas atención médica presencial, solicita
+          orientación a tu EPS. Si tus síntomas empeoran,
+          busca valoración médica.
+        </p>
+      </section>
+    }
 
     <!-- UBICACIÓN E INSTITUCIONES -->
-    @if (prioridad !== 'baja') {
+    @if (requiereEps) {
+      <section class="location-section">
+    
+        <h3>Selecciona tu EPS</h3>
+    
+        @if (epsSeleccionada) {
+          <p>EPS seleccionada. Ya puedes ingresar tu ubicación.</p>
+    
+          <button type="button" (click)="seleccionarEps()">
+            Cambiar EPS
+          </button>
+        } @else {
+          <p>
+            Para continuar con la orientación,
+            selecciona tu EPS.
+          </p>
+    
+          <button type="button" (click)="seleccionarEps()">
+            Seleccionar EPS
+          </button>
+        }
+    
+      </section>
+    }
+    @if (requiereEps && epsSeleccionada) {
 
       <section class="location-section">
 
@@ -229,7 +313,7 @@
       <!-- ESTADO DE CARGA -->
       @if (loadingInstitutions) {
         <p>
-          Buscando instituciones compatibles...
+          Buscando instituciones...
         </p>
       }
 
@@ -282,5 +366,3 @@
 
   </section>
 </main>
-
-

@@ -65,4 +65,27 @@ export class InstitutionsService {
 
     return this.http.get<InstitutionsResponse>(`${this.apiUrl}/nearby`, { params, headers });
   }
+
+getNearbyInstitutionsForClinicalReview(
+  latitude: number,
+  longitude: number,
+  epsId: number,
+  token: string
+): Observable<InstitutionsResponse> {
+  const params = new HttpParams()
+    .set('latitude', latitude.toString())
+    .set('longitude', longitude.toString())
+    .set('prioridad', 'revision_clinica')
+    .set('eps_id', epsId.toString());
+
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+  });
+
+  return this.http.get<InstitutionsResponse>(
+    `${this.apiUrl}/nearby`,
+    { params, headers }
+  );
+}
+
 }
