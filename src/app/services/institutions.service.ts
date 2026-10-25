@@ -21,10 +21,9 @@ export interface InstitutionsResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InstitutionsService {
-
   private http = inject(HttpClient);
 
   private apiUrl = 'http://127.0.0.1:3000/api/institution';
@@ -33,24 +32,19 @@ export class InstitutionsService {
     latitude: number,
     longitude: number,
     prioridad: string,
-    token: string
+    tipoAtencion: string,
+    token: string,
   ): Observable<InstitutionsResponse> {
-
     const params = new HttpParams()
       .set('latitude', latitude.toString())
       .set('longitude', longitude.toString())
-      .set('prioridad', prioridad);
+      .set('prioridad', prioridad)
+      .set('tipo_atencion', tipoAtencion);
 
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
-    return this.http.get<InstitutionsResponse>(
-      `${this.apiUrl}/nearby`,
-      {
-        params,
-        headers
-      }
-    );
+    return this.http.get<InstitutionsResponse>(`${this.apiUrl}/nearby`, { params, headers });
   }
 }

@@ -35,38 +35,55 @@ export class Result implements OnInit {
   resultadoTriage: ResultadoTriage | null = null;
 
   institutions: Institution[] = [];
+  tipoAtencion = '';
+  loadingInstitutions = false;
+  institutionsError = '';
 
   location: LocationData | null = null;
   token = sessionStorage.getItem('access_token');
 
   onLocationSelected(location: LocationData): void {
     this.location = location;
+    this.institutionsError = '';
 
-    console.log('📍 Ubicación recibida:', location);
-    console.log('🏥 Prioridad:', this.prioridad);
+    if (!this.tipoAtencion) {
+      this.institutionsError = 'No se pudo determinar el tipo de atención requerido.';
+      return;
+    }
 
     const token = sessionStorage.getItem('access_token');
 
     if (!token) {
-      console.error('❌ No existe access_token en sessionStorage');
+      this.institutionsError = 'Tu sesión ha expirado. Inicia sesión nuevamente.';
       return;
     }
 
+    this.loadingInstitutions = true;
+
     this.institutionsService
-      .getNearbyInstitutions(location.latitude, location.longitude, this.prioridad, token)
+      .getNearbyInstitutions(
+        location.latitude,
+        location.longitude,
+        this.prioridad,
+        this.tipoAtencion,
+        token,
+      )
       .subscribe({
         next: (response) => {
-          console.log('✅ Instituciones recibidas:', response);
+          this.institutions = response.institutions ?? [];
+          this.loadingInstitutions = false;
 
-          this.institutions = response.institutions;
+          if (this.institutions.length === 0) {
+            this.institutionsError =
+              'No encontramos instituciones registradas con las características requeridas en esta búsqueda.';
+          }
         },
-
         error: (error) => {
-          console.error('❌ Error buscando instituciones:', error);
-          console.error('Status:', error.status);
-          console.error('Backend:', error.error);
-
+          console.error('Error buscando instituciones:', error);
           this.institutions = [];
+          this.loadingInstitutions = false;
+          this.institutionsError =
+            'No fue posible consultar las instituciones. Inténtalo nuevamente.';
         },
       });
   }

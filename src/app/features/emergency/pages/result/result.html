@@ -126,29 +126,40 @@
         </p>
       }
     </div>
-    <p style="color: red; font-size: 20px;">
-      PRIORIDAD ACTUAL: {{ prioridad }}
-    </p>
+    <p style="color: red; font-size: 20px">PRIORIDAD ACTUAL: {{ prioridad }}</p>
 
-    <app-location
-      (locationSelected)="onLocationSelected($event)">
-    </app-location>
+    <app-location (locationSelected)="onLocationSelected($event)"> </app-location>
 
     <!-- UBICACIÓN -->
     @if (prioridad !== 'baja') {
       <section class="institutions-section">
-        <h2>Instituciones cercanas</h2>
-        <p>
-          Estas son algunas instituciones cercanas que pueden ofrecer el servicio que necesitas.
-        </p>
-        @for (institution of institutions; track institution.id) {
-          <div class="institution-card">
-            <div>
-              <h3>{{ institution.name }}</h3>
-              <p>{{ institution.address }}</p>
-            </div>
-            <span>{{ institution.distance_km }} km</span>
-          </div>
+        @if (prioridad !== 'baja') {
+          <app-location (locationSelected)="onLocationSelected($event)"> </app-location>
+
+          @if (loadingInstitutions) {
+            <p>Buscando instituciones compatibles...</p>
+          }
+
+          @if (institutionsError) {
+            <p class="error-message">
+              {{ institutionsError }}
+            </p>
+          }
+
+          @if (institutions.length > 0) {
+            <section class="institutions-section">
+              <h2>Instituciones cercanas</h2>
+
+              @for (institution of institutions; track institution.id) {
+                <article class="institution-card">
+                  <h3>{{ institution.name }}</h3>
+                  <p>{{ institution.address }}</p>
+                  <p>{{ institution.municipality }}</p>
+                  <strong>{{ institution.distance_km }} km</strong>
+                </article>
+              }
+            </section>
+          }
         }
       </section>
     }
