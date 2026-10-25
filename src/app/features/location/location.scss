@@ -1,0 +1,133 @@
+.location-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+
+  h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  > p {
+    line-height: 1.6;
+  }
+}
+
+.location-options {
+  margin-top: 1.25rem;
+}
+
+.location-button,
+.address-button {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.location-button {
+  color: #fff;
+  background-color: #303f9f;
+  border-color: #303f9f;
+}
+
+.address-button {
+  margin-top: 0.25rem;
+  color: #303f9f;
+  background-color: #fff;
+  border-color: #303f9f;
+}
+
+.location-button:disabled,
+.address-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.location-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: #e5e7eb;
+  }
+}
+
+.address-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.form-field {
+  display: grid;
+  gap: 0.4rem;
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  input {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font: inherit;
+    background: #fff;
+  }
+
+  input:focus {
+    outline: 2px solid #7986cb;
+    outline-offset: 1px;
+  }
+}
+
+.error-message {
+  margin-top: 1rem;
+  color: #b42318;
+  font-size: 0.9rem;
+}
+
+.location-disclosure {
+  margin-top: 1rem;
+  color: #6b7280;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.button-icon {
+  margin-right: 0.4rem;
+  font-size: 1.2rem;
+}
+
+.form-field {
+  select {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font: inherit;
+    background: #fff;
+  }
+
+  select:focus {
+    outline: 2px solid #7986cb;
+    outline-offset: 1px;
+  }
+}

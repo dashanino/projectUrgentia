@@ -1,29 +1,81 @@
 <section class="location-section">
-
   <h2>Encuentra instituciones cercanas</h2>
 
   <p>
-    Podemos utilizar tu ubicación para mostrarte
-    las instituciones más cercanas que ofrecen el servicio que necesitas.
+    Podemos utilizar tu ubicación para mostrarte las instituciones más cercanas que ofrecen la
+    atención que necesitas.
   </p>
 
-  <button
-    type="button"
-    (click)="getCurrentLocation()"
-    [disabled]="loading">
+  <div class="location-options">
+    <button
+      type="button"
+      class="location-button"
+      (click)="getCurrentLocation()"
+      [disabled]="loading"
+    >
+      @if (loadingType === 'gps') {
+        Obteniendo ubicación...
+      } @else {
+        <span class="button-icon">⌖</span>
+        Usar mi ubicación
+      }
+    </button>
+  </div>
 
-    @if (!loading) {
-      Usar mi ubicación
-    } @else {
-      Obteniendo ubicación...
-    }
+  <div class="location-divider">
+    <span>O ingresa una dirección</span>
+  </div>
 
-  </button>
+  <form class="address-form" (ngSubmit)="searchByAddress()">
+    <div class="form-field">
+      <label for="municipio">Municipio</label>
+
+      <select id="municipio" name="municipio" [(ngModel)]="municipio" required>
+        <option value="" disabled>Selecciona un municipio</option>
+
+        @for (municipioDisponible of municipiosDisponibles; track municipioDisponible) {
+          <option [value]="municipioDisponible">
+            {{ municipioDisponible }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="direccion">Dirección</label>
+
+      <input
+        id="direccion"
+        name="direccion"
+        type="text"
+        [(ngModel)]="direccion"
+        placeholder="Ej. Calle 10 #43A-30"
+        maxlength="250"
+        required
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="address-button"
+      [disabled]="loading || !municipio.trim() || !direccion.trim()"
+    >
+      @if (loadingType === 'address') {
+        Buscando dirección...
+      } @else {
+        Buscar por dirección
+      }
+    </button>
+  </form>
 
   @if (errorMessage) {
-    <p class="error-message">
+    <p class="error-message" role="alert">
       {{ errorMessage }}
     </p>
   }
 
+  <p class="location-disclosure">
+    Si ingresas una dirección, esta se enviará a OpenStreetMap para obtener las coordenadas
+    geográficas. Geocodificación: © OpenStreetMap contributors.
+  </p>
 </section>
