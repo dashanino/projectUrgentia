@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Output, inject } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 export interface LocationData {
@@ -8,15 +8,37 @@ export interface LocationData {
   source: 'gps' | 'address';
   displayName?: string;
   isApproximate?: boolean;
+  locationKind?: 'exact_address' | 'approximate_street' | 'named_place' | 'gps';
+}
+
+interface GeocodingCandidate {
+  id: string;
+  name: string;
+  display_name: string;
+  latitude: number;
+  longitude: number;
+  result_type: string;
+  location_kind: 'exact_address' | 'approximate_street' | 'named_place';
+  is_approximate: boolean;
+  precision_message: string;
 }
 
 interface GeocodingResponse {
   ok: boolean;
-  latitude: number;
-  longitude: number;
-  display_name: string;
+  query?: string;
+  candidates?: GeocodingCandidate[];
+  // Compatibilidad temporal con la respuesta antigua de un único punto.
+  latitude?: number;
+  longitude?: number;
+  display_name?: string;
   is_approximate?: boolean;
   precision_message?: string;
+  error?: string;
+}
+
+interface GeocodingError {
+  error?: string;
+  message?: string;
 }
 
 @Component({
@@ -41,53 +63,54 @@ export class Location {
   ];
 
   private apiUrl = 'http://127.0.0.1:3000/api';
+
   @Output() locationSelected = new EventEmitter<LocationData>();
 
   municipio = '';
   direccion = '';
+  candidatos: GeocodingCandidate[] = [];
+  candidatoSeleccionadoId: string | null = null;
+  consultaRealizada = false;
+
   loading = false;
   loadingType: 'gps' | 'address' | null = null;
   errorMessage = '';
-  ubicacionPendiente: LocationData | null = null;
-  mensajePrecision = '';
-  ubicacionConfirmada = '';
-
-  limpiarUbicacionPendiente(): void {
-    this.ubicacionPendiente = null;
-    this.mensajePrecision = '';
-    this.ubicacionConfirmada = '';
-    this.errorMessage = '';
-  }
 
   getCurrentLocation(): void {
     this.errorMessage = '';
-    this.ubicacionPendiente = null;
-    this.mensajePrecision = '';
-    this.ubicacionConfirmada = '';
+    this.candidatos = [];
+    this.consultaRealizada = false;
+    this.candidatoSeleccionadoId = null;
 
     if (!navigator.geolocation) {
       this.errorMessage = 'Tu navegador no permite obtener la ubicación.';
+      this.cdr.markForCheck();
       return;
     }
 
     this.loading = true;
     this.loadingType = 'gps';
+    this.cdr.markForCheck();
+
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const location: LocationData = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           source: 'gps',
-          isApproximate: false,
+          locationKind: 'gps',
         };
+
         this.loading = false;
         this.loadingType = null;
-        this.ubicacionConfirmada = 'Ubicación obtenida mediante GPS.';
+        console.log('[LOCATION] GPS obtenido:', location);
         this.locationSelected.emit(location);
+        this.cdr.markForCheck();
       },
       (error) => {
         this.loading = false;
         this.loadingType = null;
+
         switch (error.code) {
           case error.PERMISSION_DENIED:
             this.errorMessage = 'No permitiste el acceso a tu ubicación.';
@@ -101,6 +124,7 @@ export class Location {
           default:
             this.errorMessage = 'No fue posible obtener tu ubicación.';
         }
+
         this.cdr.markForCheck();
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
@@ -109,112 +133,134 @@ export class Location {
 
   searchByAddress(): void {
     this.errorMessage = '';
-    this.ubicacionPendiente = null;
-    this.mensajePrecision = '';
-    this.ubicacionConfirmada = '';
+    this.candidatos = [];
+    this.candidatoSeleccionadoId = null;
+    this.consultaRealizada = false;
 
     const municipio = this.municipio.trim();
-    const direccion = this.direccion.trim();
-    if (!municipio || !direccion) {
-      this.errorMessage = 'Debes ingresar el municipio y la dirección.';
+    const consulta = this.direccion.trim();
+
+    if (!municipio || consulta.length < 3) {
+      this.errorMessage = 'Indica el municipio y escribe al menos 3 caracteres.';
+      this.cdr.markForCheck();
       return;
     }
 
     const token = sessionStorage.getItem('access_token');
     if (!token) {
       this.errorMessage = 'Tu sesión ha expirado. Inicia sesión nuevamente.';
+      this.cdr.markForCheck();
       return;
     }
 
-    const params = new HttpParams().set('municipio', municipio).set('direccion', direccion);
+    const params = new HttpParams().set('municipio', municipio).set('direccion', consulta);
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
     this.loading = true;
     this.loadingType = 'address';
+    this.cdr.markForCheck();
 
     this.http
       .get<GeocodingResponse>(`${this.apiUrl}/location/geocode`, { params, headers })
       .subscribe({
         next: (response) => {
           console.log('[GEOCODING] Respuesta del backend:', response);
-
           this.loading = false;
           this.loadingType = null;
+          this.consultaRealizada = true;
 
+          let candidates = Array.isArray(response?.candidates) ? response.candidates : [];
+
+          // Compatibility fallback if a running backend still returns the old single point.
           if (
-            !response?.ok ||
-            !Number.isFinite(response.latitude) ||
-            !Number.isFinite(response.longitude) ||
-            typeof response.display_name !== 'string' ||
-            !response.display_name.trim()
+            candidates.length === 0 &&
+            Number.isFinite(response?.latitude) &&
+            Number.isFinite(response?.longitude) &&
+            typeof response?.display_name === 'string'
           ) {
-            this.errorMessage =
-              'El servicio de mapas no devolvió una ubicación verificable. Usa GPS o intenta otra dirección.';
-
-            this.cdr.markForCheck();
-            return;
+            candidates = [
+              {
+                id: `legacy:${response.latitude}:${response.longitude}`,
+                name: response.display_name.split(',')[0] || 'Ubicación encontrada',
+                display_name: response.display_name,
+                latitude: Number(response.latitude),
+                longitude: Number(response.longitude),
+                result_type: 'Ubicación',
+                location_kind: response.is_approximate ? 'approximate_street' : 'named_place',
+                is_approximate: response.is_approximate === true,
+                precision_message:
+                  response.precision_message || 'Comprueba que esta sea la ubicación correcta.',
+              },
+            ];
           }
 
-          const esAproximada = response.is_approximate === true;
+          this.candidatos = candidates.filter(
+            (candidate) =>
+              candidate &&
+              typeof candidate.id === 'string' &&
+              typeof candidate.display_name === 'string' &&
+              Number.isFinite(candidate.latitude) &&
+              Number.isFinite(candidate.longitude),
+          );
 
-          this.ubicacionPendiente = {
-            latitude: response.latitude,
-            longitude: response.longitude,
-            source: 'address',
-            displayName: response.display_name,
-            isApproximate: esAproximada,
-          };
-
-          this.mensajePrecision =
-            response.precision_message ||
-            (esAproximada
-              ? 'No se encontró el número exacto. El punto representa la vía y las distancias serán aproximadas.'
-              : 'Se encontró una coincidencia con el número de dirección.');
-
-          console.log('[GEOCODING] Ubicación pendiente de confirmación:', this.ubicacionPendiente);
+          if (this.candidatos.length === 0) {
+            this.errorMessage =
+              response?.error ||
+              'El mapa no devolvió ubicaciones que podamos mostrar. Prueba con otra búsqueda o usa el GPS.';
+          }
 
           this.cdr.markForCheck();
         },
-        error: (error) => {
+        error: (error: { status?: number; error?: GeocodingError }) => {
           this.loading = false;
           this.loadingType = null;
-          if (error.status === 401) {
+          this.consultaRealizada = true;
+          this.candidatos = [];
+
+          if (error.status === 404) {
+            this.errorMessage =
+              error.error?.error ||
+              'No encontramos coincidencias en ese municipio. Prueba con el nombre completo o usa el GPS.';
+          } else if (error.status === 401 || error.status === 422) {
             this.errorMessage = 'Tu sesión ha expirado. Inicia sesión nuevamente.';
-          } else if (error.status === 400) {
-            this.errorMessage =
-              error.error?.error || 'Revisa el formato de la dirección e inténtalo de nuevo.';
-          } else if (error.status === 404) {
-            this.errorMessage =
-              error.error?.error ||
-              'No encontramos la vía en el municipio indicado. Comprueba los datos o utiliza GPS.';
-          } else if (error.status === 502) {
-            this.errorMessage =
-              error.error?.error ||
-              'El servicio de mapas no está disponible ahora. Inténtalo de nuevo o usa GPS.';
           } else {
             this.errorMessage =
-              error.error?.error || 'No fue posible verificar la dirección. Inténtalo nuevamente.';
+              error.error?.error ||
+              error.error?.message ||
+              'No fue posible buscar la ubicación. Inténtalo nuevamente.';
           }
+
+          console.error('[GEOCODING] Error:', error);
           this.cdr.markForCheck();
         },
       });
   }
 
-  confirmarUbicacion(): void {
-    if (!this.ubicacionPendiente) return;
+  usarUbicacion(candidato: GeocodingCandidate): void {
+    if (
+      !candidato ||
+      !Number.isFinite(candidato.latitude) ||
+      !Number.isFinite(candidato.longitude)
+    ) {
+      this.errorMessage = 'La ubicación elegida no contiene coordenadas válidas.';
+      this.cdr.markForCheck();
+      return;
+    }
 
-    const ubicacion = this.ubicacionPendiente;
-    this.ubicacionConfirmada = ubicacion.isApproximate
-      ? `Ubicación aproximada seleccionada: ${ubicacion.displayName}. Las distancias son estimadas desde la vía, no desde el inmueble exacto.`
-      : `Ubicación seleccionada: ${ubicacion.displayName}`;
-    this.ubicacionPendiente = null;
-    this.mensajePrecision = '';
     this.errorMessage = '';
-    this.locationSelected.emit(ubicacion);
-  }
+    this.candidatoSeleccionadoId = candidato.id;
 
-  rechazarUbicacion(): void {
-    this.ubicacionPendiente = null;
-    this.mensajePrecision = '';
-    this.errorMessage = 'No utilizaremos ese punto. Corrige la dirección o usa tu ubicación GPS.';
+    const location: LocationData = {
+      latitude: candidato.latitude,
+      longitude: candidato.longitude,
+      source: 'address',
+      displayName: candidato.display_name,
+      isApproximate: candidato.is_approximate,
+      locationKind: candidato.location_kind,
+    };
+
+    console.log('[LOCATION] Candidato elegido por el usuario:', location);
+    this.locationSelected.emit(location);
+    this.cdr.markForCheck();
   }
 }
