@@ -15,6 +15,7 @@ interface ResultadoIA {
   tipo_atencion_urgencias: TipoAtencionUrgencias | null;
   servicio_recomendado: string | null;
   justificacion: string;
+  resumen_informacion?: string;
   incertidumbre: boolean;
   detalle_incertidumbre: string | null;
 }
@@ -76,12 +77,7 @@ export class Result implements OnInit {
       this.loadingInstitutions = true;
 
       this.institutionsService
-        .getNearbyInstitutionsForClinicalReview(
-          location.latitude,
-          location.longitude,
-          epsId,
-          token
-        )
+        .getNearbyInstitutionsForClinicalReview(location.latitude, location.longitude, epsId, token)
         .subscribe({
           next: (response) => {
             this.institutions = response.institutions ?? [];
@@ -98,12 +94,11 @@ export class Result implements OnInit {
             this.institutionsError =
               'No fue posible consultar instituciones para valoración clínica.';
             this.cdr.detectChanges();
-          }
+          },
         });
 
       return;
     }
-
 
     // Media-baja: buscar por servicio clínico.
     if (this.prioridad === 'media_baja') {
@@ -158,8 +153,7 @@ export class Result implements OnInit {
     token: string,
   ): void {
     if (this.prioridad !== 'alta' && this.prioridad !== 'media_alta') {
-      this.institutionsError =
-        'No existe una prioridad de urgencias válida para esta búsqueda.';
+      this.institutionsError = 'No existe una prioridad de urgencias válida para esta búsqueda.';
       return;
     }
     this.loadingInstitutions = true;
@@ -234,7 +228,7 @@ export class Result implements OnInit {
         error: () => {
           this.loadingInstitutions = false;
           this.institutionsError = 'No fue posible consultar las instituciones.';
-          
+
           this.cdr.detectChanges();
         },
       });
@@ -245,6 +239,8 @@ export class Result implements OnInit {
   revisionClinica = false;
 
   justificacion = '';
+
+  resumenInformacion = '';
 
   incertidumbre = false;
 
@@ -289,8 +285,10 @@ export class Result implements OnInit {
         this.resultadoTriage.resultado?.justificacion ||
         'La información disponible no permite determinar una prioridad confiable. Se requiere valoración médica.';
 
-      this.detalleIncertidumbre =
-        this.resultadoTriage.resultado?.detalle_incertidumbre ?? null;
+      this.resumenInformacion =
+        this.resultadoTriage.resultado?.resumen_informacion ||
+        this.detalleIncertidumbre ||
+        'No fue posible generar un resumen clínico confiable con la información disponible.';
 
       this.tipoAtencionUrgencias = null;
       this.servicioRecomendado = null;
@@ -308,6 +306,8 @@ export class Result implements OnInit {
       this.prioridad = 'alta';
 
       console.log('PRIORIDAD ASIGNADA:', this.prioridad);
+      this.resumenInformacion =
+        'Se activó una regla de seguridad a partir de la información registrada. Es necesario seguir la orientación de atención indicada.';
 
       this.justificacion =
         'Se identificaron signos o síntomas que requieren atención médica inmediata.';
@@ -330,6 +330,9 @@ export class Result implements OnInit {
       this.prioridad = resultadoIA.prioridad;
 
       this.justificacion = resultadoIA.justificacion;
+      this.resumenInformacion =
+        resultadoIA.resumen_informacion?.trim() ||
+        'No se generó un resumen detallado para esta evaluación. Consulta la orientación del aviso superior.';
 
       this.incertidumbre = resultadoIA.incertidumbre;
 
@@ -391,14 +394,23 @@ export class Result implements OnInit {
   get requiereEps(): boolean {
     return this.prioridad === 'media_baja' || this.revisionClinica;
   }
-  
+
   get epsSeleccionada(): string | null {
     return sessionStorage.getItem('eps_pretriage');
   }
-  
+
+  get mostrarUbicacion(): boolean {
+  return (
+    this.revisionClinica ||
+    this.prioridad === 'alta' ||
+    this.prioridad === 'media_alta' ||
+    this.prioridad === 'media_baja'
+  );
+}
+
   seleccionarEps(): void {
     this.router.navigate(['/tramites'], {
-      queryParams: { origen: 'pretriage' }
+      queryParams: { origen: 'pretriage' },
     });
   }
   irATramites(): void {

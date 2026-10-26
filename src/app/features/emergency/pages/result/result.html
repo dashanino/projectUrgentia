@@ -1,15 +1,9 @@
-
 <main class="main-layout">
   <!-- TARJETA PRINCIPAL -->
   <section class="card">
-
     <!-- TÍTULO -->
     <div class="card-header">
-      <button
-        type="button"
-        class="back-button"
-        (click)="goBack()"
-      >
+      <button type="button" class="back-button" (click)="goBack()">
         <mat-icon>chevron_left</mat-icon>
       </button>
 
@@ -47,7 +41,6 @@
       [ngClass]="revisionClinica ? 'priority-revision' : 'priority-' + prioridad"
     >
       <div class="priority-info">
-
         <div class="warning-icon">
           <mat-icon>{{ iconoPrioridad }}</mat-icon>
         </div>
@@ -56,7 +49,6 @@
           <h2>{{ tituloPrioridad }}</h2>
           <p>{{ justificacion }}</p>
         </div>
-
       </div>
 
       <!-- EMERGENCIA INMEDIATA -->
@@ -70,176 +62,125 @@
           </div>
         </a>
       }
-
     </div>
 
     <!-- INCERTIDUMBRE DE LA IA -->
     @if (incertidumbre && detalleIncertidumbre) {
       <div class="result-card">
-
-        <mat-icon class="result-icon">
-          info
-        </mat-icon>
+        <mat-icon class="result-icon"> info </mat-icon>
 
         <div>
           <h3>Información adicional</h3>
           <p>{{ detalleIncertidumbre }}</p>
         </div>
-
       </div>
     }
 
     <!-- TARJETAS INFORMATIVAS -->
     <div class="result-grid">
-
       <!-- ATENCIÓN MÉDICA -->
       <div class="result-card">
-
-        <mat-icon class="result-icon">
-          local_hospital
-        </mat-icon>
+        <mat-icon class="result-icon"> local_hospital </mat-icon>
 
         <div>
           <h3>Atención médica</h3>
 
           @if (revisionClinica) {
             <p>
-              La información disponible no permite
-              determinar una prioridad confiable.
-              Se requiere valoración por personal de salud.
+              La información disponible no permite determinar una prioridad confiable. Se requiere
+              valoración por personal de salud.
             </p>
 
-            <p>
-              Ingresa tu EPS y dirección para recibir
-              orientación hacia una institución médica.
-            </p>
-
+            <p>Ingresa tu EPS y dirección para recibir orientación hacia una institución médica.</p>
           } @else if (prioridad === 'alta') {
-            <p>
-              Busca atención médica inmediata o
-              comunícate con los servicios de emergencia.
-            </p>
-
+            <p>Busca atención médica inmediata o comunícate con los servicios de emergencia.</p>
           } @else if (prioridad === 'media_alta') {
             <p>
-              Busca atención urgente sin demora.
-              No esperes a realizar trámites administrativos.
+              Busca atención urgente sin demora. No esperes a realizar trámites administrativos.
             </p>
-
           } @else if (prioridad === 'media_baja') {
             <p>
-              Se recomienda solicitar valoración médica.
-              Indica tu EPS y dirección para buscar
+              Se recomienda solicitar valoración médica. Indica tu EPS y dirección para buscar
               instituciones que ofrezcan el servicio recomendado.
             </p>
-
           } @else if (prioridad === 'baja') {
             <p>
-              Se evaluará si tu necesidad puede resolverse
-              mediante un trámite administrativo o si
+              Se evaluará si tu necesidad puede resolverse mediante un trámite administrativo o si
               necesitas acudir a una institución de salud.
             </p>
-
           } @else {
             <p>
-              No fue posible determinar una orientación.
-              Se requiere valoración por personal de salud.
+              No fue posible determinar una orientación. Se requiere valoración por personal de
+              salud.
             </p>
           }
-
         </div>
       </div>
 
       <!-- RESUMEN -->
       <div class="result-card">
-
-        <mat-icon class="result-icon">
-          description
-        </mat-icon>
+        <mat-icon class="result-icon"> description </mat-icon>
 
         <div>
           <h3>Resumen de tu información</h3>
 
-          <p>
-            Tu información del pre-triage puede ser utilizada
-            como apoyo durante la atención por personal de salud.
+          <p class="result-summary">{{ resumenInformacion }}</p>
+
+          <p class="summary-note">
+            Este resumen recoge información registrada durante el pre-triaje para apoyar la
+            conversación con el personal de salud. No constituye un diagnóstico.
           </p>
         </div>
-
       </div>
 
       <!-- IMPORTANTE -->
       <div class="result-card">
-
-        <mat-icon class="result-icon">
-          info
-        </mat-icon>
+        <mat-icon class="result-icon"> info </mat-icon>
 
         <div>
           <h3>Importante</h3>
 
-          <p>
-            Este resultado NO reemplaza la valoración
-            realizada por un profesional de la salud.
-          </p>
+          <p>Este resultado NO reemplaza la valoración realizada por un profesional de la salud.</p>
 
           <p>
-            Si presentas síntomas graves o señales de alarma,
-            busca atención urgente sin esperar la búsqueda
-            de instituciones.
+            Si presentas síntomas graves o señales de alarma, busca atención urgente sin esperar la
+            búsqueda de instituciones.
           </p>
         </div>
-
       </div>
-
     </div>
 
     <!-- MENSAJE FINAL -->
     <div class="final-message">
-
       <mat-icon>verified_user</mat-icon>
 
       @if (revisionClinica) {
         <p>
-          Urgentia no pudo determinar una prioridad confiable.
-          Se requiere valoración médica.
-          Indica tu EPS y ubicación para buscar opciones de atención.
+          Urgentia no pudo determinar una prioridad confiable. Se requiere valoración médica. Indica
+          tu EPS y ubicación para buscar opciones de atención.
         </p>
-
       } @else if (prioridad === 'alta') {
         <p>
-          Urgentia recomienda buscar atención médica inmediata.
-          En caso de emergencia, llama al 123.
+          Urgentia recomienda buscar atención médica inmediata. En caso de emergencia, llama al 123.
         </p>
-
       } @else if (prioridad === 'media_alta') {
         <p>
-          Urgentia recomienda acudir a un servicio de urgencias
-          sin demora. No esperes a registrar tu EPS o dirección.
+          Urgentia recomienda acudir a un servicio de urgencias sin demora. No esperes a registrar
+          tu EPS o dirección.
         </p>
-
       } @else if (prioridad === 'media_baja') {
         <p>
-          Se recomienda solicitar valoración médica.
-          Puedes consultar instituciones que ofrezcan
-          el servicio recomendado.
+          Se recomienda solicitar valoración médica. Puedes consultar instituciones que ofrezcan el
+          servicio recomendado.
         </p>
-
       } @else if (prioridad === 'baja') {
         <p>
-          Urgentia debe verificar si tu necesidad puede
-          resolverse mediante los trámites de tu EPS.
-          Si necesitas atención presencial, se buscará
-          una institución adecuada.
+          Urgentia debe verificar si tu necesidad puede resolverse mediante los trámites de tu EPS.
+          Si necesitas atención presencial, se buscará una institución adecuada.
         </p>
-
       } @else {
-        <p>
-          No se dispone de una clasificación válida.
-          Solicita orientación de personal de salud.
-        </p>
+        <p>No se dispone de una clasificación válida. Solicita orientación de personal de salud.</p>
       }
-
     </div>
     <!-- ORIENTACIÓN ADMINISTRATIVA PARA PRIORIDAD BAJA -->
     @if (prioridad === 'baja' && !revisionClinica) {
@@ -247,63 +188,89 @@
         <h3>Orientación administrativa</h3>
 
         <p>
-          Puedes consultar si tu necesidad corresponde a un
-          trámite de tu EPS, como autorizaciones, citas o
-          renovación de fórmulas.
+          Puedes consultar si tu necesidad corresponde a un trámite de tu EPS, como autorizaciones,
+          citas o renovación de fórmulas.
         </p>
 
-        <button type="button" (click)="irATramites()">
-          Consultar trámites de mi EPS
-        </button>
+        <button type="button" (click)="irATramites()">Consultar trámites de mi EPS</button>
 
         <p>
-          Si necesitas atención médica presencial, solicita
-          orientación a tu EPS. Si tus síntomas empeoran,
-          busca valoración médica.
+          Si necesitas atención médica presencial, solicita orientación a tu EPS. Si tus síntomas
+          empeoran, busca valoración médica.
         </p>
       </section>
     }
 
     <!-- UBICACIÓN E INSTITUCIONES -->
-    @if (requiereEps) {
+    <!-- UBICACIÓN E INSTITUCIONES -->
+    @if (mostrarUbicacion) {
       <section class="location-section">
-    
-        <h3>Selecciona tu EPS</h3>
-    
-        @if (epsSeleccionada) {
-          <p>EPS seleccionada. Ya puedes ingresar tu ubicación.</p>
-    
-          <button type="button" (click)="seleccionarEps()">
-            Cambiar EPS
-          </button>
-        } @else {
-          <p>
-            Para continuar con la orientación,
-            selecciona tu EPS.
-          </p>
-    
-          <button type="button" (click)="seleccionarEps()">
-            Seleccionar EPS
-          </button>
+        <h2>Centros de atención cercanos</h2>
+
+        <!-- EPS: solo necesaria para media-baja y revisión clínica -->
+        @if (requiereEps) {
+          <h3>Selecciona tu EPS</h3>
+
+          @if (epsSeleccionada) {
+            <p>EPS seleccionada. Ya puedes ingresar tu ubicación.</p>
+
+            <button type="button" (click)="seleccionarEps()">
+              Cambiar EPS
+            </button>
+          } @else {
+            <p>
+              Para consultar instituciones registradas para tu caso,
+              selecciona primero tu EPS.
+            </p>
+
+            <button type="button" (click)="seleccionarEps()">
+              Seleccionar EPS
+            </button>
+          }
         }
-    
+
+        <!-- Alta y media-alta pueden buscar sin seleccionar EPS -->
+        @if (!requiereEps || epsSeleccionada) {
+          <app-location
+            (locationSelected)="onLocationSelected($event)">
+          </app-location>
+
+          @if (prioridad === 'media_baja' && servicioRecomendado) {
+            <p>
+              Servicio recomendado: {{ servicioRecomendado }}
+            </p>
+          }
+
+          @if (loadingInstitutions) {
+            <p>Buscando instituciones...</p>
+          }
+
+          @if (institutionsError) {
+            <p class="error-message" role="alert">
+              {{ institutionsError }}
+            </p>
+          }
+
+          @if (institutions.length > 0) {
+            <section class="institutions-section">
+              <h2>Instituciones cercanas</h2>
+
+              @for (institution of institutions; track institution.id) {
+                <article class="institution-card">
+                  <h3>{{ institution.name }}</h3>
+                  <p>{{ institution.address }}</p>
+                  <p>{{ institution.municipality }}</p>
+                  <strong>{{ institution.distance_km }} km</strong>
+                </article>
+              }
+            </section>
+          }
+        }
       </section>
     }
-    @if (requiereEps && epsSeleccionada) {
-
-      <section class="location-section">
-
-        <app-location
-          (locationSelected)="onLocationSelected($event)">
-        </app-location>
-
-      </section>
 
       <!-- SERVICIO RECOMENDADO -->
-      @if (
-        prioridad === 'media_baja' &&
-        servicioRecomendado
-      ) {
+      @if (prioridad === 'media_baja' && servicioRecomendado) {
         <p>
           Servicio recomendado:
           {{ servicioRecomendado }}
@@ -312,9 +279,7 @@
 
       <!-- ESTADO DE CARGA -->
       @if (loadingInstitutions) {
-        <p>
-          Buscando instituciones...
-        </p>
+        <p>Buscando instituciones...</p>
       }
 
       <!-- ERRORES -->
@@ -326,18 +291,11 @@
 
       <!-- INSTITUCIONES ENCONTRADAS -->
       @if (institutions.length > 0) {
-
         <section class="institutions-section">
-
           <h2>Instituciones cercanas</h2>
 
-          @for (
-            institution of institutions;
-            track institution.id
-          ) {
-
+          @for (institution of institutions; track institution.id) {
             <article class="institution-card">
-
               <h3>
                 {{ institution.name }}
               </h3>
@@ -350,19 +308,11 @@
                 {{ institution.municipality }}
               </p>
 
-              <strong>
-                {{ institution.distance_km }} km
-              </strong>
-
+              <strong> {{ institution.distance_km }} km </strong>
             </article>
-
           }
-
         </section>
-
       }
-
-    }
-
+    
   </section>
 </main>
