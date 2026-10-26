@@ -2,28 +2,34 @@
   <h2>Encuentra instituciones cercanas</h2>
 
   <p>
-    Puedes usar el GPS o ingresar una dirección. Si buscas por dirección,
-    revisa el resultado del mapa antes de utilizarlo para calcular distancias.
+    Busca por dirección, edificio, conjunto residencial, clínica, hospital, universidad,
+    comercio o nombre de un lugar conocido. El mapa puede no tener registrados todos los lugares.
   </p>
 
   <div class="location-options">
-    <button type="button" class="location-button" (click)="getCurrentLocation()" [disabled]="loading">
+    <button
+      type="button"
+      class="location-button"
+      (click)="getCurrentLocation()"
+      [disabled]="loading"
+    >
       @if (loadingType === 'gps') {
         Obteniendo ubicación...
       } @else {
         <span class="button-icon">⌖</span>
-        Usar mi ubicación
+        Usar mi ubicación GPS
       }
     </button>
   </div>
 
-  <div class="location-divider"><span>O ingresa una dirección completa</span></div>
+  <div class="location-divider">
+    <span>O busca un lugar</span>
+  </div>
 
   <form class="address-form" (ngSubmit)="searchByAddress()">
     <div class="form-field">
       <label for="municipio">Municipio</label>
-      <select id="municipio" name="municipio" [(ngModel)]="municipio"
-        (ngModelChange)="limpiarUbicacionPendiente()" required>
+      <select id="municipio" name="municipio" [(ngModel)]="municipio" required>
         <option value="" disabled>Selecciona un municipio</option>
         @for (municipioDisponible of municipiosDisponibles; track municipioDisponible) {
           <option [value]="municipioDisponible">{{ municipioDisponible }}</option>
@@ -32,58 +38,92 @@
     </div>
 
     <div class="form-field">
-      <label for="direccion">Dirección</label>
-      <input id="direccion" name="direccion" type="text" [(ngModel)]="direccion"
-        (ngModelChange)="limpiarUbicacionPendiente()" placeholder="Ej. Carrera 43A #32-39"
-        maxlength="250" autocomplete="street-address" required />
-      <small>Incluye el tipo de vía y el número, por ejemplo: Carrera 43A #32-39.</small>
+      <label for="direccion">Dirección o nombre del lugar</label>
+      <input
+        id="direccion"
+        name="direccion"
+        type="text"
+        [(ngModel)]="direccion"
+        placeholder="Ej. Carrera 43A #32-39 o Metropolitan Apartamentos"
+        maxlength="250"
+        minlength="3"
+        autocomplete="street-address"
+        required
+      />
     </div>
 
-    <button type="submit" class="address-button"
-      [disabled]="loading || !municipio.trim() || !direccion.trim()">
+    <button
+      type="submit"
+      class="address-button"
+      [disabled]="loading || !municipio.trim() || direccion.trim().length < 3"
+    >
       @if (loadingType === 'address') {
-        Verificando dirección...
+        Buscando coincidencias...
       } @else {
-        Buscar dirección
+        Buscar dirección o lugar
       }
     </button>
   </form>
-
-  @if (ubicacionPendiente) {
-    <div class="location-confirmation" role="group" aria-label="Confirmar ubicación encontrada">
-      <h3>
-        {{ ubicacionPendiente.isApproximate ? 'No encontramos el número exacto' : '¿Esta es la dirección correcta?' }}
-      </h3>
-      <p class="found-address">{{ ubicacionPendiente.displayName }}</p>
-      @if (ubicacionPendiente.isApproximate) {
-        <p class="precision-warning">
-          {{ mensajePrecision }} Solo se utilizará si confirmas que aceptas una ubicación aproximada.
-        </p>
-      } @else {
-        <p class="confirmation-note">{{ mensajePrecision }} Revisa el resultado antes de continuar.</p>
-      }
-      <div class="confirmation-actions">
-        <button type="button" class="confirm-location-button" (click)="confirmarUbicacion()">
-          {{ ubicacionPendiente.isApproximate ? 'Usar ubicación aproximada' : 'Sí, usar esta ubicación' }}
-        </button>
-        <button type="button" class="reject-location-button" (click)="rechazarUbicacion()">
-          No es mi dirección
-        </button>
-      </div>
-    </div>
-  }
-
-  @if (ubicacionConfirmada) {
-    <p class="selected-location" aria-live="polite">{{ ubicacionConfirmada }}</p>
-  }
 
   @if (errorMessage) {
     <p class="error-message" role="alert">{{ errorMessage }}</p>
   }
 
+  @if (candidatos.length > 0) {
+    <section class="geocoding-results" aria-live="polite">
+      <h3>Selecciona la ubicación correcta</h3>
+      <p class="results-help">
+        Revisa el nombre y el municipio antes de usar un resultado. No seleccionamos ubicaciones automáticamente.
+      </p>
+
+      @for (candidato of candidatos; track candidato.id) {
+        <article
+          class="candidate-card"
+          [class.candidate-selected]="candidatoSeleccionadoId === candidato.id"
+        >
+          <div class="candidate-topline">
+            <span class="candidate-type">{{ candidato.result_type }}</span>
+            @if (candidato.location_kind === 'exact_address') {
+              <span class="precision-badge precision-exact">Dirección con número</span>
+            } @else if (candidato.location_kind === 'approximate_street') {
+              <span class="precision-badge precision-approximate">Vía aproximada</span>
+            } @else {
+              <span class="precision-badge precision-place">Lugar en el mapa</span>
+            }
+          </div>
+
+          <h4>{{ candidato.name }}</h4>
+          <p class="candidate-address">{{ candidato.display_name }}</p>
+          <p
+            class="candidate-precision"
+            [class.candidate-precision-warning]="candidato.is_approximate"
+          >
+            {{ candidato.precision_message }}
+          </p>
+
+          <button
+            type="button"
+            class="candidate-use-button"
+            [disabled]="candidatoSeleccionadoId === candidato.id"
+            (click)="usarUbicacion(candidato)"
+          >
+            @if (candidatoSeleccionadoId === candidato.id) {
+              Ubicación seleccionada
+            } @else if (candidato.is_approximate) {
+              Usar ubicación aproximada
+            } @else {
+              Usar esta ubicación
+            }
+          </button>
+        </article>
+      }
+    </section>
+  } @else if (consultaRealizada && !loading && !errorMessage) {
+    <p class="empty-results">No hay coincidencias para mostrar. Prueba con otra búsqueda.</p>
+  }
+
   <p class="location-disclosure">
-    Las direcciones se envían a OpenStreetMap para buscar coordenadas geográficas.
-    © OpenStreetMap contributors. Si no se encuentra una coincidencia precisa, puedes usar GPS
-    o confirmar explícitamente una ubicación aproximada de la vía.
+    Las búsquedas por dirección y nombre consultan OpenStreetMap/Nominatim. Los resultados dependen
+    de los datos cartográficos disponibles. Geocodificación: © OpenStreetMap contributors.
   </p>
 </section>
