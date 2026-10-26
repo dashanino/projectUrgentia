@@ -79,7 +79,8 @@
     font-weight: 600;
   }
 
-  input {
+  input,
+  select {
     box-sizing: border-box;
     width: 100%;
     min-height: 44px;
@@ -90,9 +91,16 @@
     background: #fff;
   }
 
-  input:focus {
+  input:focus,
+  select:focus {
     outline: 2px solid #7986cb;
     outline-offset: 1px;
+  }
+
+  small {
+    color: var(--color-text-muted, #6b7280);
+    font-size: 0.8rem;
+    line-height: 1.45;
   }
 }
 
@@ -100,6 +108,7 @@
   margin-top: 1rem;
   color: #b42318;
   font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .location-disclosure {
@@ -114,20 +123,91 @@
   font-size: 1.2rem;
 }
 
-.form-field {
-  select {
-    box-sizing: border-box;
-    width: 100%;
-    min-height: 44px;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font: inherit;
-    background: #fff;
+.location-confirmation {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border, #d8e1f5);
+  border-radius: 14px;
+  background: var(--color-surface-soft, #f8faff);
+}
+
+.location-confirmation h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+}
+
+.found-address {
+  margin: 0;
+  color: var(--color-text, #111827);
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.confirmation-note {
+  margin: 0.65rem 0 0;
+  color: var(--color-text-muted, #6b7280);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.confirm-location-button,
+.reject-location-button {
+  min-height: 44px;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--color-primary, #2260ff);
+  border-radius: 9px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.confirm-location-button {
+  background: var(--color-primary, #2260ff);
+  color: #fff;
+}
+
+.reject-location-button {
+  background: #fff;
+  color: var(--color-primary-dark, #00278c);
+}
+
+.selected-location {
+  margin-top: 1rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+  background: var(--color-primary-soft, #ecf1ff);
+  color: var(--color-primary-dark, #00278c);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 560px) {
+  .confirmation-actions {
+    flex-direction: column;
   }
 
-  select:focus {
-    outline: 2px solid #7986cb;
-    outline-offset: 1px;
+  .confirm-location-button,
+  .reject-location-button {
+    width: 100%;
   }
+}
+
+.precision-warning {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 0.9rem;
+  border-left: 4px solid var(--color-warning, #f4a300);
+  border-radius: 8px;
+  background: var(--color-warning-soft, #fff8e6);
+  color: #6b4b00;
+  font-size: 0.88rem;
+  line-height: 1.5;
 }

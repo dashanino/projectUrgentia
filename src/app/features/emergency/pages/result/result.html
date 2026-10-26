@@ -202,43 +202,31 @@
     }
 
     <!-- UBICACIÓN E INSTITUCIONES -->
-    <!-- UBICACIÓN E INSTITUCIONES -->
     @if (mostrarUbicacion) {
       <section class="location-section">
         <h2>Centros de atención cercanos</h2>
 
-        <!-- EPS: solo necesaria para media-baja y revisión clínica -->
+        <!-- EPS requerida para media-baja y revisión clínica -->
         @if (requiereEps) {
           <h3>Selecciona tu EPS</h3>
 
           @if (epsSeleccionada) {
             <p>EPS seleccionada. Ya puedes ingresar tu ubicación.</p>
 
-            <button type="button" (click)="seleccionarEps()">
-              Cambiar EPS
-            </button>
+            <button type="button" (click)="seleccionarEps()">Cambiar EPS</button>
           } @else {
-            <p>
-              Para consultar instituciones registradas para tu caso,
-              selecciona primero tu EPS.
-            </p>
+            <p>Para consultar instituciones registradas para tu caso, selecciona primero tu EPS.</p>
 
-            <button type="button" (click)="seleccionarEps()">
-              Seleccionar EPS
-            </button>
+            <button type="button" (click)="seleccionarEps()">Seleccionar EPS</button>
           }
         }
 
-        <!-- Alta y media-alta pueden buscar sin seleccionar EPS -->
+        <!-- Mostrar ubicación cuando se cumpla el requisito de EPS -->
         @if (!requiereEps || epsSeleccionada) {
-          <app-location
-            (locationSelected)="onLocationSelected($event)">
-          </app-location>
+          <app-location (locationSelected)="onLocationSelected($event)"> </app-location>
 
           @if (prioridad === 'media_baja' && servicioRecomendado) {
-            <p>
-              Servicio recomendado: {{ servicioRecomendado }}
-            </p>
+            <p>Servicio recomendado: {{ servicioRecomendado }}</p>
           }
 
           @if (loadingInstitutions) {
@@ -251,6 +239,7 @@
             </p>
           }
 
+          <!-- ÚNICO listado de instituciones -->
           @if (institutions.length > 0) {
             <section class="institutions-section">
               <h2>Instituciones cercanas</h2>
@@ -268,51 +257,5 @@
         }
       </section>
     }
-
-      <!-- SERVICIO RECOMENDADO -->
-      @if (prioridad === 'media_baja' && servicioRecomendado) {
-        <p>
-          Servicio recomendado:
-          {{ servicioRecomendado }}
-        </p>
-      }
-
-      <!-- ESTADO DE CARGA -->
-      @if (loadingInstitutions) {
-        <p>Buscando instituciones...</p>
-      }
-
-      <!-- ERRORES -->
-      @if (institutionsError) {
-        <p class="error-message">
-          {{ institutionsError }}
-        </p>
-      }
-
-      <!-- INSTITUCIONES ENCONTRADAS -->
-      @if (institutions.length > 0) {
-        <section class="institutions-section">
-          <h2>Instituciones cercanas</h2>
-
-          @for (institution of institutions; track institution.id) {
-            <article class="institution-card">
-              <h3>
-                {{ institution.name }}
-              </h3>
-
-              <p>
-                {{ institution.address }}
-              </p>
-
-              <p>
-                {{ institution.municipality }}
-              </p>
-
-              <strong> {{ institution.distance_km }} km </strong>
-            </article>
-          }
-        </section>
-      }
-    
   </section>
 </main>

@@ -76,10 +76,17 @@ export class Result implements OnInit {
 
       this.loadingInstitutions = true;
 
+      const inicioConsulta = performance.now();
+
       this.institutionsService
         .getNearbyInstitutionsForClinicalReview(location.latitude, location.longitude, epsId, token)
         .subscribe({
           next: (response) => {
+            console.log(
+              '[URGENTIA] Tiempo de consulta:',
+              Math.round(performance.now() - inicioConsulta),
+              'ms',
+            );
             this.institutions = response.institutions ?? [];
             this.loadingInstitutions = false;
 
@@ -400,13 +407,13 @@ export class Result implements OnInit {
   }
 
   get mostrarUbicacion(): boolean {
-  return (
-    this.revisionClinica ||
-    this.prioridad === 'alta' ||
-    this.prioridad === 'media_alta' ||
-    this.prioridad === 'media_baja'
-  );
-}
+    return (
+      this.revisionClinica ||
+      this.prioridad === 'alta' ||
+      this.prioridad === 'media_alta' ||
+      this.prioridad === 'media_baja'
+    );
+  }
 
   seleccionarEps(): void {
     this.router.navigate(['/tramites'], {
