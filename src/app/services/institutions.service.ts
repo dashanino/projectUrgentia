@@ -52,18 +52,28 @@ export class InstitutionsService {
     longitude: number,
     servicioRecomendado: string,
     token: string,
+    epsId?: number,
   ): Observable<InstitutionsResponse> {
-    const params = new HttpParams()
+  
+    let params = new HttpParams()
       .set('latitude', latitude.toString())
       .set('longitude', longitude.toString())
       .set('prioridad', 'media_baja')
       .set('servicio_recomendado', servicioRecomendado);
-
+  
+    // Enviar la EPS cuando esté disponible.
+    if (epsId !== undefined && Number.isInteger(epsId) && epsId > 0) {
+      params = params.set('eps_id', epsId.toString());
+    }
+  
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-
-    return this.http.get<InstitutionsResponse>(`${this.apiUrl}/nearby`, { params, headers });
+  
+    return this.http.get<InstitutionsResponse>(
+      `${this.apiUrl}/nearby`,
+      { params, headers }
+    );
   }
 
 getNearbyInstitutionsForClinicalReview(

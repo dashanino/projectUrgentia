@@ -71,6 +71,12 @@ export const routes: Routes = [
         path: 'perfil',
         loadComponent: () => import('./features/perfil/pages/perfil/perfil').then((m) => m.Perfil),
       },
+      {
+        path: 'confirmacion-clinica',
+        loadComponent: () =>
+          import('./features/emergency/pages/confirmacion-clinica/confirmacion-clinica')
+            .then((m) => m.ConfirmacionClinica),
+      },
     ],
   },
 

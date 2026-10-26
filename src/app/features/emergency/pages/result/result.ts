@@ -218,24 +218,53 @@ export class Result implements OnInit {
       });
   }
 
-  private buscarPorServicio(location: LocationData, servicio: string, token: string): void {
+  private buscarPorServicio(
+    location: LocationData,
+    servicio: string,
+    token: string
+  ): void {
+  
     this.loadingInstitutions = true;
-
+    this.institutionsError = '';
+    this.institutions = [];
+  
+    const epsId = Number(this.epsSeleccionada);
+  
+    const epsValida =
+      Number.isInteger(epsId) && epsId > 0
+        ? epsId
+        : undefined;
+  
     this.institutionsService
-      .getNearbyInstitutionsByService(location.latitude, location.longitude, servicio, token)
+      .getNearbyInstitutionsByService(
+        location.latitude,
+        location.longitude,
+        servicio,
+        token,
+        epsValida
+      )
       .subscribe({
         next: (response) => {
+          console.log('[URGENTIA] Instituciones encontradas:', response);
+  
           this.institutions = response.institutions ?? [];
           this.loadingInstitutions = false;
-
+  
           if (!this.institutions.length) {
-            this.institutionsError = `No encontramos instituciones registradas que ofrezcan ${servicio}.`;
+            this.institutionsError =
+              `No encontramos instituciones registradas que ofrezcan ${servicio} para los criterios de búsqueda.`;
           }
+  
+          this.cdr.detectChanges();
         },
-        error: () => {
+  
+        error: (error) => {
+          console.error('[URGENTIA] Error buscando instituciones:', error);
+  
           this.loadingInstitutions = false;
-          this.institutionsError = 'No fue posible consultar las instituciones.';
-
+          this.institutionsError =
+            'No fue posible consultar las instituciones.';
+  
           this.cdr.detectChanges();
         },
       });
@@ -403,7 +432,30 @@ export class Result implements OnInit {
   }
 
   get epsSeleccionada(): string | null {
-    return sessionStorage.getItem('eps_pretriage');
+    const epsPretriage = sessionStorage.getItem('eps_pretriage');
+  
+    if (sessionStorage.getItem('pretriage_registrado') === 'true') {
+      const usuarioGuardado = sessionStorage.getItem('user');
+  
+      if (!usuarioGuardado) {
+        return null;
+      }
+  
+      try {
+        const usuario = JSON.parse(usuarioGuardado);
+        const epsId = Number(usuario.id_eps);
+  
+        if (Number.isInteger(epsId) && epsId > 0) {
+          return String(epsId);
+        }
+      } catch {
+        return null;
+      }
+  
+      return null;
+    }
+  
+    return epsPretriage;
   }
 
   get mostrarUbicacion(): boolean {

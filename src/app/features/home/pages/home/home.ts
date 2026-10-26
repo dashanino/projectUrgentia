@@ -1,6 +1,6 @@
-
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { EmergencyService } from '../../../../services/emergency.service';
 
 interface UsuarioSesion {
   id: number;
@@ -19,8 +19,89 @@ interface UsuarioSesion {
 export class Home {
 
   private router = inject(Router);
+  private emergencyService = inject(EmergencyService);
+
+  iniciandoEvaluacion = false;
+
   nuevaEvaluacion(): void {
-    this.router.navigate(['/emergency/red-flags/adulto']);
+    if (this.iniciandoEvaluacion) {
+      return;
+    }
+
+    const token = sessionStorage.getItem('access_token');
+
+    if (!token) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.iniciandoEvaluacion = true;
+
+    this.emergencyService.iniciarPretriageRegistrado(token).subscribe({
+      next: (respuesta) => {
+        this.iniciandoEvaluacion = false;
+
+        sessionStorage.setItem(
+          'id_pretriage',
+          String(respuesta.id_pretriage)
+        );
+
+        sessionStorage.setItem(
+          'id_poblacion',
+          String(respuesta.id_poblacion)
+        );
+
+        sessionStorage.setItem(
+          'pretriage_registrado',
+          'true'
+        );
+
+        sessionStorage.setItem(
+          'requiere_confirmacion_antecedentes',
+          String(respuesta.requiere_confirmacion_antecedentes)
+        );
+
+        sessionStorage.setItem(
+          'requiere_confirmacion_poblacion_especial',
+          String(respuesta.requiere_confirmacion_poblacion_especial)
+        );
+
+        console.log('Pre-triage registrado creado:', respuesta);
+
+        // Navegación provisional.
+        // Antes de ir a las banderas rojas debemos implementar
+        // la confirmación clínica del paciente.
+        // Seleccionar la pantalla según la población calculada
+        const rutasPoblacion: Record<number, string> = {
+          1: '/emergency/red-flags/nino',
+          2: '/emergency/red-flags/adulto',
+          3: '/emergency/red-flags/adulto-mayor',
+        };
+
+        const ruta = rutasPoblacion[respuesta.id_poblacion];
+
+        if (!ruta) {
+          console.error('Población no reconocida:', respuesta.id_poblacion);
+          alert('No se pudo determinar la pantalla de evaluación.');
+          return;
+        }
+
+        // Temporalmente solo comprobamos la ruta calculada.
+        // No saltar la confirmación clínica en el flujo definitivo.
+        console.log('Ruta calculada para el paciente:', ruta);
+
+        this.router.navigate(['/app/confirmacion-clinica']);
+      },
+
+      error: (error) => {
+        this.iniciandoEvaluacion = false;
+        console.error('Error al iniciar el pre-triage:', error);
+        alert(
+          error.error?.error ||
+          'No fue posible iniciar la evaluación. Inténtalo nuevamente.'
+        );
+      },
+    });
   }
 
   irPerfil(): void {
@@ -49,14 +130,12 @@ export class Home {
     if (Number.isInteger(epsId) && epsId > 0) {
       this.router.navigate(['/tramites/seleccionar-tramite'], {
         queryParams: {
-          eps: epsId
-        }
+          eps: epsId,
+        },
       });
       return;
     }
 
-    // Si el paciente no tiene EPS registrada,
-    // puede seleccionarla manualmente.
     this.router.navigate(['/tramites']);
   }
 }

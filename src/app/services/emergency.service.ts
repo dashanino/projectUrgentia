@@ -8,6 +8,17 @@ export interface PretriageResponse {
   id_pretriage: number;
   access_token: string;
 }
+export interface PretriageRegistradoResponse {
+  message: string;
+  id_pretriage: number;
+  id_poblacion: number;
+  poblacion: string;
+  edad: number;
+  antecedentes_precargados: number;
+  antecedentes_completados: boolean;
+  requiere_confirmacion_antecedentes: boolean;
+  requiere_confirmacion_poblacion_especial: boolean;
+}
 
 export interface Sintoma {
   id: number;
@@ -30,6 +41,55 @@ export class EmergencyService {
 
   iniciarPretriage(): Observable<PretriageResponse> {
     return this.http.post<PretriageResponse>(`${this.apiUrl}/pretriage`, {});
+  }
+  iniciarPretriageRegistrado(
+    token: string
+  ): Observable<PretriageRegistradoResponse> {
+    return this.http.post<PretriageRegistradoResponse>(
+      `${this.apiUrl}/pretriage/registrado`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    
+  }
+  confirmarClinicaRegistrado(
+    idPretriage: number,
+    token: string,
+    accidente: boolean,
+    embarazo: boolean | null,
+    antecedentesActualizados: boolean
+  ): Observable<{
+    ok: boolean;
+    message: string;
+    id_pretriage: number;
+    id_poblacion: number;
+    poblacion: string;
+    antecedentes_actualizados: boolean;
+  }> {
+    return this.http.post<{
+      ok: boolean;
+      message: string;
+      id_pretriage: number;
+      id_poblacion: number;
+      poblacion: string;
+      antecedentes_actualizados: boolean;
+    }>(
+      `${this.apiUrl}/pretriage/${idPretriage}/confirmacion-clinica`,
+      {
+        accidente,
+        embarazo,
+        antecedentes_actualizados: antecedentesActualizados,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   }
 
   guardarAntecedentes(

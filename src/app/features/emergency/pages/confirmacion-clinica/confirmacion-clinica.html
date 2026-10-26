@@ -1,0 +1,109 @@
+<main class="confirmacion-page">
+    <section class="confirmacion-card">
+  
+      <span class="etiqueta">URGENTIA · NUEVA EVALUACIÓN</span>
+  
+      <h1>Antes de comenzar</h1>
+  
+      <p class="descripcion">
+        Hemos recuperado tu información médica registrada.
+        Solo necesitamos confirmar algunos datos para orientar
+        correctamente tu evaluación.
+      </p>
+  
+      <div class="poblacion-info">
+        <span>Tu población general</span>
+        <strong>{{ poblacion }}</strong>
+        <small>Calculada automáticamente a partir de tu edad.</small>
+      </div>
+  
+      <div class="pregunta">
+        <h2>¿Tu consulta está relacionada con un accidente o traumatismo?</h2>
+  
+        <div class="opciones">
+          <button
+            type="button"
+            [class.seleccionado]="accidente === 'si'"
+            (click)="seleccionarAccidente('si')">
+            Sí
+          </button>
+  
+          <button
+            type="button"
+            [class.seleccionado]="accidente === 'no'"
+            (click)="seleccionarAccidente('no')">
+            No
+          </button>
+        </div>
+      </div>
+  
+      @if (preguntarEmbarazo) {
+        <div class="pregunta">
+          <h2>¿Estás embarazada o existe posibilidad de embarazo?</h2>
+  
+          <div class="opciones">
+            <button
+              type="button"
+              [class.seleccionado]="embarazo === 'si'"
+              (click)="seleccionarEmbarazo('si')">
+              Sí
+            </button>
+  
+            <button
+              type="button"
+              [class.seleccionado]="embarazo === 'no'"
+              (click)="seleccionarEmbarazo('no')">
+              No
+            </button>
+          </div>
+        </div>
+      }
+  
+      <div class="pregunta">
+        <h2>¿La información médica de tu perfil está actualizada?</h2>
+  
+        <p>
+          Incluye tus antecedentes, medicamentos, alergias
+          y otros datos médicos registrados.
+        </p>
+  
+        <div class="opciones">
+          <button
+            type="button"
+            [class.seleccionado]="antecedentesActualizados === 'si'"
+            (click)="seleccionarAntecedentes('si')">
+            Sí
+          </button>
+  
+          <button
+            type="button"
+            [class.seleccionado]="antecedentesActualizados === 'no'"
+            (click)="seleccionarAntecedentes('no')">
+            Necesito actualizarla
+          </button>
+        </div>
+      </div>
+  
+      <div class="acciones">
+        <button type="button" class="volver" (click)="volver()">
+          Volver
+        </button>
+  
+        <button
+          type="button"
+          class="continuar"
+          [disabled]="!formularioCompleto || guardando"
+          (click)="continuar()">
+          Continuar →
+        </button>
+      </div>
+  
+      <p class="advertencia">
+        Urgentia ofrece orientación inicial y no reemplaza
+        la valoración de un profesional de salud.
+        Si tienes síntomas de peligro inmediato, busca atención
+        de emergencias sin esperar el resultado.
+      </p>
+  
+    </section>
+  </main>
