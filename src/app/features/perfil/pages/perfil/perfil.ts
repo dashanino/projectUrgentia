@@ -12,10 +12,6 @@ import { MatIconModule } from '@angular/material/icon';
 export class Perfil {
   private router = inject(Router);
 
-  nuevaEvaluacion() {
-    this.router.navigate(['emergency/red-flags/adulto']);
-  }
-
   goBack(){
     this.router.navigate(['/app/home'])
   }

@@ -1,6 +1,47 @@
+
 <header class="topbar">
   <div class="brand">
-    <a href="/begin"><img src="logo.png" alt="Urgentia" /></a>
+    <a href="/begin">
+      <img src="logo.png" alt="Urgentia" />
+    </a>
     <span>Urgentia</span>
     <p>Pre-triage inteligente<br />para urgencias</p>
   </div>
+
+  <div class="header-actions">
+    <div class="settings-container">
+      <button
+        type="button"
+        class="settings-button"
+        aria-label="Configuración de cuenta"
+        [attr.aria-expanded]="showProfileMenu"
+        (click)="toggleProfileMenu()"
+      >
+        <mat-icon>settings</mat-icon>
+        <span></span>
+      </button>
+
+      @if (showProfileMenu) {
+        <div class="settings-menu">
+          <button
+            type="button"
+            routerLink="/app/perfil"
+            (click)="toggleProfileMenu()"
+          >
+            <mat-icon>person_outline</mat-icon>
+            Mi perfil
+          </button>
+
+          <button
+            type="button"
+            (click)="logout()"
+          >
+            <mat-icon>logout</mat-icon>
+            Cerrar sesión
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</header>
+

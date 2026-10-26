@@ -1,6 +1,97 @@
-<h1>HOME</h1>
-<button
-    type="button"
-    (click)="irPerfil()">
-    Ir a PERFIL
-</button>
+
+<main class="home-page">
+
+    <!-- PRESENTACIÓN DE URGENTIA -->
+    <section class="welcome-card">
+      <span class="welcome-label">BIENVENIDO A URGENTIA</span>
+  
+      <h1>Tu salud, mejor orientada.</h1>
+  
+      <p>
+        Urgentia es una herramienta de pre-triage
+        que utiliza inteligencia artificial para
+        analizar la información que proporcionas
+        y ofrecer orientación inicial sobre el
+        tipo de atención que podrías necesitar.
+      </p>
+  
+      <div class="notice">
+        <span>ⓘ</span>
+        <p>
+          Urgentia no reemplaza la valoración
+          realizada por un profesional de salud.
+        </p>
+      </div>
+    </section>
+  
+    <!-- ACCESOS PRINCIPALES -->
+    <section class="home-actions">
+  
+      <h2>¿Qué deseas hacer?</h2>
+  
+      <div class="actions-grid">
+        <!-- NUEVA EVALUACIÓN -->
+        <article class="action-card">
+            <div class="card-icon">✚</div>
+        
+            <h3>Nueva Evaluación</h3>
+        
+            <p>
+            Inicia una nueva evaluación de pre-triage
+            para recibir orientación inicial sobre
+            tu estado de salud.
+            </p>
+        
+            <button
+            type="button"
+            (click)="nuevaEvaluacion()"
+            >
+            Iniciar evaluación
+            <span>→</span>
+            </button>
+        </article>
+        <!-- TRÁMITES EPS -->
+        <article class="action-card">
+          <div class="card-icon">✚</div>
+  
+          <h3>Trámites de mi EPS</h3>
+  
+          <p>
+            Consulta los trámites disponibles
+            para tu EPS registrada.
+          </p>
+  
+          <button
+            type="button"
+            (click)="irATramites()"
+          >
+            Consultar trámites
+            <span>→</span>
+          </button>
+        </article>
+  
+        <!-- PERFIL -->
+        <article class="action-card">
+          <div class="card-icon">♙</div>
+  
+          <h3>Mi perfil</h3>
+  
+          <p>
+            Consulta tu información personal
+            y accede a la configuración de tu cuenta.
+          </p>
+  
+          <button
+            type="button"
+            (click)="irPerfil()"
+          >
+            Ver mi perfil
+            <span>→</span>
+          </button>
+        </article>
+  
+      </div>
+    </section>
+  
+  </main>
+  
