@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink, Router} from '@angular/router';
+import { Router} from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [MatIconModule,RouterLink],
+  imports: [MatIconModule],
   standalone:true,
   templateUrl: './header.html',
   styleUrl: './header.scss',

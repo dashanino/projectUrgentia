@@ -1,48 +1,95 @@
+@use 'variables' as *;
+
+/* CONTENEDOR PRINCIPAL */
 .sintomas-container {
-  width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 30px 20px;
+  width: 95%;
+  max-width: 1100px;
+  box-sizing: border-box;
+
+  margin: 30px auto;
+  padding: 35px 45px;
+
+  background: white;
+  border-radius: 45px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
-h2 {
-  margin-bottom: 25px;
+/* TÍTULO PRINCIPAL */
+.sintomas-container > h2 {
+  margin: 0 0 30px;
+
+  font-family: $font-title;
+  font-size: 30px;
+  font-weight: $font-semi-bold;
   text-align: center;
 }
 
+/* GRUPOS DE SÍNTOMAS */
+.grupo-sintomas {
+  margin-bottom: 28px;
+}
+
+.grupo-sintomas h2 {
+  margin: 0 0 15px;
+  padding-bottom: 10px;
+
+  font-family: $font-title;
+  font-size: 21px;
+  font-weight: $font-semi-bold;
+
+  color: var(--color-primary);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* LISTA DE SÍNTOMAS */
 .sintomas-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
+/* BOTONES */
 .sintoma {
   width: 100%;
-  min-height: 60px;
-  padding: 16px 20px;
+  min-height: 54px;
+  box-sizing: border-box;
+  padding: 12px 18px;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+
+  border: 1px solid #e1e5eb;
+  border-radius: 24px;
 
   background: white;
-  border: 2px solid #ddd;
-  border-radius: 12px;
+  color: #111;
+
+  font-family: $font-title;
+  font-size: 16px;
+  text-align: left;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 
   cursor: pointer;
-  text-align: left;
-  font-size: 16px;
-
-  transition: 0.2s;
+  transition: all 0.2s ease;
 }
 
-.sintoma:hover {
-  border-color: #888;
+.sintoma:hover:not(.seleccionado) {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
+/* SÍNTOMA SELECCIONADO */
 .sintoma.seleccionado {
-  border-color: #000;
-  background: #f2f2f2;
+  background: var(--color-primary-soft);
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+
+  box-shadow: none;
 }
 
 .nombre-sintoma {
@@ -50,21 +97,102 @@ h2 {
 }
 
 .check {
-  margin-left: 15px;
+  flex-shrink: 0;
+  margin-left: 8px;
+
+  color: var(--color-primary);
   font-size: 22px;
   font-weight: bold;
 }
 
+/* CONTINUAR */
 .continuar {
-  display: block;
-  width: 100%;
-  margin-top: 30px;
-  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 180px;
+  height: 52px;
+  padding: 0 25px;
+  margin: 25px 0 0 auto;
 
   border: none;
-  border-radius: 10px;
+  border-radius: 28px;
+
+  background: var(--color-primary);
+  color: white;
+
+  font-family: $font-title;
+  font-size: 16px;
+  font-weight: $font-semi-bold;
 
   cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.continuar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.16);
+}
+
+/* CARGA Y ERRORES */
+.loading,
+.error-message {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+.loading {
+  background: #f3f4f6;
+  text-align: center;
+}
+
+.error-message {
+  background: #fff1f1;
+  color: #a11d1d;
+}
+
+/* PANTALLAS PEQUEÑAS */
+@media (max-width: 700px) {
+  .sintomas-container {
+    width: 100%;
+    padding: 25px 18px;
+    border-radius: 28px;
+  }
+
+  .sintomas-container > h2 {
+    font-size: 24px;
+  }
+
+  .grupo-sintomas h2 {
+    font-size: 18px;
+  }
+
+  .sintomas-list {
+    grid-template-columns: 1fr;
+  }
+
+  .continuar {
+    width: 100%;
+  }
+}
+
+.back-button {
+  border: none;
+  background: transparent;
+
+  color: var(--color-primary);
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-button mat-icon {
+  font-size: 35px;
+  width: 35px;
+  height: 35px;
 }

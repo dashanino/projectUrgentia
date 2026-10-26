@@ -45,7 +45,6 @@ export class Adulto {
 
     if (this.ningunoSeleccionado) {
       this.sintomasSeleccionados = [];
-      
     }
   }
 
@@ -62,12 +61,7 @@ export class Adulto {
 
   continuar(): void {
     const idPretriage = sessionStorage.getItem('id_pretriage');
-
     const token = sessionStorage.getItem('access_token');
-    if (this.ningunoSeleccionado) {
-      this.router.navigate(['emergency/sub-banderas']);
-      return;
-    }
 
     if (!idPretriage || !token) {
       console.error('No existe un pretriage activo');
@@ -76,35 +70,36 @@ export class Adulto {
 
     const id = Number(idPretriage);
 
-    // No seleccionó nada
-    if (this.sintomasSeleccionados.length === 0 && !this.ningunoSeleccionado) {
+    if (!Number.isInteger(id) || id <= 0) {
+      console.error('El ID del pretriage no es válido');
       return;
     }
 
-    // ==========================================
-    // CASO 1: NINGUNO DE LOS ANTERIORES
-    // ==========================================
-
+    // CASO 1: Ninguna bandera roja seleccionada.
+    // Primero guardamos la selección vacía.
     if (this.ningunoSeleccionado) {
       this.emergencyService.guardarBanderasRojas(id, [], token).subscribe({
         next: (respuesta) => {
-          console.log('No hay banderas rojas:', respuesta);
+          console.log('Selección vacía de banderas guardada:', respuesta);
 
-          this.generarPreguntasAdicionales(id, token);
+          // Evaluar las reglas antes de continuar.
+          this.evaluarTriage(id, token);
         },
-
         error: (error) => {
-          console.error('Error al guardar banderas:', error);
+          console.error('Error al guardar la selección vacía:', error);
         },
       });
 
       return;
     }
 
-    // ==========================================
-    // CASO 2: SÍ SELECCIONÓ SÍNTOMAS
-    // ==========================================
+    // Si no seleccionó nada y tampoco marcó "Ninguno",
+    // no permitir continuar.
+    if (this.sintomasSeleccionados.length === 0) {
+      return;
+    }
 
+    // CASO 2: Sí seleccionó banderas rojas.
     this.guardarYEvaluar(id, token);
   }
 
@@ -132,6 +127,28 @@ export class Adulto {
         // 🔴 ALTA PRIORIDAD
         if (resultado.origen === 'reglas' && resultado.accion === 'alerta') {
           this.router.navigate(['emergency/resultado']);
+          return;
+        }
+        // NO SE ACTIVÓ UNA REGLA Y NO HAY SUBMENÚ.
+        // Registrar que la etapa de síntomas terminó vacía
+        // y continuar con la IA.
+        if (resultado.origen === 'reglas' && resultado.accion === 'continuar_ia') {
+          this.emergencyService.guardarSintomas(id, [], token).subscribe({
+            next: (respuesta) => {
+              console.log('Etapa de síntomas completada sin selecciones:', respuesta);
+
+              if (respuesta.ok === true && respuesta.accion === 'iniciar_ia') {
+                this.router.navigate(['emergency/sub-banderas']);
+                return;
+              }
+
+              console.error('El servidor no confirmó la etapa de síntomas.', respuesta);
+            },
+            error: (error) => {
+              console.error('Error al guardar la selección vacía de síntomas:', error);
+            },
+          });
+
           return;
         }
 

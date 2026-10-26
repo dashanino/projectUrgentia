@@ -1,41 +1,6 @@
 <header class="topbar">
   <div class="brand">
-    <img src="logo.png" alt="Urgentia" />
+    <a href="/begin"><img src="logo.png" alt="Urgentia" /></a>
     <span>Urgentia</span>
     <p>Pre-triage inteligente<br />para urgencias</p>
   </div>
-
-  <div class="top-icons">
-
-    <div class="profile-container">
-      <button
-        type="button"
-        class="profile-button"
-        (click)="toggleProfileMenu()">
-        Perfil
-      </button>
-
-      @if (showProfileMenu){
-        <div class="profile-menu">
-          <button routerLink="/app/perfil">
-            Ver perfil
-          </button>
-
-          <button (click)="logout()">
-            Cerrar sesión
-          </button>
-        </div>}
-    </div>
-    
-
-    <button type="button" class="icon-button">
-      <mat-icon>notifications_none</mat-icon>
-    </button>
-
-    <button type="button" class="icon-button">
-      <mat-icon>settings</mat-icon>
-    </button>
-
-  </div>
-</header>
-

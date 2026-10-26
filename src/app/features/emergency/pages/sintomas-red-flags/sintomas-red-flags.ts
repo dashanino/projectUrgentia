@@ -1,16 +1,16 @@
-
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 import { EmergencyService, Sintoma } from '../../../../services/emergency.service';
 
 @Component({
   selector: 'app-sintomas-red-flags',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './sintomas-red-flags.html',
+  imports: [CommonModule, MatIconModule],
+  templateUrl:'./sintomas-red-flags.html',
   styleUrl: './sintomas-red-flags.scss',
 })
 export class SintomasRedFlags implements OnInit {
@@ -23,6 +23,7 @@ export class SintomasRedFlags implements OnInit {
 
   // Banderas seleccionadas por el usuario
   banderasSeleccionadas: number[] = [];
+  ningunoSeleccionado = false;
 
   // Nombres de las banderas
   readonly nombresBanderas: { [key: number]: string } = {
@@ -54,10 +55,7 @@ export class SintomasRedFlags implements OnInit {
     try {
       const banderas = JSON.parse(banderasGuardadas);
 
-      if (
-        !Array.isArray(banderas) ||
-        !banderas.every((id) => Number.isInteger(id))
-      ) {
+      if (!Array.isArray(banderas) || !banderas.every((id) => Number.isInteger(id))) {
         throw new Error('Formato de banderas inválido');
       }
 
@@ -89,19 +87,17 @@ export class SintomasRedFlags implements OnInit {
     this.mensajeError = '';
 
     const peticiones = banderas.map((idBandera) =>
-      this.emergencyService.obtenerSintomasPorRedFlag(idBandera)
+      this.emergencyService.obtenerSintomasPorRedFlag(idBandera),
     );
 
     forkJoin(peticiones).subscribe({
       next: (respuestas) => {
-        const todosLosSintomas = respuestas.flatMap(
-          (respuesta) => respuesta.sintomas
-        );
+        const todosLosSintomas = respuestas.flatMap((respuesta) => respuesta.sintomas);
 
         // Evitar síntomas duplicados
         this.sintomas = todosLosSintomas.filter(
           (sintoma, index, arreglo) =>
-            arreglo.findIndex((item) => item.id === sintoma.id) === index
+            arreglo.findIndex((item) => item.id === sintoma.id) === index,
         );
 
         console.log('Todos los síntomas encontrados:', this.sintomas);
@@ -131,16 +127,14 @@ export class SintomasRedFlags implements OnInit {
       return;
     }
 
-    const index = this.sintomasSeleccionados.indexOf(sintomaId);
+    // Seleccionar un síntoma desmarca "Ninguno".
+    this.ningunoSeleccionado = false;
 
-    if (index === -1) {
-      this.sintomasSeleccionados.push(sintomaId);
+    if (this.sintomasSeleccionados.includes(sintomaId)) {
+      this.sintomasSeleccionados = this.sintomasSeleccionados.filter((id) => id !== sintomaId);
     } else {
-      this.sintomasSeleccionados.splice(index, 1);
+      this.sintomasSeleccionados = [...this.sintomasSeleccionados, sintomaId];
     }
-
-    // Nueva referencia para Angular
-    this.sintomasSeleccionados = [...this.sintomasSeleccionados];
   }
 
   estaSeleccionado(sintomaId: number): boolean {
@@ -150,9 +144,7 @@ export class SintomasRedFlags implements OnInit {
   // Devuelve solamente los síntomas pertenecientes
   // a una bandera específica
   getSintomasPorBandera(idBandera: number): Sintoma[] {
-    return this.sintomas.filter(
-      (sintoma) => sintoma.id_bandera === idBandera
-    );
+    return this.sintomas.filter((sintoma) => sintoma.id_bandera === idBandera);
   }
 
   // Devuelve el nombre de la bandera
@@ -191,45 +183,49 @@ export class SintomasRedFlags implements OnInit {
 
     console.log('Síntomas seleccionados:', this.sintomasSeleccionados);
 
-    this.emergencyService
-      .guardarSintomas(
-        id,
-        this.sintomasSeleccionados,
-        token
-      )
-      .subscribe({
-        next: (respuesta) => {
-          console.log('Síntomas guardados:', respuesta);
+    this.emergencyService.guardarSintomas(id, this.sintomasSeleccionados, token).subscribe({
+      next: (respuesta) => {
+        console.log('Síntomas guardados:', respuesta);
 
-          this.guardando = false;
-          this.cargando = false;
+        this.guardando = false;
+        this.cargando = false;
 
-          if (respuesta.ok === true && respuesta.accion === 'iniciar_ia') {
-            this.irAIA();
-          } else {
-            this.mensajeError =
-              'El servidor no confirmó el guardado de los síntomas.';
-            this.cdr.detectChanges();
-          }
-        },
-
-        error: (error) => {
-          console.error('Error al guardar síntomas:', error);
-
-          this.guardando = false;
-          this.cargando = false;
-
-          this.mensajeError =
-            error.error?.error ||
-            'No fue posible guardar los síntomas. Intenta nuevamente.';
-
+        if (respuesta.ok === true && respuesta.accion === 'iniciar_ia') {
+          this.irAIA();
+        } else {
+          this.mensajeError = 'El servidor no confirmó el guardado de los síntomas.';
           this.cdr.detectChanges();
-        },
-      });
+        }
+      },
+
+      error: (error) => {
+        console.error('Error al guardar síntomas:', error);
+
+        this.guardando = false;
+        this.cargando = false;
+
+        this.mensajeError =
+          error.error?.error || 'No fue posible guardar los síntomas. Intenta nuevamente.';
+
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   // Navegar a las preguntas de IA
   private irAIA(): void {
     this.router.navigate(['/emergency/sub-banderas']);
+  }
+
+  goBack(): void {
+    this.router.navigate(['/emergency/patient-group']);
+  }
+  
+  seleccionarNinguno(): void {
+    this.ningunoSeleccionado = !this.ningunoSeleccionado;
+
+    if (this.ningunoSeleccionado) {
+      this.sintomasSeleccionados = [];
+    }
   }
 }

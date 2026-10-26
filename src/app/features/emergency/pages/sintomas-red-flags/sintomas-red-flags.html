@@ -1,11 +1,17 @@
 <div class="sintomas-container">
+  <!-- BOTÓN VOLVER -->
+  <button type="button" class="back-button" (click)="goBack()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
   @if (cargando) {
     <div class="loading">
-      <p>Cargando...</p>
+      <p>Cargando síntomas...</p>
     </div>
-  } @else if (sintomas.length > 0) {
+  } @else {
     <h2>¿Presenta alguno de los siguientes síntomas?</h2>
 
+    <!-- GRUPOS DE SÍNTOMAS POR BANDERA ROJA -->
     @for (idBandera of banderasSeleccionadas; track idBandera) {
       @if (getSintomasPorBandera(idBandera).length > 0) {
         <section class="grupo-sintomas">
@@ -20,6 +26,7 @@
                 type="button"
                 class="sintoma"
                 [class.seleccionado]="estaSeleccionado(sintoma.id)"
+                [disabled]="guardando"
                 (click)="seleccionarSintoma(sintoma.id)"
               >
                 <span class="nombre-sintoma">
@@ -36,9 +43,36 @@
       }
     }
 
-    <button type="button" class="continuar" (click)="continuar()">Continuar</button>
+    <!-- NINGUNO: FUERA DE LOS BUCLES -->
+    <button
+      type="button"
+      class="sintoma ninguno-option"
+      [class.seleccionado]="ningunoSeleccionado"
+      [disabled]="guardando"
+      (click)="seleccionarNinguno()"
+    >
+      <span class="nombre-sintoma"> Ninguno de los anteriores </span>
+
+      @if (ningunoSeleccionado) {
+        <span class="check">✓</span>
+      }
+    </button>
+
+    <!-- CONTINUAR -->
+    <button
+      type="button"
+      class="continuar"
+      [disabled]="guardando || (sintomasSeleccionados.length === 0 && !ningunoSeleccionado)"
+      (click)="continuar()"
+    >
+      {{ guardando ? 'Guardando...' : 'Continuar' }}
+    </button>
   }
 </div>
+
+<!-- MENSAJES DE ERROR -->
 @if (mensajeError) {
-  <p class="error-message">{{ mensajeError }}</p>
+  <p class="error-message" role="alert">
+    {{ mensajeError }}
+  </p>
 }

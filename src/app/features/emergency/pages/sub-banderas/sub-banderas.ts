@@ -1,10 +1,4 @@
-
-import {
-  Component,
-  ChangeDetectorRef,
-  OnInit,
-  inject
-} from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, inject } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -28,10 +22,9 @@ interface RevisionSeguridad {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './sub-banderas.html',
-  styleUrl: './sub-banderas.scss'
+  styleUrl: './sub-banderas.scss',
 })
 export class SubBanderas implements OnInit {
-
   private router = inject(Router);
   private emergencyService = inject(EmergencyService);
   private cdr = inject(ChangeDetectorRef);
@@ -63,8 +56,7 @@ export class SubBanderas implements OnInit {
       this.idPretriage <= 0 ||
       !this.token
     ) {
-      this.mensajeError =
-        'No se encontró un pre-triage activo. Debes iniciar nuevamente.';
+      this.mensajeError = 'No se encontró un pre-triage activo. Debes iniciar nuevamente.';
       return;
     }
 
@@ -80,126 +72,105 @@ export class SubBanderas implements OnInit {
     this.mensajeError = '';
     this.mensajeEstado = '';
 
-    this.emergencyService
-      .generarPreguntaIA(this.idPretriage, this.token)
-      .subscribe({
-        next: (respuesta) => {
-          this.cargando = false;
-          if (respuesta?.accion === 'revision_clinica') {
-            sessionStorage.setItem(
-              'resultadoTriage',
-              JSON.stringify({
-                ok: true,
-                id_pretriage: this.idPretriage,
-                origen: 'ia',
-                alta_prioridad: false,
-                accion: 'revision_clinica',
-                resultado: {
-                  prioridad: null,
-                  justificacion:
-                    respuesta.message ||
-                    'Se requiere valoración médica presencial.',
-                  incertidumbre: true,
-                  detalle_incertidumbre: null,
-                  tipo_atencion_urgencias: null,
-                  servicio_recomendado: null
-                }
-              })
-            );
-          
-            this.router.navigate(['/emergency/resultado']);
-            return;
-          }
+    this.emergencyService.generarPreguntaIA(this.idPretriage, this.token).subscribe({
+      next: (respuesta) => {
+        this.cargando = false;
+        if (respuesta?.accion === 'revision_clinica') {
+          sessionStorage.setItem(
+            'resultadoTriage',
+            JSON.stringify({
+              ok: true,
+              id_pretriage: this.idPretriage,
+              origen: 'ia',
+              alta_prioridad: false,
+              accion: 'revision_clinica',
+              resultado: {
+                prioridad: null,
+                justificacion: respuesta.message || 'Se requiere valoración médica presencial.',
+                incertidumbre: true,
+                detalle_incertidumbre: null,
+                tipo_atencion_urgencias: null,
+                servicio_recomendado: null,
+              },
+            }),
+          );
 
-          if (!respuesta.ok) {
-            this.mensajeError =
-              'No fue posible obtener la pregunta de IA.';
-            this.cdr.detectChanges();
-            return;
-          }
-
-          const resultado = respuesta.resultado;
-
-          // Se completaron las cinco preguntas.
-          // Todavía NO significa que exista una
-          // clasificación final autorizada.
-          if (resultado?.accion === 'cuestionario_completado') {
-            this.preguntaActual = null;
-            this.mensajeEstado = 'Analizando tus respuestas...';
-          
-            this.cdr.detectChanges();
-          
-            this.evaluarPretriage();
-            return;
-          }
-
-          // Detener si el backend solicita revisión.
-          if (
-            resultado?.accion === 'revision_clinica' ||
-            resultado?.accion === 'informacion_insuficiente'
-          ) {
-            this.enviarARevisionClinica(
-              resultado.mensaje ||
-              'No fue posible determinar una prioridad confiable.'
-            );
-            return;
-          } {
-            this.finalizado = true;
-            this.preguntaActual = null;
-
-            this.mensajeEstado =
-              resultado.mensaje ||
-              'Se requiere una revisión de seguridad.';
-
-            this.cdr.detectChanges();
-            return;
-          }
-
-          // Verificar que la pregunta recibida sea válida.
-          if (
-            !resultado ||
-            typeof resultado.id_pregunta !== 'number' ||
-            typeof resultado.pregunta !== 'string'
-          ) {
-            this.mensajeError =
-              'El servidor no devolvió una pregunta válida.';
-
-            this.cdr.detectChanges();
-            return;
-          }
-
-          this.preguntaActual = {
-            id_pregunta: resultado.id_pregunta,
-            pregunta: resultado.pregunta,
-            orden: resultado.orden
-          };
-
-          this.respuestaPaciente = '';
-
-          this.cdr.detectChanges();
-        },
-
-        error: (error) => {
-          this.cargando = false;
-
-          this.mensajeError =
-            error.error?.message ||
-            'Ocurrió un error al generar la pregunta.';
-
-          this.cdr.detectChanges();
+          this.router.navigate(['/emergency/resultado']);
+          return;
         }
-      });
+
+        if (!respuesta.ok) {
+          this.mensajeError = 'No fue posible obtener la pregunta de IA.';
+          this.cdr.detectChanges();
+          return;
+        }
+
+        const resultado = respuesta.resultado;
+
+        // Se completaron las cinco preguntas.
+        // Todavía NO significa que exista una
+        // clasificación final autorizada.
+        if (resultado?.accion === 'cuestionario_completado') {
+          this.preguntaActual = null;
+          this.respuestaPaciente = '';
+          this.cdr.detectChanges();
+
+          this.evaluarResultadoFinal();
+          return;
+        }
+
+        // Detener si el backend solicita revisión.
+
+        // Detener si el backend solicita revisión clínica.
+        if (
+          resultado?.accion === 'revision_clinica' ||
+          resultado?.accion === 'informacion_insuficiente'
+        ) {
+          this.enviarARevisionClinica(
+            resultado.mensaje || 'No fue posible determinar una prioridad confiable.',
+          );
+          return;
+        }
+
+        // Verificar que la pregunta recibida sea válida.
+
+        // Verificar que la pregunta recibida sea válida.
+        if (
+          !resultado ||
+          typeof resultado.id_pregunta !== 'number' ||
+          typeof resultado.pregunta !== 'string'
+        ) {
+          this.mensajeError = 'El servidor no devolvió una pregunta válida.';
+
+          this.cdr.detectChanges();
+          return;
+        }
+
+        this.preguntaActual = {
+          id_pregunta: resultado.id_pregunta,
+          pregunta: resultado.pregunta,
+          orden: resultado.orden,
+        };
+
+        this.respuestaPaciente = '';
+
+        this.cdr.detectChanges();
+      },
+
+      error: (error) => {
+        this.cargando = false;
+
+        this.mensajeError = error.error?.message || 'Ocurrió un error al generar la pregunta.';
+
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   enviarRespuesta(): void {
     const respuesta = this.respuestaPaciente.trim();
 
-    if (
-      !this.preguntaActual ||
-      this.guardando ||
-      this.cargando ||
-      this.finalizado
-    ) {
+    if (!this.preguntaActual || this.guardando || this.cargando || this.finalizado) {
       return;
     }
 
@@ -214,26 +185,19 @@ export class SubBanderas implements OnInit {
     const idPregunta = this.preguntaActual.id_pregunta;
 
     this.emergencyService
-      .guardarRespuestaIA(
-        this.idPretriage,
-        idPregunta,
-        respuesta,
-        this.token
-      )
+      .guardarRespuestaIA(this.idPretriage, idPregunta, respuesta, this.token)
       .subscribe({
         next: (resultado) => {
           this.guardando = false;
 
           if (!resultado.ok) {
-            this.mensajeError =
-              'No fue posible guardar tu respuesta.';
+            this.mensajeError = 'No fue posible guardar tu respuesta.';
 
             this.cdr.detectChanges();
             return;
           }
 
-          const revision: RevisionSeguridad | undefined =
-            resultado.revision_seguridad;
+          const revision: RevisionSeguridad | undefined = resultado.revision_seguridad;
 
           // Nunca continuar sin revisión de seguridad.
           if (!revision) {
@@ -250,10 +214,7 @@ export class SubBanderas implements OnInit {
           console.log('Revisión de seguridad:', revision);
 
           // CASO 1: Se identificó una posible alerta.
-          if (
-            revision.accion === 'alerta' ||
-            revision.estado_seguridad_ia === 'alerta'
-          ) {
+          if (revision.accion === 'alerta' || revision.estado_seguridad_ia === 'alerta') {
             this.alerta = true;
             this.finalizado = true;
             this.preguntaActual = null;
@@ -275,8 +236,7 @@ export class SubBanderas implements OnInit {
             revision.estado_seguridad_ia === 'en_revision'
           ) {
             this.enviarARevisionClinica(
-              revision.mensaje ||
-              'Se requiere valoración por personal de salud.'
+              revision.mensaje || 'Se requiere valoración por personal de salud.',
             );
             return;
           }
@@ -286,10 +246,7 @@ export class SubBanderas implements OnInit {
           //
           // Esto NO equivale a declarar
           // que el paciente está fuera de peligro.
-          if (
-            revision.accion === 'continuar' &&
-            revision.estado_seguridad_ia === 'continuar'
-          ) {
+          if (revision.accion === 'continuar' && revision.estado_seguridad_ia === 'continuar') {
             this.preguntaActual = null;
             this.respuestaPaciente = '';
 
@@ -306,8 +263,7 @@ export class SubBanderas implements OnInit {
           this.preguntaActual = null;
 
           this.mensajeEstado =
-            revision.mensaje ||
-            'Se requiere verificar la seguridad antes de continuar.';
+            revision.mensaje || 'Se requiere verificar la seguridad antes de continuar.';
 
           this.cdr.detectChanges();
         },
@@ -316,128 +272,173 @@ export class SubBanderas implements OnInit {
           this.guardando = false;
 
           this.mensajeError =
-            error.error?.message ||
-            'No fue posible guardar la respuesta. Intenta nuevamente.';
+            error.error?.message || 'No fue posible guardar la respuesta. Intenta nuevamente.';
 
           this.cdr.detectChanges();
-        }
+        },
       });
   }
   evaluarPretriage(): void {
     if (this.cargando || this.guardando || this.finalizado) {
       return;
     }
-  
+
     this.cargando = true;
     this.mensajeError = '';
-  
-    this.emergencyService
-      .evaluarConIA(this.idPretriage, this.token)
-      .subscribe({
-        next: (respuesta) => {
-          this.cargando = false;
-  
-          if (!respuesta?.ok || !respuesta?.result) {
-            this.mensajeError =
-              'No fue posible obtener la evaluación final.';
-            this.cdr.detectChanges();
-            return;
-          }
-  
-          const resultado = respuesta.result;
-  
-          const prioridadesValidas = [
-            'alta',
-            'media_alta',
-            'media_baja',
-            'baja'
-          ];
-  
-          if (!prioridadesValidas.includes(resultado.prioridad)) {
-            this.mensajeError =
-              'El servidor no devolvió una prioridad válida.';
-            this.cdr.detectChanges();
-            return;
-          }
-  
-          // Una incertidumbre clínicamente relevante
-          // requiere una revisión antes de mostrar prioridad.
-          if (resultado.incertidumbre === true) {
-            sessionStorage.setItem(
-              'resultadoTriage',
-              JSON.stringify({
-                ok: true,
-                id_pretriage: this.idPretriage,
-                origen: 'ia',
-                alta_prioridad: false,
-                accion: 'revision_clinica',
-                resultado: {
-                  prioridad: null,
-                  justificacion:
-                    'Se requiere valoración médica presencial.',
-                  incertidumbre: true,
-                  detalle_incertidumbre:
-                    resultado.detalle_incertidumbre ?? null,
-                  tipo_atencion_urgencias: null,
-                  servicio_recomendado: null
-                }
-              })
-            );
-          
-            this.router.navigate(['/emergency/resultado']);
-            return;
-          }
-  
+
+    this.emergencyService.evaluarConIA(this.idPretriage, this.token).subscribe({
+      next: (respuesta) => {
+        this.cargando = false;
+
+        if (!respuesta?.ok || !respuesta?.result) {
+          this.mensajeError = 'No fue posible obtener la evaluación final.';
+          this.cdr.detectChanges();
+          return;
+        }
+
+        const resultado = respuesta.result;
+
+        const prioridadesValidas = ['alta', 'media_alta', 'media_baja', 'baja'];
+
+        if (!prioridadesValidas.includes(resultado.prioridad)) {
+          this.mensajeError = 'El servidor no devolvió una prioridad válida.';
+          this.cdr.detectChanges();
+          return;
+        }
+
+        // Una incertidumbre clínicamente relevante
+        // requiere una revisión antes de mostrar prioridad.
+        if (resultado.incertidumbre === true) {
           sessionStorage.setItem(
             'resultadoTriage',
             JSON.stringify({
               ok: true,
               id_pretriage: this.idPretriage,
               origen: 'ia',
-              alta_prioridad: resultado.prioridad === 'alta',
-              accion: 'resultado_ia',
-              resultado
-            })
+              alta_prioridad: false,
+              accion: 'revision_clinica',
+              resultado: {
+                prioridad: null,
+                justificacion: 'Se requiere valoración médica presencial.',
+                incertidumbre: true,
+                detalle_incertidumbre: resultado.detalle_incertidumbre ?? null,
+                tipo_atencion_urgencias: null,
+                servicio_recomendado: null,
+              },
+            }),
           );
-  
+
           this.router.navigate(['/emergency/resultado']);
-        },
-  
-        error: (error) => {
-          this.cargando = false;
-  
-          this.mensajeError =
-            error.error?.message ||
-            'No fue posible completar la evaluación. Intenta nuevamente.';
-  
-          this.cdr.detectChanges();
+          return;
         }
-      });
+
+        sessionStorage.setItem(
+          'resultadoTriage',
+          JSON.stringify({
+            ok: true,
+            id_pretriage: this.idPretriage,
+            origen: 'ia',
+            alta_prioridad: resultado.prioridad === 'alta',
+            accion: 'resultado_ia',
+            resultado,
+          }),
+        );
+
+        this.router.navigate(['/emergency/resultado']);
+      },
+
+      error: (error) => {
+        this.cargando = false;
+
+        this.mensajeError =
+          error.error?.message || 'No fue posible completar la evaluación. Intenta nuevamente.';
+
+        this.cdr.detectChanges();
+      },
+    });
   }
 
-private enviarARevisionClinica(mensaje: string): void {
-  sessionStorage.setItem(
-    'resultadoTriage',
-    JSON.stringify({
-      ok: true,
-      id_pretriage: this.idPretriage,
-      origen: 'ia',
-      alta_prioridad: false,
-      accion: 'revision_clinica',
-      resultado: {
-        prioridad: null,
-        incertidumbre: true,
-        justificacion: mensaje,
-        detalle_incertidumbre: mensaje
-      }
-    })
-  );
+  private enviarARevisionClinica(mensaje: string): void {
+    sessionStorage.setItem(
+      'resultadoTriage',
+      JSON.stringify({
+        ok: true,
+        id_pretriage: this.idPretriage,
+        origen: 'ia',
+        alta_prioridad: false,
+        accion: 'revision_clinica',
+        resultado: {
+          prioridad: null,
+          incertidumbre: true,
+          justificacion: mensaje,
+          detalle_incertidumbre: mensaje,
+        },
+      }),
+    );
 
-  this.router.navigate(['/emergency/resultado']);
-}
-
+    this.router.navigate(['/emergency/resultado']);
+  }
 
   volver(): void {
     this.router.navigate(['/emergency/sintomas']);
+  }
+
+  private evaluarResultadoFinal(): void {
+    this.cargando = true;
+    this.mensajeError = '';
+    this.mensajeEstado = '';
+
+    this.emergencyService.evaluarConIA(this.idPretriage, this.token).subscribe({
+      next: (respuesta) => {
+        this.cargando = false;
+
+        // La IA no pudo emitir una orientación automática fiable.
+        if (respuesta?.accion === 'revision_clinica') {
+          this.finalizado = true;
+          this.alerta = false;
+          this.preguntaActual = null;
+
+          this.mensajeEstado =
+            respuesta.message || 'La información requiere valoración por personal de salud.';
+
+          this.cdr.detectChanges();
+          return;
+        }
+
+        if (!respuesta?.ok || !respuesta?.result) {
+          this.finalizado = true;
+          this.mensajeEstado =
+            respuesta?.message || 'No fue posible completar la evaluación final.';
+
+          this.cdr.detectChanges();
+          return;
+        }
+
+        const resultadoIA = respuesta.result;
+
+        const resultadoTriage = {
+          ok: true,
+          id_pretriage: this.idPretriage,
+          origen: 'ia' as const,
+          alta_prioridad: resultadoIA.prioridad === 'alta',
+          accion: 'resultado_ia' as const,
+          resultado: resultadoIA,
+        };
+
+        sessionStorage.setItem('resultadoTriage', JSON.stringify(resultadoTriage));
+
+        this.router.navigate(['/emergency/resultado']);
+      },
+
+      error: (error) => {
+        this.cargando = false;
+        this.finalizado = true;
+
+        this.mensajeEstado =
+          error.error?.message || 'No fue posible completar la evaluación final.';
+
+        this.cdr.detectChanges();
+      },
+    });
   }
 }
