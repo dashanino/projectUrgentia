@@ -75,27 +75,32 @@ export class SubBanderas implements OnInit {
     this.emergencyService.generarPreguntaIA(this.idPretriage, this.token).subscribe({
       next: (respuesta) => {
         this.cargando = false;
-        if (respuesta?.accion === 'revision_clinica') {
-          sessionStorage.setItem(
-            'resultadoTriage',
-            JSON.stringify({
-              ok: true,
-              id_pretriage: this.idPretriage,
-              origen: 'ia',
-              alta_prioridad: false,
-              accion: 'revision_clinica',
-              resultado: {
-                prioridad: null,
-                justificacion: respuesta.message || 'Se requiere valoración médica presencial.',
-                incertidumbre: true,
-                detalle_incertidumbre: null,
-                tipo_atencion_urgencias: null,
-                servicio_recomendado: null,
-              },
-            }),
-          );
 
-          this.router.navigate(['/emergency/resultado']);
+        // La evaluación solicita información adicional.
+        if (respuesta?.result?.accion === 'pregunta_adicional') {
+          const pregunta = respuesta.result;
+
+          this.preguntaActual = {
+            id_pregunta: pregunta.id_pregunta,
+            pregunta: pregunta.pregunta,
+            orden: pregunta.orden,
+          };
+
+          this.respuestaPaciente = '';
+          this.finalizado = false;
+          this.alerta = false;
+          this.mensajeEstado = '';
+          this.mensajeError = '';
+
+          this.cdr.detectChanges();
+          return;
+        }
+
+        if (respuesta?.accion === 'revision_clinica') {
+          this.enviarARevisionClinica(
+            respuesta.message ||
+            'Se requiere valoración por personal de salud.'
+          );
           return;
         }
 
@@ -214,16 +219,14 @@ export class SubBanderas implements OnInit {
           console.log('Revisión de seguridad:', revision);
 
           // CASO 1: Se identificó una posible alerta.
+
+          // Una señal explícita de alarma debe llevar al
+          // resultado de alta prioridad, no dejar el
+          // cuestionario detenido en la pantalla actual.
           if (revision.accion === 'alerta' || revision.estado_seguridad_ia === 'alerta') {
-            this.alerta = true;
-            this.finalizado = true;
-            this.preguntaActual = null;
-
-            this.mensajeEstado =
-              revision.mensaje ||
-              'Se identificó una posible señal de alarma. Solicita atención médica inmediata.';
-
-            this.cdr.detectChanges();
+            this.enviarAResultadoPrioridadAlta(
+              revision.mensaje || 'Se identificó una señal que requiere atención inmediata.',
+            );
             return;
           }
 
@@ -440,5 +443,28 @@ export class SubBanderas implements OnInit {
         this.cdr.detectChanges();
       },
     });
+  }
+
+  private enviarAResultadoPrioridadAlta(mensaje: string): void {
+    sessionStorage.setItem(
+      'resultadoTriage',
+      JSON.stringify({
+        ok: true,
+        id_pretriage: this.idPretriage,
+        origen: 'ia',
+        alta_prioridad: true,
+        accion: 'resultado_ia',
+        resultado: {
+          prioridad: 'alta',
+          tipo_atencion_urgencias: 'general',
+          servicio_recomendado: null,
+          justificacion: mensaje,
+          incertidumbre: false,
+          detalle_incertidumbre: null,
+        },
+      }),
+    );
+
+    this.router.navigate(['/emergency/resultado']);
   }
 }
