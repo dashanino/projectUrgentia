@@ -77,29 +77,10 @@ export class SubBanderas implements OnInit {
         this.cargando = false;
 
         // La evaluación solicita información adicional.
-        if (respuesta?.result?.accion === 'pregunta_adicional') {
-          const pregunta = respuesta.result;
-
-          this.preguntaActual = {
-            id_pregunta: pregunta.id_pregunta,
-            pregunta: pregunta.pregunta,
-            orden: pregunta.orden,
-          };
-
-          this.respuestaPaciente = '';
-          this.finalizado = false;
-          this.alerta = false;
-          this.mensajeEstado = '';
-          this.mensajeError = '';
-
-          this.cdr.detectChanges();
-          return;
-        }
 
         if (respuesta?.accion === 'revision_clinica') {
           this.enviarARevisionClinica(
-            respuesta.message ||
-            'Se requiere valoración por personal de salud.'
+            respuesta.message || 'Se requiere valoración por personal de salud.',
           );
           return;
         }
@@ -395,51 +376,89 @@ export class SubBanderas implements OnInit {
       next: (respuesta) => {
         this.cargando = false;
 
-        // La IA no pudo emitir una orientación automática fiable.
-        if (respuesta?.accion === 'revision_clinica') {
-          this.finalizado = true;
-          this.alerta = false;
-          this.preguntaActual = null;
+        // CASO 1: La IA necesita más información.
+        if (respuesta?.ok && respuesta?.result?.accion === 'pregunta_adicional') {
+          const pregunta = respuesta.result;
 
-          this.mensajeEstado =
-            respuesta.message || 'La información requiere valoración por personal de salud.';
+          if (
+            typeof pregunta.id_pregunta !== 'number' ||
+            typeof pregunta.pregunta !== 'string' ||
+            typeof pregunta.orden !== 'number'
+          ) {
+            this.mensajeError = 'El servidor no devolvió una pregunta válida.';
+            this.cdr.detectChanges();
+            return;
+          }
+
+          this.preguntaActual = {
+            id_pregunta: pregunta.id_pregunta,
+            pregunta: pregunta.pregunta,
+            orden: pregunta.orden,
+          };
+
+          this.respuestaPaciente = '';
+          this.finalizado = false;
+          this.alerta = false;
+          this.mensajeError = '';
+          this.mensajeEstado = '';
 
           this.cdr.detectChanges();
           return;
         }
 
-        if (!respuesta?.ok || !respuesta?.result) {
-          this.finalizado = true;
-          this.mensajeEstado =
-            respuesta?.message || 'No fue posible completar la evaluación final.';
+        // CASO 2: No se pudo establecer una orientación fiable.
+        if (respuesta?.accion === 'revision_clinica') {
+          this.enviarARevisionClinica(
+            respuesta.message || 'Se requiere valoración por personal de salud.',
+          );
+          return;
+        }
 
+        if (!respuesta?.ok || !respuesta?.result) {
+          this.mensajeError = respuesta?.message || 'No fue posible completar la evaluación final.';
           this.cdr.detectChanges();
           return;
         }
 
         const resultadoIA = respuesta.result;
 
-        const resultadoTriage = {
-          ok: true,
-          id_pretriage: this.idPretriage,
-          origen: 'ia' as const,
-          alta_prioridad: resultadoIA.prioridad === 'alta',
-          accion: 'resultado_ia' as const,
-          resultado: resultadoIA,
-        };
+        // No mostrar una clasificación como definitiva
+        // si la propia evaluación indica incertidumbre.
+        if (resultadoIA.incertidumbre === true) {
+          this.enviarARevisionClinica(
+            resultadoIA.detalle_incertidumbre ||
+              'La información requiere valoración por personal de salud.',
+          );
+          return;
+        }
 
-        sessionStorage.setItem('resultadoTriage', JSON.stringify(resultadoTriage));
+        const prioridadesValidas = ['alta', 'media_alta', 'media_baja', 'baja'];
+
+        if (!prioridadesValidas.includes(resultadoIA.prioridad)) {
+          this.mensajeError = 'El servidor no devolvió una prioridad válida.';
+          this.cdr.detectChanges();
+          return;
+        }
+
+        // CASO 3: Clasificación final obtenida.
+        sessionStorage.setItem(
+          'resultadoTriage',
+          JSON.stringify({
+            ok: true,
+            id_pretriage: this.idPretriage,
+            origen: 'ia',
+            alta_prioridad: resultadoIA.prioridad === 'alta',
+            accion: 'resultado_ia',
+            resultado: resultadoIA,
+          }),
+        );
 
         this.router.navigate(['/emergency/resultado']);
       },
 
       error: (error) => {
         this.cargando = false;
-        this.finalizado = true;
-
-        this.mensajeEstado =
-          error.error?.message || 'No fue posible completar la evaluación final.';
-
+        this.mensajeError = error.error?.message || 'No fue posible completar la evaluación final.';
         this.cdr.detectChanges();
       },
     });
