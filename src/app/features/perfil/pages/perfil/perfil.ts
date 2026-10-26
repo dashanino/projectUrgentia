@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ChangeDetectorRef } from '@angular/core';
+import { finalize } from 'rxjs';
 
 interface Antecedente { id: number; name: string; }
 interface PerfilMedico {
@@ -227,16 +228,55 @@ export class Perfil implements OnInit, OnDestroy {
   goBack(): void { this.router.navigate(['/app/home']); }
 
   guardar(): void {
-    this.guardando = true; this.error = ''; this.mensaje = '';
+    if (this.guardando) return;
+  
+    this.guardando = true;
+    this.error = '';
+    this.mensaje = '';
+  
+    this.cdr.detectChanges();
+  
     const body = {
       antecedente_ids: this.seleccionados,
-      medications: this.lista(this.medications), allergies: this.lista(this.allergies),
-      hospitalizations: this.lista(this.hospitalizations), surgeries: this.lista(this.surgeries),
-      weight_kg: this.weight_kg, height_cm: this.height_cm
+      medications: this.lista(this.medications),
+      allergies: this.lista(this.allergies),
+      hospitalizations: this.lista(this.hospitalizations),
+      surgeries: this.lista(this.surgeries),
+      weight_kg: this.weight_kg,
+      height_cm: this.height_cm
     };
-    this.http.put<PerfilMedico>(`${this.api}/me`, body, { headers: this.headers() }).subscribe({
-      next: p => { this.perfil = p; this.editando = false; this.guardando = false; this.mensaje = 'Información médica actualizada.'; },
-      error: e => { this.guardando = false; this.error = e.error?.error || 'No se pudieron guardar los cambios.'; }
+  
+    this.http.put<PerfilMedico>(
+      `${this.api}/me`,
+      body,
+      { headers: this.headers() }
+    )
+    .pipe(
+      finalize(() => {
+        this.guardando = false;
+        this.cdr.detectChanges();
+      })
+    )
+    .subscribe({
+      next: (perfilActualizado) => {
+        this.perfil = perfilActualizado;
+        this.reiniciarFormulario();
+  
+        this.editando = false;
+        this.mensaje = 'Información médica actualizada correctamente.';
+  
+        this.cdr.detectChanges();
+      },
+  
+      error: (error) => {
+        console.error('Error al guardar perfil médico:', error);
+  
+        this.error =
+          error.error?.error ||
+          'No se pudieron guardar los cambios. Inténtalo nuevamente.';
+  
+        this.cdr.detectChanges();
+      }
     });
   }
 }
