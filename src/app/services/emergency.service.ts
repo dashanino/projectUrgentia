@@ -42,9 +42,7 @@ export class EmergencyService {
   iniciarPretriage(): Observable<PretriageResponse> {
     return this.http.post<PretriageResponse>(`${this.apiUrl}/pretriage`, {});
   }
-  iniciarPretriageRegistrado(
-    token: string
-  ): Observable<PretriageRegistradoResponse> {
+  iniciarPretriageRegistrado(token: string): Observable<PretriageRegistradoResponse> {
     return this.http.post<PretriageRegistradoResponse>(
       `${this.apiUrl}/pretriage/registrado`,
       {},
@@ -52,16 +50,15 @@ export class EmergencyService {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
-    
   }
   confirmarClinicaRegistrado(
     idPretriage: number,
     token: string,
     accidente: boolean,
     embarazo: boolean | null,
-    antecedentesActualizados: boolean
+    antecedentesActualizados: boolean,
   ): Observable<{
     ok: boolean;
     message: string;
@@ -88,7 +85,7 @@ export class EmergencyService {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      }
+      },
     );
   }
 
@@ -194,6 +191,28 @@ export class EmergencyService {
     );
   }
 
+  guardarRespuestasIA(
+    idPretriage: number,
+    respuestas: Array<{
+      id_pregunta: number;
+      respuesta: string;
+    }>,
+    token: string,
+  ): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/pretriage-agent/respuestas`,
+      {
+        id_pretriage: idPretriage,
+        respuestas: respuestas,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  }
+
   guardarRespuestaIA(
     idPretriage: number,
     idPregunta: number,
@@ -214,7 +233,6 @@ export class EmergencyService {
       },
     );
   }
-
   evaluarConIA(idPretriage: number, token: string): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/pretriage-agent/evaluate`,
