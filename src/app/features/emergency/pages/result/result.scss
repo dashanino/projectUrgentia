@@ -164,10 +164,10 @@
 }
 
 .priority-box.priority-baja {
-  background: #effaf3;
+  background: #f5fffd;
   border-color: #b9e8ca;
-  --priority-ink: #17683b;
-  --priority-icon: #16834a;
+  --priority-ink: #09947f;
+  --priority-icon: #069983;
 }
 
 .priority-box.priority-revision {
@@ -243,7 +243,8 @@
   color: #fff;
   text-decoration: none;
   cursor: pointer;
-  transition: transform var(--transition-default, 0.2s ease),
+  transition:
+    transform var(--transition-default, 0.2s ease),
     background-color var(--transition-default, 0.2s ease),
     box-shadow var(--transition-default, 0.2s ease);
 
@@ -305,7 +306,8 @@
   background: #fff;
   border: 1px solid #e0e5ee;
   border-radius: 18px;
-  transition: border-color var(--transition-default, 0.2s ease),
+  transition:
+    border-color var(--transition-default, 0.2s ease),
     box-shadow var(--transition-default, 0.2s ease);
 }
 
@@ -384,7 +386,9 @@
   font-size: 14px;
   font-weight: $font-semi-bold;
   cursor: pointer;
-  transition: background-color var(--transition-default, 0.2s ease), color var(--transition-default, 0.2s ease);
+  transition:
+    background-color var(--transition-default, 0.2s ease),
+    color var(--transition-default, 0.2s ease);
 
   &:hover {
     background: var(--color-primary-soft, #ecf1ff);
@@ -468,7 +472,9 @@
     font-size: 14px;
     font-weight: $font-semi-bold;
     cursor: pointer;
-    transition: background-color var(--transition-default, 0.2s ease), color var(--transition-default, 0.2s ease);
+    transition:
+      background-color var(--transition-default, 0.2s ease),
+      color var(--transition-default, 0.2s ease);
 
     &:hover {
       background: var(--color-primary-soft, #ecf1ff);
@@ -508,7 +514,9 @@
   background: #fff;
   border: 1px solid #e0e5ee;
   border-radius: 16px;
-  transition: border-color var(--transition-default, 0.2s ease), box-shadow var(--transition-default, 0.2s ease);
+  transition:
+    border-color var(--transition-default, 0.2s ease),
+    box-shadow var(--transition-default, 0.2s ease);
 
   &:hover {
     border-color: #b9caff;
@@ -747,5 +755,86 @@
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+}
+
+/* Orientación administrativa para prioridad baja */
+.low-priority-guidance {
+  background: #f0f7ff;
+  border-color: #cbdcfb;
+
+  .guidance-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+
+    mat-icon {
+      flex: 0 0 28px;
+      width: 28px;
+      height: 28px;
+      color: var(--color-primary, #2260ff);
+      font-size: 28px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(19px, 2vw, 23px);
+    }
+  }
+
+  .tramites-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 22px;
+    border: 1px solid #bb38dd;
+    border-radius: 12px;
+    // background: #bb38dd;
+    color: #bb38dd;
+    font-family: $font-title;
+    font-size: 14px;
+    font-weight: $font-semi-bold;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      background: #a52cc5;
+      border-color: #a52cc5;
+      transform: translateY(-1px);
+      color:white;
+    }
+
+    &:focus-visible {
+      outline: 3px solid rgba(187, 56, 221, 0.3);
+      outline-offset: 3px;
+    }
+
+    mat-icon {
+      width: 19px;
+      height: 19px;
+      font-size: 19px;
+    }
+  }
+
+  .guidance-note {
+    margin-top: 18px;
+    margin-bottom: 0;
+    font-size: 13px;
+    color: #4b5563;
+  }
+}
+
+@media (max-width: 680px) {
+  .low-priority-guidance {
+    .tramites-button {
+      background: white;
+      color: #bb38dd;
+      border: 1px solid #bb38dd;
+    }
   }
 }

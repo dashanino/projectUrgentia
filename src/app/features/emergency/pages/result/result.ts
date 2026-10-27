@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Location, LocationData } from '../../../location/location';
 import { InstitutionsService, Institution } from '../../../../services/institutions.service';
@@ -40,6 +40,7 @@ export class Result implements OnInit {
   private institutionsService = inject(InstitutionsService);
   private emergencyService = inject(EmergencyService);
   private cdr = inject(ChangeDetectorRef);
+  private route = inject(ActivatedRoute);
 
   resultadoTriage: ResultadoTriage | null = null;
 
@@ -218,53 +219,43 @@ export class Result implements OnInit {
       });
   }
 
-  private buscarPorServicio(
-    location: LocationData,
-    servicio: string,
-    token: string
-  ): void {
-  
+  private buscarPorServicio(location: LocationData, servicio: string, token: string): void {
     this.loadingInstitutions = true;
     this.institutionsError = '';
     this.institutions = [];
-  
+
     const epsId = Number(this.epsSeleccionada);
-  
-    const epsValida =
-      Number.isInteger(epsId) && epsId > 0
-        ? epsId
-        : undefined;
-  
+
+    const epsValida = Number.isInteger(epsId) && epsId > 0 ? epsId : undefined;
+
     this.institutionsService
       .getNearbyInstitutionsByService(
         location.latitude,
         location.longitude,
         servicio,
         token,
-        epsValida
+        epsValida,
       )
       .subscribe({
         next: (response) => {
           console.log('[URGENTIA] Instituciones encontradas:', response);
-  
+
           this.institutions = response.institutions ?? [];
           this.loadingInstitutions = false;
-  
+
           if (!this.institutions.length) {
-            this.institutionsError =
-              `No encontramos instituciones registradas que ofrezcan ${servicio} para los criterios de búsqueda.`;
+            this.institutionsError = `No encontramos instituciones registradas que ofrezcan ${servicio} para los criterios de búsqueda.`;
           }
-  
+
           this.cdr.detectChanges();
         },
-  
+
         error: (error) => {
           console.error('[URGENTIA] Error buscando instituciones:', error);
-  
+
           this.loadingInstitutions = false;
-          this.institutionsError =
-            'No fue posible consultar las instituciones.';
-  
+          this.institutionsError = 'No fue posible consultar las instituciones.';
+
           this.cdr.detectChanges();
         },
       });
@@ -283,6 +274,20 @@ export class Result implements OnInit {
   detalleIncertidumbre: string | null = null;
 
   ngOnInit(): void {
+    const prioridadTest = this.route.snapshot.queryParamMap.get('prioridad');
+
+    if (
+      prioridadTest === 'alta' ||
+      prioridadTest === 'media_alta' ||
+      prioridadTest === 'media_baja' ||
+      prioridadTest === 'baja'
+    ) {
+      this.prioridad = prioridadTest;
+      return;
+    }
+
+    // ⬇️ AQUÍ DEJA TODO TU CÓDIGO ACTUAL DE ngOnInit
+
     const resultadoGuardado = sessionStorage.getItem('resultadoTriage');
 
     if (!resultadoGuardado) {
@@ -433,28 +438,28 @@ export class Result implements OnInit {
 
   get epsSeleccionada(): string | null {
     const epsPretriage = sessionStorage.getItem('eps_pretriage');
-  
+
     if (sessionStorage.getItem('pretriage_registrado') === 'true') {
       const usuarioGuardado = sessionStorage.getItem('user');
-  
+
       if (!usuarioGuardado) {
         return null;
       }
-  
+
       try {
         const usuario = JSON.parse(usuarioGuardado);
         const epsId = Number(usuario.id_eps);
-  
+
         if (Number.isInteger(epsId) && epsId > 0) {
           return String(epsId);
         }
       } catch {
         return null;
       }
-  
+
       return null;
     }
-  
+
     return epsPretriage;
   }
 
@@ -472,7 +477,30 @@ export class Result implements OnInit {
       queryParams: { origen: 'pretriage' },
     });
   }
+
   irATramites(): void {
-    this.router.navigate(['/tramites']);
+    const eps = this.epsSeleccionada;
+
+    // Si ya conocemos la EPS, la guardamos y vamos directamente
+    // a seleccionar el trámite.
+    if (eps) {
+      sessionStorage.setItem('eps_pretriage', eps);
+
+      this.router.navigate(['/tramites/seleccionar-tramite'], {
+        queryParams: {
+          eps: eps,
+          origen: 'pretriage',
+        },
+      });
+
+      return;
+    }
+
+    // Si todavía no tiene EPS, primero debe seleccionarla.
+    this.router.navigate(['/tramites'], {
+      queryParams: {
+        origen: 'pretriage',
+      },
+    });
   }
 }

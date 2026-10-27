@@ -184,19 +184,31 @@
     </div>
     <!-- ORIENTACIÓN ADMINISTRATIVA PARA PRIORIDAD BAJA -->
     @if (prioridad === 'baja' && !revisionClinica) {
-      <section class="location-section">
-        <h3>Orientación administrativa</h3>
+      <section class="location-section low-priority-guidance" aria-labelledby="tramites-heading">
+        <div class="guidance-heading">
+          <mat-icon aria-hidden="true">assignment</mat-icon>
+          <h2 id="tramites-heading">¿Tu solicitud podría resolverse con un trámite?</h2>
+        </div>
 
         <p>
-          Puedes consultar si tu necesidad corresponde a un trámite de tu EPS, como autorizaciones,
-          citas o renovación de fórmulas.
+          Según la información registrada, podrías empezar consultando los trámites disponibles en
+          tu EPS, por ejemplo, autorizaciones, asignación de citas o renovación de fórmulas. Esta
+          orientación no descarta que puedas necesitar atención médica.
         </p>
 
-        <button type="button" (click)="irATramites()">Consultar trámites de mi EPS</button>
+        <button
+          type="button"
+          class="tramites-button"
+          (click)="irATramites()"
+          aria-label="Consultar trámites disponibles de mi EPS"
+        >
+          <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+          Consultar trámites de mi EPS
+        </button>
 
-        <p>
-          Si necesitas atención médica presencial, solicita orientación a tu EPS. Si tus síntomas
-          empeoran, busca valoración médica.
+        <p class="guidance-note">
+          Si tus síntomas son nuevos, empeoran o te preocupan, solicita valoración médica. Ante
+          señales de alarma o una emergencia, busca atención urgente o llama al 123.
         </p>
       </section>
     }

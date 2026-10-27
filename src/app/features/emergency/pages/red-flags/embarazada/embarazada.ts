@@ -51,19 +51,19 @@ export class Embarazada {
   continuar(): void {
     const idPretriage = sessionStorage.getItem('id_pretriage');
     const token = sessionStorage.getItem('access_token');
-  
+
     if (!idPretriage || !token) {
       console.error('No existe un pretriage activo');
       return;
     }
-  
+
     const id = Number(idPretriage);
-  
+
     if (!Number.isInteger(id) || id <= 0) {
       console.error('ID de pretriage inválido');
       return;
     }
-  
+
     // CASO 1: Ninguna bandera roja seleccionada
     if (this.ningunoSeleccionado) {
       this.emergencyService.guardarBanderasRojas(id, [], token).subscribe({
@@ -75,15 +75,15 @@ export class Embarazada {
           console.error('Error al guardar banderas:', error);
         },
       });
-  
+
       return;
     }
-  
+
     // CASO 2: No seleccionó ninguna opción
     if (this.sintomasSeleccionados.length === 0) {
       return;
     }
-  
+
     // CASO 3: Seleccionó una o varias banderas rojas
     this.guardarYEvaluar(id, token);
   }
@@ -106,70 +106,49 @@ export class Embarazada {
     this.emergencyService.evaluarTriage(id, token).subscribe({
       next: (resultado) => {
         console.log('Resultado del triage:', resultado);
-  
-        sessionStorage.setItem(
-          'resultadoTriage',
-          JSON.stringify(resultado)
-        );
-  
+
+        sessionStorage.setItem('resultadoTriage', JSON.stringify(resultado));
+
         // PRIORIDAD ALTA: las reglas prevalecen sobre la IA
-        if (
-          resultado.origen === 'reglas' &&
-          resultado.accion === 'alerta'
-        ) {
+        if (resultado.origen === 'reglas' && resultado.accion === 'alerta') {
           this.router.navigate(['/emergency/resultado']);
           return;
         }
-  
+
         // Ninguna alerta: completar la etapa de síntomas
         // antes de iniciar las preguntas de IA.
-        if (
-          resultado.origen === 'reglas' &&
-          resultado.accion === 'continuar_ia'
-        ) {
+        if (resultado.origen === 'reglas' && resultado.accion === 'continuar_ia') {
           this.emergencyService.guardarSintomas(id, [], token).subscribe({
             next: (respuesta) => {
-              if (
-                respuesta.ok === true &&
-                respuesta.accion === 'iniciar_ia'
-              ) {
+              if (respuesta.ok === true && respuesta.accion === 'iniciar_ia') {
                 this.router.navigate(['/emergency/sub-banderas']);
                 return;
               }
-  
-              console.error(
-                'El backend no autorizó iniciar la IA:',
-                respuesta
-              );
+
+              console.error('El backend no autorizó iniciar la IA:', respuesta);
             },
             error: (error) => {
-              console.error(
-                'Error al completar la etapa de síntomas:',
-                error
-              );
+              console.error('Error al completar la etapa de síntomas:', error);
             },
           });
-  
+
           return;
         }
-  
+
         // Hay síntomas adicionales que deben revisarse
-        if (
-          resultado.origen === 'reglas' &&
-          resultado.accion === 'continuar_submenu'
-        ) {
+        if (resultado.origen === 'reglas' && resultado.accion === 'continuar_submenu') {
           sessionStorage.setItem(
             'banderas_seleccionadas',
-            JSON.stringify(this.sintomasSeleccionados)
+            JSON.stringify(this.sintomasSeleccionados),
           );
-  
+
           this.router.navigate(['/emergency/sintomas']);
           return;
         }
-  
+
         console.error('Acción de triage no reconocida:', resultado);
       },
-  
+
       error: (error) => {
         console.error('Error al evaluar triage:', error);
       },
@@ -197,6 +176,13 @@ export class Embarazada {
   }
 
   goBack(): void {
-    this.router.navigate(['emergency/patient-group']);
+    const esRegistrado = sessionStorage.getItem('pretriage_registrado') === 'true';
+
+    if (esRegistrado) {
+      this.router.navigate(['/app/home']);
+      return;
+    }
+
+    this.router.navigate(['/emergency/patient-group']);
   }
 }
