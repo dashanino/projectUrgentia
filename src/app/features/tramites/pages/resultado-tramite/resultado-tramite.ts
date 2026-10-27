@@ -70,7 +70,7 @@ export class ResultadoTramite implements OnInit {
     this.cargando = true;
     this.error = '';
 
-    this.http.get<Eps[]>('http://127.0.0.1:5001/api/tramites/eps').subscribe({
+    this.http.get<Eps[]>('http://127.0.0.1:3000/api/tramites/eps').subscribe({
       next: (listaEps) => {
         const epsEncontrada = listaEps.find((eps) => eps.id === epsId);
 
