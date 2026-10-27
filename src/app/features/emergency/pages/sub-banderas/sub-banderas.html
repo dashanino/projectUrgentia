@@ -1,11 +1,8 @@
-
 <main class="cuestionario-container">
-
   <h1>Preguntas adicionales</h1>
 
   <p class="descripcion">
-    Responde las siguientes preguntas para ayudarnos
-    a comprender mejor tu situación.
+    Responde las siguientes preguntas para ayudarnos a comprender mejor tu situación.
   </p>
 
   @if (cargando) {
@@ -21,11 +18,7 @@
   }
 
   @if (finalizado) {
-    <div
-      class="mensaje-estado"
-      [class.alerta]="alerta"
-      role="alert"
-    >
+    <div class="mensaje-estado" [class.alerta]="alerta" role="alert">
       <h2>
         {{ alerta ? 'Atención médica necesaria' : 'Cuestionario detenido' }}
       </h2>
@@ -33,26 +26,18 @@
       <p>{{ mensajeEstado }}</p>
 
       @if (alerta) {
-        <p>
-          Si presentas síntomas graves o una emergencia,
-          busca atención médica inmediata.
-        </p>
+        <p>Si presentas síntomas graves o una emergencia, busca atención médica inmediata.</p>
       }
     </div>
   }
 
   @if (preguntaActual && !finalizado && !cargando) {
     <section class="pregunta-card">
-
-      <span class="numero-pregunta">
-        Pregunta {{ preguntaActual.orden }}
-      </span>
+      <span class="numero-pregunta"> Pregunta {{ preguntaActual.orden }} </span>
 
       <h2>{{ preguntaActual.pregunta }}</h2>
 
-      <label for="respuesta">
-        Tu respuesta
-      </label>
+      <label for="respuesta"> Tu respuesta </label>
 
       <textarea
         id="respuesta"
@@ -71,8 +56,39 @@
       >
         {{ guardando ? 'Guardando respuesta...' : 'Continuar' }}
       </button>
-
     </section>
   }
+  @if (preguntasActuales.length > 0 && !finalizado && !cargando) {
+    <section class="bloque-preguntas">
+      @for (pregunta of preguntasActuales; track pregunta.id_pregunta) {
+        <section class="pregunta-card">
+          <span class="numero-pregunta"> Pregunta {{ pregunta.orden }} </span>
 
+          <h2>
+            {{ pregunta.pregunta }}
+          </h2>
+
+          <label [for]="'respuesta-' + pregunta.id_pregunta"> Tu respuesta </label>
+
+          <textarea
+            [id]="'respuesta-' + pregunta.id_pregunta"
+            [name]="'respuesta-' + pregunta.id_pregunta"
+            [(ngModel)]="respuestasActuales[pregunta.id_pregunta]"
+            [disabled]="guardando"
+            placeholder="Escribe tu respuesta aquí..."
+            rows="4"
+          ></textarea>
+        </section>
+      }
+
+      <button
+        type="button"
+        class="boton-continuar"
+        (click)="enviarRespuestas()"
+        [disabled]="guardando || !todasRespondidas()"
+      >
+        {{ guardando ? 'Analizando respuestas...' : 'Continuar' }}
+      </button>
+    </section>
+  }
 </main>
