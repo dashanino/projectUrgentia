@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -19,6 +19,10 @@ export class SeleccionarEps implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
+  private cdr = inject(ChangeDetectorRef);
+
+  // Conserva las EPS mientras esta pestaña siga abierta
+  private static epsCache: Eps[] | null = null;
 
   epsSeleccionada: number | null = null;
   listaEps: Eps[] = [];
@@ -30,7 +34,9 @@ export class SeleccionarEps implements OnInit {
 
   ngOnInit(): void {
     this.origen =
-      this.route.snapshot.queryParamMap.get('origen') === 'pretriage' ? 'pretriage' : 'tramites';
+      this.route.snapshot.queryParamMap.get('origen') === 'pretriage'
+        ? 'pretriage'
+        : 'tramites';
 
     if (this.origen === 'pretriage') {
       const epsGuardada = sessionStorage.getItem('eps_pretriage');
@@ -48,20 +54,33 @@ export class SeleccionarEps implements OnInit {
   }
 
   cargarEps(): void {
+    // Si ya tenemos las EPS en memoria, no llamamos al backend
+    if (SeleccionarEps.epsCache !== null) {
+      this.listaEps = SeleccionarEps.epsCache;
+      this.cargando = false;
+      this.error = '';
+      return;
+    }
+
     this.cargando = true;
     this.error = '';
 
-    this.http.get<Eps[]>('http://127.0.0.1:3000/api/tramites/eps').subscribe({
-      next: (respuesta) => {
-        this.listaEps = respuesta;
-        this.cargando = false;
-      },
-      error: (err) => {
-        console.error('Error cargando EPS:', err);
-        this.error = 'No se pudieron cargar las EPS.';
-        this.cargando = false;
-      },
-    });
+    this.http
+      .get<Eps[]>('http://127.0.0.1:3000/api/tramites/eps')
+      .subscribe({
+        next: (respuesta) => {
+          SeleccionarEps.epsCache = respuesta;
+          this.listaEps = respuesta;
+          this.cargando = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          console.error('Error cargando EPS:', err);
+          this.error = 'No se pudieron cargar las EPS.';
+          this.cargando = false;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   continuar(): void {
@@ -69,9 +88,11 @@ export class SeleccionarEps implements OnInit {
       return;
     }
 
-    // Selección de EPS desde el pre-triage
     if (this.origen === 'pretriage') {
-      sessionStorage.setItem('eps_pretriage', String(this.epsSeleccionada));
+      sessionStorage.setItem(
+        'eps_pretriage',
+        String(this.epsSeleccionada)
+      );
 
       this.router.navigate(['/tramites/seleccionar-tramite'], {
         queryParams: {
@@ -83,7 +104,6 @@ export class SeleccionarEps implements OnInit {
       return;
     }
 
-    // Funcionamiento original de trámites
     this.router.navigate(['/tramites/seleccionar-tramite'], {
       queryParams: {
         eps: this.epsSeleccionada,
