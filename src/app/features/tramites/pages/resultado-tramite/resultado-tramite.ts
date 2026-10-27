@@ -82,7 +82,7 @@ export class ResultadoTramite implements OnInit {
     this.error = '';
 
     this.http.get<Eps[]>(
-      'http://127.0.0.1:5001/api/tramites/eps'
+      'http://127.0.0.1:3000/api/tramites/eps'
     ).subscribe({
 
       next: (listaEps) => {
