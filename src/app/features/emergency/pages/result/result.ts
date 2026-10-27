@@ -503,4 +503,7 @@ export class Result implements OnInit {
       },
     });
   }
+  goToBegin(): void {
+    this.router.navigate(['/begin']);
+  }
 }

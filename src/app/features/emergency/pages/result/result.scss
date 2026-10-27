@@ -33,8 +33,7 @@
 .card-header {
   display: flex;
   align-items: center;
-  gap: 18px;
-  min-width: 0;
+  width: 100%;
 }
 
 .card-header h1 {
@@ -806,7 +805,7 @@
       background: #a52cc5;
       border-color: #a52cc5;
       transform: translateY(-1px);
-      color:white;
+      color: white;
     }
 
     &:focus-visible {
@@ -836,5 +835,30 @@
       color: #bb38dd;
       border: 1px solid #bb38dd;
     }
+  }
+}
+
+.logout-button {
+  margin-left: auto;
+
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #2463eb;
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  &:hover {
+    background-color: rgba(36, 99, 235, 0.1);
+    border-radius: 50%;
   }
 }
