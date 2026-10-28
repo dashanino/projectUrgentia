@@ -82,6 +82,20 @@ export class Embarazada {
         error: (error) => {
           this.cargando=false;
           console.error('Error al guardar banderas:', error);
+        
+          if (error.status === 403) {
+            alert(
+              'Este pre-triage tiene una alerta de seguridad activa. ' +
+              'No es posible continuar con las preguntas de IA. ' +
+              'Debes seguir la orientación de urgencias correspondiente.'
+            );
+            return;
+          }
+        
+          alert(
+            'No fue posible guardar la información. ' +
+            'Por favor, intenta nuevamente.'
+          );
         },
       });
 
@@ -107,6 +121,20 @@ export class Embarazada {
 
       error: (error) => {
         console.error('Error al guardar banderas:', error);
+      
+        if (error.status === 403) {
+          alert(
+            'Este pre-triage tiene una alerta de seguridad activa. ' +
+            'No es posible continuar con las preguntas de IA. ' +
+            'Debes seguir la orientación de urgencias correspondiente.'
+          );
+          return;
+        }
+      
+        alert(
+          'No fue posible guardar la información. ' +
+          'Por favor, intenta nuevamente.'
+        );
       },
     });
   }

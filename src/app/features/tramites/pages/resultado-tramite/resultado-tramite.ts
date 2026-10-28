@@ -1,10 +1,20 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 interface Eps {
   id: number;
   nombre: string;
+}
+interface OrientacionTramite {
+  eps: string;
+  tramite: string;
+  disponible: boolean;
+  requisitos?: string[];
+  pasos?: string[];
+  url_oficial?: string | null;
+  fecha_verificacion?: string | null;
+  mensaje?: string;
 }
 
 @Component({
@@ -18,6 +28,7 @@ export class ResultadoTramite implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
+  private cdr = inject(ChangeDetectorRef);
 
   origen: 'tramites' | 'pretriage' = 'tramites';
 
@@ -25,6 +36,9 @@ export class ResultadoTramite implements OnInit {
   nombreEps = '';
   tramiteSeleccionado = '';
   nombreTramite = '';
+  orientacion: OrientacionTramite | null = null;
+  cargandoOrientacion = false;
+  errorOrientacion = '';
 
   cargando = false;
   error = '';
@@ -64,30 +78,32 @@ export class ResultadoTramite implements OnInit {
     this.nombreTramite = this.tramites[this.tramiteSeleccionado];
 
     this.cargarEps(epsId);
+    this.cargarOrientacion(epsId);
   }
 
   cargarEps(epsId: number): void {
     this.cargando = true;
     this.error = '';
-
+  
     this.http.get<Eps[]>('http://127.0.0.1:3000/api/tramites/eps').subscribe({
       next: (listaEps) => {
         const epsEncontrada = listaEps.find((eps) => eps.id === epsId);
-
+  
         if (!epsEncontrada) {
           this.error = 'No se encontró la EPS seleccionada.';
-          this.cargando = false;
-          return;
+        } else {
+          this.nombreEps = epsEncontrada.nombre;
         }
-
-        this.nombreEps = epsEncontrada.nombre;
+  
         this.cargando = false;
+        this.cdr.markForCheck();
       },
-
+  
       error: (err) => {
         console.error('Error consultando EPS:', err);
         this.error = 'No se pudo consultar la EPS.';
         this.cargando = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -117,4 +133,28 @@ export class ResultadoTramite implements OnInit {
 
   urlLoginSura =
     'https://login.sura.com/sso/servicelogin.aspx?continueTo=https%3A%2F%2Fportaleps.epssura.com%2FServiciosUnClick%2F&service=epssura';
+    cargarOrientacion(epsId: number): void {
+      this.cargandoOrientacion = true;
+      this.errorOrientacion = '';
+      this.orientacion = null;
+    
+      const codigo = encodeURIComponent(this.tramiteSeleccionado);
+    
+      this.http.get<OrientacionTramite>(
+        `http://127.0.0.1:3000/api/tramites/eps/${epsId}/tramites/${codigo}`
+      ).subscribe({
+        next: (respuesta) => {
+          this.orientacion = respuesta;
+          this.cargandoOrientacion = false;
+          this.cdr.markForCheck();
+        },
+    
+        error: (err) => {
+          console.error('Error consultando orientación:', err);
+          this.errorOrientacion = 'No fue posible consultar la información del trámite.';
+          this.cargandoOrientacion = false;
+          this.cdr.markForCheck();
+        },
+      });
+    }
 }

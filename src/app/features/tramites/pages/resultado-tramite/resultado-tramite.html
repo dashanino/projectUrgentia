@@ -63,89 +63,92 @@
             </div>
           }
   
-          @if (mostrarAutorizacionSura && !cargando && !error) {
-  
+          @if (cargandoOrientacion && !cargando && !error) {
+
             <div class="estado-informacion">
-  
-              <h4>¿Cómo realizar este trámite?</h4>
-  
-              <p>
-                EPS SURA dispone de servicios virtuales
-                para gestionar solicitudes de autorización
-                y consultar su estado.
-              </p>
-  
-              <h4>Documentos que debes tener disponibles</h4>
-  
-              <ul>
-                <li>Documento de identidad.</li>
-                <li>Orden médica o solicitud del servicio.</li>
-                <li>
-                  Soportes clínicos adicionales, cuando
-                  sean requeridos por la EPS.
-                </li>
-              </ul>
-  
-              <h4>Pasos para solicitar la autorización</h4>
-  
-              <ol>
-                <li>
-                  Ingresa a los servicios digitales de EPS SURA.
-                </li>
-                <li>
-                  Inicia sesión con tus credenciales
-                  en el portal oficial.
-                </li>
-                <li>
-                  Busca la opción correspondiente
-                  a solicitudes o autorizaciones.
-                </li>
-                <li>
-                  Sigue las instrucciones del portal
-                  y adjunta los documentos solicitados.
-                </li>
-                <li>
-                  Consulta el estado de tu solicitud
-                  por los canales habilitados.
-                </li>
-              </ol>
-  
-              <p>
-                Los requisitos y las opciones disponibles
-                pueden variar según el servicio solicitado.
-              </p>
-  
-              <!-- DOS OPCIONES PARA SURA -->
-              <div class="opciones-sura">
-  
-                <a
-                  [href]="urlLoginSura"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="portal-sura-button"
-                >
-                  Iniciar sesión en SURA ↗
-                </a>
-  
-                <a
-                  [href]="urlPortalSura"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="portal-sura-button secundario"
-                >
-                  Consultar portal oficial ↗
-                </a>
-  
-              </div>
-  
-              <p class="nota-seguridad">
-                Por seguridad, ingresa tus datos de acceso
-                únicamente en el sitio oficial de SURA.
-                Urgentia no solicita ni almacena
-                esas credenciales.
-              </p>
-  
+              <p>Consultando los requisitos y pasos de tu trámite...</p>
             </div>
+          
+          } @else if (errorOrientacion && !cargando && !error) {
+          
+            <div class="estado-informacion">
+              <h4>No pudimos consultar la orientación</h4>
+              <p>{{ errorOrientacion }}</p>
+            </div>
+          
+          } @else if (orientacion?.disponible && !cargando && !error) {
+          
+            <div class="estado-informacion">
+          
+              <h4>¿Cómo realizar este trámite?</h4>
+          
+              <p>
+                Consulta la siguiente orientación para realizar
+                tu trámite en {{ nombreEps }}.
+              </p>
+          
+              <h4>Documentos y requisitos</h4>
+          
+              <ul>
+                @for (requisito of orientacion?.requisitos ?? []; track $index) {
+                  <li>{{ requisito }}</li>
+                }
+              </ul>
+          
+              <h4>Pasos para realizar el trámite</h4>
+          
+              <ol>
+                @for (paso of orientacion?.pasos ?? []; track $index) {
+                  <li>{{ paso }}</li>
+                }
+              </ol>
+          
+              @if (orientacion?.url_oficial) {
+          
+                <div class="opciones-sura">
+          
+                  <a
+                    [href]="orientacion?.url_oficial"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="portal-sura-button"
+                  >
+                    Consultar portal oficial ↗
+                  </a>
+          
+                </div>
+          
+              }
+          
+              <p class="nota-seguridad">
+                Esta información es orientativa y puede cambiar
+                según las disposiciones de tu EPS.
+                Verifica siempre los requisitos y canales
+                directamente en su portal oficial.
+                Urgentia no solicita tus contraseñas.
+              </p>
+          
+            </div>
+          
+          } @else if (!cargando && !error && !cargandoOrientacion && !errorOrientacion) {
+          
+            <div class="estado-informacion">
+          
+              <h4>Orientación del trámite</h4>
+          
+              <p>
+                Estamos preparando la información específica
+                de este trámite para {{ nombreEps }}.
+              </p>
+          
+              <p>
+                Próximamente podrás consultar los requisitos,
+                pasos y canales oficiales de atención.
+              </p>
+          
+            </div>
+          
+          
   
           } @else if (!cargando && !error) {
   
