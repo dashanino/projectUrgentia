@@ -22,6 +22,7 @@ export class Antecedentes {
 
   antecedentesSeleccionados: string[] = [];
   ningunoSeleccionado = false;
+  cargando = false;
 
   seleccionarNinguno(): void {
     this.ningunoSeleccionado = !this.ningunoSeleccionado;
@@ -53,6 +54,12 @@ export class Antecedentes {
     const idPretriage = sessionStorage.getItem('id_pretriage');
     const token = sessionStorage.getItem('access_token');
 
+    if (this.cargando) {
+      return;
+    }
+
+    this.cargando = true;
+
     if (!idPretriage || !token) {
       console.error('No existe un pretriaje activo');
       return;
@@ -66,12 +73,14 @@ export class Antecedentes {
       .guardarAntecedentes(Number(idPretriage), idsAntecedentes, token)
       .subscribe({
         next: (respuesta) => {
+          this.cargando = false;
           console.log('Antecedentes guardados:', respuesta);
 
           this.router.navigate(['/emergency/patient-group']);
         },
 
         error: (error) => {
+          this.cargando=false;
           console.error('Error al guardar antecedentes:', error);
         },
       });

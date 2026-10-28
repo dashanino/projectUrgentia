@@ -1,8 +1,8 @@
 @use 'variables' as *;
 
 .ParentDiv {
-    display: flex;
-    min-height: 100vh;
+  display: flex;
+  min-height: 100vh;
 }
 .begin-visual {
   position: relative;
@@ -38,19 +38,18 @@
 
 /* Estilos del Logo */
 .logo {
-    width: 150px; /* Controla el tamaño de tu logo */
-    height: auto;
-    margin-top: 10vh; 
-    margin-bottom: -40px;/* Separación con el título */
+  width: 150px; /* Controla el tamaño de tu logo */
+  height: auto;
+  margin-top: 10vh;
+  margin-bottom: -40px; /* Separación con el título */
 }
 
 /* Estilos de los Textos */
 .nombre-visual h1 {
-    font-family: $font-title;
-    font-weight: $font-thin;
-    font-size: 65px;
-    margin-bottom: 25px;
-
+  font-family: $font-title;
+  font-weight: $font-thin;
+  font-size: 65px;
+  margin-bottom: 25px;
 }
 
 .nombre-visual p {
@@ -60,7 +59,6 @@
   font-family: $font-title;
   text-align: center;
   line-height: 1.1;
-
 }
 
 /* ==================================================
@@ -83,17 +81,15 @@
   background-color: var(--color-surface);
 }
 
-
 /* CONTENIDO CENTRAL */
 
 .welcome {
   width: 100%;
   max-width: 700px;
-  
+
   margin-top: 100px;
   text-align: center;
 }
-
 
 /* ==================================================
    TÍTULO
@@ -114,7 +110,6 @@
   color: var(--color-primary);
 }
 
-
 /* ==================================================
    DESCRIPCIÓN
 ================================================== */
@@ -131,7 +126,6 @@
   color: var(--color-text);
 }
 
-
 /* ==================================================
    INSTRUCCIÓN
 ================================================== */
@@ -146,7 +140,6 @@
   color: var(--color-text);
 }
 
-
 /* ==================================================
    BOTONES
 ================================================== */
@@ -157,7 +150,6 @@
   gap: 15px;
   width: 100%;
 }
-
 
 /* Cada botón + su texto */
 
@@ -181,13 +173,11 @@
   cursor: pointer;
 }
 
-
 /* BOTÓN ROJO */
 
 .emergency-button {
   background: #ff2449;
 }
-
 
 /* BOTÓN AZUL */
 
@@ -200,7 +190,6 @@
   background: #bb38dd;
 }
 
-
 /* TEXTO DEBAJO DEL BOTÓN */
 
 .action-group p {
@@ -212,7 +201,6 @@
 
   color: var(--color-text-muted);
 }
-
 
 /* ==================================================
    REGISTRO
@@ -235,7 +223,6 @@
 
   text-decoration: none;
 }
-
 
 /* ==================================================
    DIVISOR
@@ -261,7 +248,6 @@
   margin: 0;
 }
 
-
 /* LÍNEAS */
 
 .divider span {
@@ -271,7 +257,6 @@
 
   background: var(--color-border);
 }
-
 
 /* ESCUDO / ICONO CENTRAL */
 
@@ -294,7 +279,6 @@
   font-family: $font-title;
   font-size: 16px;
 }
-
 
 /* ==================================================
    FOOTER
@@ -329,3 +313,25 @@ footer p {
   margin: 2px 0;
 }
 
+.emergency-button:disabled {
+  opacity: 0.75;
+  cursor: wait;
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: urgentia-spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes urgentia-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

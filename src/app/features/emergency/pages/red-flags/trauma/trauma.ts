@@ -13,6 +13,7 @@ import { EmergencyService } from '../../../../../services/emergency.service';
 export class Trauma {
   private router = inject(Router);
   private emergencyService = inject(EmergencyService);
+  cargando = false;
 
   readonly sintomas = [
     {
@@ -79,6 +80,11 @@ export class Trauma {
     const idPretriage = sessionStorage.getItem('id_pretriage');
     const token = sessionStorage.getItem('access_token');
 
+    if (this.cargando){
+      return
+    }
+    this.cargando=true;
+
     if (!idPretriage || !token) {
       console.error('No existe un pretriage activo');
       return;
@@ -95,10 +101,12 @@ export class Trauma {
     if (this.ningunoSeleccionado) {
       this.emergencyService.guardarBanderasRojas(id, [], token).subscribe({
         next: () => {
+          this.cargando=false;
           sessionStorage.setItem('banderas_seleccionadas', '[]');
           this.evaluarTriage(id, token);
         },
         error: (error) => {
+          this.cargando=false;
           console.error('Error al guardar banderas:', error);
         },
       });

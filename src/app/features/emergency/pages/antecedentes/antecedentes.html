@@ -1,13 +1,7 @@
 <section class="card">
-
   <!-- HEADER -->
   <div class="card-header">
-
-    <button
-      type="button"
-      class="back-button"
-      (click)="goBack()"
-    >
+    <button type="button" class="back-button" (click)="goBack()">
       <mat-icon>chevron_left</mat-icon>
     </button>
 
@@ -16,13 +10,10 @@
     </div>
 
     <h1>Antecedentes Importantes</h1>
-
   </div>
-
 
   <!-- PROGRESS -->
   <div class="progress">
-
     <span class="circle active">1</span>
 
     <span class="line"></span>
@@ -36,16 +27,12 @@
     <span class="line"></span>
 
     <span class="circle">4</span>
-
   </div>
-
 
   <!-- CONTENT -->
   <div class="card-content">
-
     <!-- OPTIONS -->
     <div class="options">
-
       <button
         type="button"
         [class.selected]="isSelected('Anticoagulantes')"
@@ -93,55 +80,43 @@
         [class.selected]="ningunoSeleccionado"
         (click)="seleccionarNinguno()"
       >
-        
         <span>Ninguno de los anteriores</span>
       </button>
-
     </div>
-
 
     <!-- INFORMATION BOX -->
     <aside class="info-box">
-
       <h3>¿Por qué es importante?</h3>
 
       <p>
-        Esta información nos ayuda a entender tu condición y brindarte
-        una orientación más segura y precisa.
+        Esta información nos ayuda a entender tu condición y brindarte una orientación más segura y
+        precisa.
       </p>
 
       <div class="medical-file-icon">
-        <img
-          src="Group.png"
-          alt="Información médica"
-        >
+        <img src="Group.png" alt="Información médica" />
       </div>
-
     </aside>
-
   </div>
-
 
   <!-- CONTINUE -->
   <div class="continue-container">
-
     <button
       type="button"
       class="continue-btn"
       (click)="continuar()"
-      [disabled]="
-        antecedentesSeleccionados.length === 0 &&
-        !ningunoSeleccionado
-      "
+      [disabled]="cargando || (antecedentesSeleccionados.length === 0 && !ningunoSeleccionado)"
     >
-      <span>Continuar</span>
+      @if (cargando) {
+        <span class="button-loading">
+          <span class="spinner"></span>
+          Guardando...
+        </span>
+      } @else {
+        <span>Continuar</span>
 
-      <mat-icon>
-        arrow_forward
-      </mat-icon>
-
+        <mat-icon> arrow_forward </mat-icon>
+      }
     </button>
-
   </div>
-
 </section>

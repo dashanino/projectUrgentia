@@ -14,6 +14,8 @@ export class Adulto {
   private router = inject(Router);
   private emergencyService = inject(EmergencyService);
 
+  cargando = false;
+
   readonly sintomas = [
     {
       id: 2,
@@ -60,6 +62,11 @@ export class Adulto {
   }
 
   continuar(): void {
+    if (this.cargando) {
+      return;
+    }
+    this.cargando = true;
+
     const idPretriage = sessionStorage.getItem('id_pretriage');
     const token = sessionStorage.getItem('access_token');
 
@@ -79,10 +86,12 @@ export class Adulto {
     if (this.ningunoSeleccionado) {
       this.emergencyService.guardarBanderasRojas(id, [], token).subscribe({
         next: () => {
+          this.cargando=false;
           sessionStorage.setItem('banderas_seleccionadas', '[]');
           this.evaluarTriage(id, token);
         },
         error: (error) => {
+          this.cargando=false;
           console.error('Error al guardar banderas:', error);
         },
       });

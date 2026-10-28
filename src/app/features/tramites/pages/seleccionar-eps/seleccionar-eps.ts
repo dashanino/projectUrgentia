@@ -18,15 +18,21 @@ interface Eps {
 export class SeleccionarEps implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private http = inject(HttpClient);
+
+  readonly listaEps: Eps[] = [
+    { id: 1, nombre: 'SURA' },
+    { id: 2, nombre: 'Sanitas' },
+    { id: 3, nombre: 'Nueva EPS' },
+    { id: 4, nombre: 'Salud Total' },
+    { id: 7, nombre: 'Compensar' },
+    { id: 8, nombre: 'Famisanar' },
+    { id: 5, nombre: 'Coosalud' },
+    { id: 6, nombre: 'Savia Salud' },
+  ];
 
   epsSeleccionada: number | null = null;
-  listaEps: Eps[] = [];
 
   origen: 'tramites' | 'pretriage' = 'tramites';
-
-  cargando = false;
-  error = '';
 
   ngOnInit(): void {
     this.origen =
@@ -43,25 +49,6 @@ export class SeleccionarEps implements OnInit {
         }
       }
     }
-
-    this.cargarEps();
-  }
-
-  cargarEps(): void {
-    this.cargando = true;
-    this.error = '';
-
-    this.http.get<Eps[]>('http://127.0.0.1:3000/api/tramites/eps').subscribe({
-      next: (respuesta) => {
-        this.listaEps = respuesta;
-        this.cargando = false;
-      },
-      error: (err) => {
-        console.error('Error cargando EPS:', err);
-        this.error = 'No se pudieron cargar las EPS.';
-        this.cargando = false;
-      },
-    });
   }
 
   continuar(): void {

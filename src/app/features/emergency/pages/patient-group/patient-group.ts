@@ -10,19 +10,19 @@ import { EmergencyService } from '../../../../services/emergency.service';
   styleUrl: './patient-group.scss',
 })
 export class PatientGroup {
-
   private router = inject(Router);
   private emergencyService = inject(EmergencyService);
 
   private mapaPoblaciones: Record<string, number> = {
-    'Niño': 1,
-    'Adulto': 2,
+    Niño: 1,
+    Adulto: 2,
     'Adulto Mayor': 3,
-    'Embarazada': 4,
-    'Trauma/Accidente': 5
+    Embarazada: 4,
+    'Trauma/Accidente': 5,
   };
 
   poblacionSeleccionada: string | null = null;
+  cargando = false;
 
   seleccionarPoblacion(poblacion: string) {
     this.poblacionSeleccionada = poblacion;
@@ -33,81 +33,60 @@ export class PatientGroup {
   }
 
   continuar() {
+    if (this.cargando) {
+      return;
+    }
+
+    this.cargando = true;
 
     if (!this.poblacionSeleccionada) {
       return;
     }
-  
+
     const idPretriage = sessionStorage.getItem('id_pretriage');
     const token = sessionStorage.getItem('access_token');
-  
+
     if (!idPretriage || !token) {
       console.error('No existe un pretriaje activo');
       return;
     }
-  
-    const idPoblacion =
-      this.mapaPoblaciones[this.poblacionSeleccionada];
-  
-    this.emergencyService.guardarPoblacion(
-      Number(idPretriage),
-      idPoblacion,
-      token
-    ).subscribe({
-  
+
+    const idPoblacion = this.mapaPoblaciones[this.poblacionSeleccionada];
+
+    this.emergencyService.guardarPoblacion(Number(idPretriage), idPoblacion, token).subscribe({
       next: (respuesta) => {
-  
-        console.log(
-          'Población guardada:',
-          respuesta
-        );
-  
-        sessionStorage.setItem(
-          'tipoPoblacion',
-          this.poblacionSeleccionada!
-        );
-  
+        this.cargando = false;
+        console.log('Población guardada:', respuesta);
+
+        sessionStorage.setItem('tipoPoblacion', this.poblacionSeleccionada!);
+
         switch (this.poblacionSeleccionada) {
-  
           case 'Niño':
-            this.router.navigate([
-              'emergency/red-flags/nino'
-            ]);
+            this.router.navigate(['emergency/red-flags/nino']);
             break;
-  
+
           case 'Adulto':
-            this.router.navigate([
-              'emergency/red-flags/adulto'
-            ]);
+            this.router.navigate(['emergency/red-flags/adulto']);
             break;
-  
+
           case 'Adulto Mayor':
-            this.router.navigate([
-              'emergency/red-flags/adulto-mayor'
-            ]);
+            this.router.navigate(['emergency/red-flags/adulto-mayor']);
             break;
-  
+
           case 'Embarazada':
-            this.router.navigate([
-              'emergency/red-flags/embarazada'
-            ]);
+            this.router.navigate(['emergency/red-flags/embarazada']);
             break;
-  
+
           case 'Trauma/Accidente':
-            this.router.navigate([
-              'emergency/red-flags/trauma'
-            ]);
+            this.router.navigate(['emergency/red-flags/trauma']);
             break;
         }
       },
-  
+
       error: (error) => {
-        console.error(
-          'Error al guardar población:',
-          error
-        );
-      }
-  
+        this.cargando=false;
+        console.error('Error al guardar población:', error);
+      },
     });
   }
 

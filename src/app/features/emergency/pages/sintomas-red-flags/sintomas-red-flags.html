@@ -3,6 +3,15 @@
   <button type="button" class="back-button" (click)="goBack()">
     <mat-icon>chevron_left</mat-icon>
   </button>
+  <div class="progress">
+    <span class="circle completed">✓</span>
+    <span class="line completed-line"></span>
+    <span class="circle completed">✓</span>
+    <span class="line completed-line"></span>
+    <span class="circle active">3.1</span>
+    <span class="line"></span>
+    <span class="circle">4</span>
+  </div>
 
   @if (cargando) {
     <div class="loading">

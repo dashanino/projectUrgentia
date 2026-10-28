@@ -132,10 +132,21 @@
       [disabled]="!poblacionSeleccionada"
       (click)="continuar()">
 
-      Continuar
-      <mat-icon>arrow_forward</mat-icon>
+      @if (cargando) {
+        <span class="button-loading">
+          <span class="spinner"></span>
+          Guardando...
+        </span>
+      } @else {
+        <span>Continuar</span>
+
+        <mat-icon> arrow_forward </mat-icon>
+      }
+    
 
     </button>
+    
+      
 
   </div>
 
