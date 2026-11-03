@@ -268,4 +268,12 @@ export class EmergencyService {
       },
     );
   }
+  evaluarRelatoAdministrador(motivo: string, token: string): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/pretriage-agent/admin/evaluate-free-text`,
+      { motivo },
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+  }
+
 }
