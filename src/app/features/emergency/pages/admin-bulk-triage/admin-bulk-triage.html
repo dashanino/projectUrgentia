@@ -64,9 +64,33 @@
     </button>
 
     @if (cargando) {
-      <p class="processing-note">
-        Urgentia está evaluando los casos. El tiempo depende de la cantidad de filas del archivo.
-      </p>
+      <section class="progress-card" aria-live="polite">
+        <div class="progress-heading">
+          <strong>{{ progreso.status === 'en cola' ? 'En cola...' : 'Evaluando casos' }}</strong>
+          <strong>{{ progreso.percentage }}%</strong>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill" [style.width.%]="progreso.percentage"></div>
+        </div>
+
+        @if (progreso.total > 0) {
+          <p class="progress-main">
+            <strong>Caso {{ progreso.current }} de {{ progreso.total }}</strong>
+          </p>
+          @if (progreso.row) {
+            <p class="progress-detail">
+              Fila actual del Excel: {{ progreso.row }}
+            </p>
+          }
+        } @else {
+          <p class="progress-main">Preparando los casos...</p>
+        }
+
+        <p class="processing-note">
+          No cierres esta página. Puedes ver en tiempo real por cuál caso va Urgentia.
+        </p>
+      </section>
     }
   </section>
 </main>
