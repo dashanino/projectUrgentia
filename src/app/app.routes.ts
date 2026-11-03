@@ -68,6 +68,12 @@ export const routes: Routes = [
       },
 
       {
+        path: 'evaluacion-inmediata',
+        loadComponent: () =>
+          import('./features/emergency/pages/admin-free-triage/admin-free-triage')
+            .then((m) => m.AdminFreeTriage),
+      },
+      {
         path: 'perfil',
         loadComponent: () => import('./features/perfil/pages/perfil/perfil').then((m) => m.Perfil),
       },
