@@ -1,0 +1,29 @@
+:host { display: block; }
+.admin-triage-page { max-width: 1000px; margin: 0 auto; padding: 30px 20px 55px; color: #18345d; font-family: 'League Spartan', Arial, sans-serif; }
+.admin-triage-card { background: #fff; border: 1px solid #e0e9f5; border-radius: 24px; padding: clamp(24px, 4vw, 48px); box-shadow: 0 8px 28px rgba(30,70,140,.07); }
+.back-button { border: 0; background: transparent; color: #2865e6; cursor: pointer; font-weight: 700; margin-bottom: 28px; }
+.eyebrow { display: block; color: #326de0; font-size: 12px; font-weight: 800; letter-spacing: 1.2px; }
+h1 { color: #16428d; font-size: clamp(30px, 4vw, 42px); margin: 10px 0; }
+.intro { color: #64748b; line-height: 1.6; margin-bottom: 30px; }
+label { display: block; color: #1d3b70; font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+textarea { width: 100%; box-sizing: border-box; resize: vertical; min-height: 220px; padding: 18px; border: 1px solid #cbd5e1; border-radius: 14px; font: inherit; line-height: 1.6; color: #1f2937; }
+textarea:focus { outline: 3px solid rgba(40,101,230,.14); border-color: #2865e6; }
+.form-meta { display: flex; justify-content: space-between; gap: 12px; color: #71819a; font-size: 13px; margin: 10px 0 22px; }
+.submit-button,.secondary-button { border-radius: 12px; padding: 14px 20px; font: inherit; font-weight: 700; cursor: pointer; }
+.submit-button { border: 0; background: #2865e6; color: #fff; }
+.submit-button:disabled { opacity: .55; cursor: not-allowed; }
+.secondary-button { border: 1px solid #2865e6; background: #fff; color: #2865e6; }
+.error { color: #b42323; margin: 12px 0; }
+.result-panel { margin-top: 20px; padding: 25px; border-radius: 18px; border: 1px solid #cbd5e1; }
+.result-panel h2 { margin: 8px 0; }
+.result-panel.alta { background: #fff1f1; border-color: #f2b5b5; color: #b42323; }
+.result-panel.media_alta { background: #fff8e8; border-color: #f3d48a; color: #925b00; }
+.result-panel.media_baja { background: #eff5ff; border-color: #c6d8ff; color: #1d4ed8; }
+.result-panel.baja { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+.result-panel.revision { background: #fff8e8; border-color: #f3d48a; color: #825600; }
+.summary { margin: 24px 0; padding: 22px; border: 1px solid #e0e5ee; border-radius: 16px; }
+.summary p { white-space: pre-line; line-height: 1.6; color: #475569; }
+.warning,.disclaimer { padding: 14px; background: #fff8e8; border-radius: 12px; color: #825600; line-height: 1.6; }
+.disclaimer { color: #475569; background: #f8fafc; }
+.actions { display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+@media(max-width:600px) { .admin-triage-page { padding: 16px 10px 35px; } .admin-triage-card { padding: 22px 16px; } .form-meta { flex-direction: column; } .actions > button { width: 100%; } }
