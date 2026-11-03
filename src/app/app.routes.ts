@@ -70,8 +70,8 @@ export const routes: Routes = [
       {
         path: 'evaluacion-inmediata',
         loadComponent: () =>
-          import('./features/emergency/pages/admin-free-triage/admin-free-triage')
-            .then((m) => m.AdminFreeTriage),
+          import('./features/emergency/pages/admin-bulk-triage/admin-bulk-triage')
+            .then((m) => m.AdminBulkTriage),
       },
       {
         path: 'perfil',
