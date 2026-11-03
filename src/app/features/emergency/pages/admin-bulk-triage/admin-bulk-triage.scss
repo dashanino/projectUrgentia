@@ -1,0 +1,194 @@
+:host { display: block; }
+
+.bulk-triage-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px 20px 55px;
+  color: #18345d;
+  font-family: 'League Spartan', Arial, sans-serif;
+}
+
+.bulk-triage-card {
+  background: #fff;
+  border: 1px solid #e0e9f5;
+  border-radius: 24px;
+  padding: clamp(24px, 4vw, 48px);
+  box-shadow: 0 8px 28px rgba(30, 70, 140, .07);
+}
+
+.back-button {
+  border: 0;
+  background: transparent;
+  color: #2865e6;
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  display: block;
+  color: #326de0;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+
+h1 {
+  color: #16428d;
+  font-size: clamp(30px, 4vw, 42px);
+  margin: 10px 0;
+}
+
+.intro {
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.format-card {
+  background: #f8fbff;
+  border: 1px solid #dce8f7;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 24px;
+}
+
+.format-card h2 {
+  color: #1d4f9a;
+  font-size: 18px;
+  margin-top: 0;
+}
+
+.format-card p {
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.example-table {
+  border: 1px solid #d8e2ef;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 18px;
+}
+
+.example-header,
+.example-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0;
+}
+
+.example-header {
+  background: #eef4fb;
+  font-weight: 800;
+  color: #264b7d;
+}
+
+.example-header span,
+.example-row span {
+  padding: 12px 14px;
+  border-right: 1px solid #d8e2ef;
+}
+
+.example-header span:last-child,
+.example-row span:last-child {
+  border-right: 0;
+}
+
+.example-row {
+  border-top: 1px solid #d8e2ef;
+  color: #52647a;
+  font-size: 14px;
+}
+
+.upload-area {
+  min-height: 170px;
+  border: 2px dashed #b9cbe2;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  text-align: center;
+  color: #52647a;
+  transition: border-color .2s, background .2s;
+}
+
+.upload-area:hover {
+  border-color: #2865e6;
+  background: #f8fbff;
+}
+
+.upload-icon {
+  font-size: 28px;
+  color: #2865e6;
+}
+
+.upload-area strong {
+  color: #1d4f9a;
+  font-size: 17px;
+}
+
+.upload-area span:last-child {
+  font-size: 13px;
+  color: #8190a4;
+}
+
+.submit-button {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 15px 20px;
+  margin-top: 22px;
+  background: #2865e6;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit-button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.error,
+.success,
+.processing-note {
+  padding: 14px;
+  border-radius: 12px;
+  margin-top: 18px;
+  line-height: 1.5;
+}
+
+.error {
+  color: #a32121;
+  background: #fff1f1;
+}
+
+.success {
+  color: #166534;
+  background: #f0fdf4;
+}
+
+.processing-note {
+  color: #52647a;
+  background: #f8fafc;
+}
+
+@media (max-width: 600px) {
+  .bulk-triage-page {
+    padding: 16px 10px 35px;
+  }
+
+  .bulk-triage-card {
+    padding: 22px 16px;
+  }
+
+  .example-header,
+  .example-row {
+    grid-template-columns: 75px 1fr;
+  }
+}
