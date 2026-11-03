@@ -50,6 +50,18 @@
             <span>→</span>
             </button>
         </article>
+        @if (esAdmin) {
+          <article class="action-card">
+            <div class="card-icon">⚕</div>
+            <h3>Evaluación inmediata</h3>
+            <p>Registra en un solo relato el motivo de consulta y obtén una orientación preliminar de prioridad.</p>
+            <button type="button" (click)="abrirEvaluacionInmediata()">
+              Evaluar motivo de consulta
+              <span>→</span>
+            </button>
+          </article>
+        }
+
         <!-- TRÁMITES EPS -->
         <article class="action-card">
           <div class="card-icon">✚</div>
