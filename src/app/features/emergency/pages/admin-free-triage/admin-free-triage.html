@@ -1,0 +1,57 @@
+<main class="admin-triage-page">
+  <section class="admin-triage-card">
+    <button type="button" class="back-button" (click)="volver()">← Volver</button>
+    <span class="eyebrow">URGENTIA · MODO ADMINISTRADOR</span>
+    <h1>Evaluación inmediata</h1>
+    <p class="intro">Registra el motivo de consulta en las palabras de la persona. No necesitas completar el cuestionario habitual.</p>
+
+    @if (!resultado) {
+      <label for="motivo">¿Por qué motivo desea acudir a urgencias?</label>
+      <textarea
+        id="motivo"
+        name="motivo"
+        [(ngModel)]="motivo"
+        rows="9"
+        maxlength="10000"
+        placeholder="Describe qué le está pasando, cuándo comenzó, cómo han evolucionado los síntomas y cualquier otro dato que haya referido..."
+        [disabled]="cargando"
+      ></textarea>
+      <div class="form-meta">
+        <span>Incluye solo la información que la persona haya proporcionado.</span>
+        <span>{{ motivo.length }}/10000</span>
+      </div>
+
+      @if (error) {
+        <p class="error" role="alert">{{ error }}</p>
+      }
+
+      <button class="submit-button" type="button" (click)="evaluar()" [disabled]="cargando || motivo.trim().length < 20">
+        {{ cargando ? 'Analizando relato...' : 'Realizar priorización' }}
+      </button>
+    } @else {
+      <section class="result-panel" [class]="'result-panel ' + (resultado.prioridad || 'revision')">
+        <span class="eyebrow">RESULTADO ORIENTADOR</span>
+        <h2>{{ tituloPrioridad }}</h2>
+        <p>{{ resultado.justificacion }}</p>
+        @if (resultado.incertidumbre && resultado.detalle_incertidumbre) {
+          <p class="warning">{{ resultado.detalle_incertidumbre }}</p>
+        }
+      </section>
+      <section class="summary">
+        <h3>Resumen del relato</h3>
+        <p>{{ resultado.resumen_informacion }}</p>
+        @if (resultado.tipo_atencion_urgencias) {
+          <p><strong>Tipo de atención:</strong> {{ resultado.tipo_atencion_urgencias }}</p>
+        }
+        @if (resultado.servicio_recomendado) {
+          <p><strong>Servicio sugerido:</strong> {{ resultado.servicio_recomendado }}</p>
+        }
+      </section>
+      <p class="disclaimer">Esta priorización es orientadora y no reemplaza la valoración presencial ni el triage realizado por personal de salud. Si hay signos de emergencia, activa la ruta institucional de atención inmediata.</p>
+      <div class="actions">
+        <button type="button" class="secondary-button" (click)="resultado = null">Nueva evaluación</button>
+        <button type="button" class="submit-button" (click)="volver()">Finalizar</button>
+      </div>
+    }
+  </section>
+</main>
