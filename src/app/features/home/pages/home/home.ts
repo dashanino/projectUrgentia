@@ -23,6 +23,22 @@ export class Home {
 
   iniciandoEvaluacion = false;
 
+  esAdmin = false;
+
+  ngOnInit(): void {
+    try {
+      const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+      this.esAdmin = String(user.role || user.role_name || '').toLowerCase() === 'admin'
+        || Number(user.id_role) === Number(sessionStorage.getItem('admin_role_id'));
+    } catch {
+      this.esAdmin = false;
+    }
+  }
+
+  abrirEvaluacionInmediata(): void {
+    this.router.navigate(['/app/evaluacion-inmediata']);
+  }
+
   nuevaEvaluacion(): void {
     if (this.iniciandoEvaluacion) {
       return;
