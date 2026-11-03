@@ -1,0 +1,72 @@
+<main class="bulk-triage-page">
+  <section class="bulk-triage-card">
+    <button type="button" class="back-button" (click)="volver()">← Volver</button>
+
+    <span class="eyebrow">URGENTIA · MODO ADMINISTRADOR</span>
+    <h1>Evaluación masiva de casos</h1>
+    <p class="intro">
+      Carga un Excel con casos clínicos y Urgentia agregará automáticamente
+      la priorización correspondiente a cada caso.
+    </p>
+
+    <section class="format-card">
+      <h2>Formato del archivo</h2>
+      <p>
+        El Excel debe tener una fila de encabezados y una columna que identifique
+        el caso. Puedes llamarla <strong>caso</strong>, <strong>caso_clinico</strong>,
+        <strong>motivo_de_consulta</strong> o <strong>relato</strong>.
+      </p>
+
+      <div class="example-table">
+        <div class="example-header">
+          <span>ID</span>
+          <span>Caso clínico</span>
+        </div>
+        <div class="example-row">
+          <span>001</span>
+          <span>Paciente con dolor intenso en el pecho...</span>
+        </div>
+        <div class="example-row">
+          <span>002</span>
+          <span>Paciente con congestión y dolor de garganta...</span>
+        </div>
+      </div>
+    </section>
+
+    <label class="upload-area" for="excelFile">
+      <span class="upload-icon">↑</span>
+      <strong>{{ archivo ? archivo.name : 'Seleccionar archivo Excel' }}</strong>
+      <span>Formato permitido: .xlsx</span>
+    </label>
+    <input
+      id="excelFile"
+      type="file"
+      accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      (change)="seleccionarArchivo($event)"
+      hidden
+    />
+
+    @if (error) {
+      <p class="error" role="alert">{{ error }}</p>
+    }
+
+    @if (resultado) {
+      <p class="success" role="status">{{ resultado }}</p>
+    }
+
+    <button
+      type="button"
+      class="submit-button"
+      (click)="procesar()"
+      [disabled]="cargando || !archivo"
+    >
+      {{ cargando ? 'Procesando casos...' : 'Procesar casos y descargar resultado' }}
+    </button>
+
+    @if (cargando) {
+      <p class="processing-note">
+        Urgentia está evaluando los casos. El tiempo depende de la cantidad de filas del archivo.
+      </p>
+    }
+  </section>
+</main>
