@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface BulkProgress {
@@ -22,6 +22,8 @@ export interface BulkProgressResponse {
   } | null;
   error: string | null;
 }
+
+export interface BulkResultResponse extends HttpResponse<Blob> {}
 
 @Injectable({
   providedIn: 'root',
@@ -56,13 +58,14 @@ export class BulkPretriageService {
     );
   }
 
-  descargarResultado(jobId: string, token: string): Observable<Blob> {
+  descargarResultado(jobId: string, token: string): Observable<HttpResponse<Blob>> {
     return this.http.get(
       `${this.apiUrl}/pretriage-agent/admin/evaluate-excel/${jobId}/result`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        observe: 'response',
         responseType: 'blob',
       },
     );
