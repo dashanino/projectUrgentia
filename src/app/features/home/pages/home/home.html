@@ -50,13 +50,17 @@
             <span>→</span>
             </button>
         </article>
+
         @if (esAdmin) {
           <article class="action-card">
-            <div class="card-icon">⚕</div>
-            <h3>Evaluación inmediata</h3>
-            <p>Registra en un solo relato el motivo de consulta y obtén una orientación preliminar de prioridad.</p>
+            <div class="card-icon">▦</div>
+            <h3>Evaluación masiva</h3>
+            <p>
+              Carga un Excel con casos clínicos y obtén
+              la priorización de Urgentia para cada caso.
+            </p>
             <button type="button" (click)="abrirEvaluacionInmediata()">
-              Evaluar motivo de consulta
+              Cargar casos
               <span>→</span>
             </button>
           </article>
